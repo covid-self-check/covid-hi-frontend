@@ -150,7 +150,7 @@ export default function RegistrationForm() {
                                     }}
                                 />
                             )}
-                            rules={{ required: "โปรดใส่น้ำหนัก" }}
+                            rules={{ required: "โปรดใส่ส่วนสูง" }}
                         />
 
                         <Controller
