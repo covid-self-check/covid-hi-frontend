@@ -27,20 +27,18 @@ export const Navbar = () => {
   const classes = useStyles();
   return (
     <Toolbar sx={{ py: 4 }}>
-      <Link href="/">
-        <Typography
-          variant="h5"
-          component="div"
-          sx={{
-            flexGrow: 1,
-            fontWeight: 700,
-            color: theme.palette.primary.main,
-          }}
-        >
-          ComCovid
-        </Typography>
-      </Link>
-      <Link href="/register">
+      <Typography
+        variant="h5"
+        component="div"
+        sx={{
+          flexGrow: 1,
+          fontWeight: 700,
+          color: theme.palette.primary.main,
+        }}
+      >
+        ComCovid
+      </Typography>
+      <Link href="/register" passHref>
         <Typography
           variant="body2"
           component="a"
@@ -51,7 +49,7 @@ export const Navbar = () => {
           ลงทะเบียน
         </Typography>
       </Link>
-      <Link href="/update">
+      <Link href="/update" passHref>
         <Typography
           variant="body2"
           component="a"
