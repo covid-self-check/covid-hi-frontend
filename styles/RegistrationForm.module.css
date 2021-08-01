@@ -1,21 +1,26 @@
 .title {
-    font-size: 3rem;
+  font-size: 3rem;
 }
 
 .subtitle {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .title_div {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .text_field {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .button {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.form_label {
+  margin-top: 30px;
+  margin-bottom: 10px;
 }
