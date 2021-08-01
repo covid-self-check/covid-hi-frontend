@@ -8,7 +8,7 @@ import theme from '../styles/theme'
 const useStyles = makeStyles({
   link: {
     textDecoration: "none",
-    padding: theme.spacing(0.7, 1.3),
+    padding: theme.spacing(0.7, 1.5),
     margin: theme.spacing(0, 0.5),
     color: 'white',
     backgroundColor: theme.palette.primary.main,
@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   },
   active: {
     textDecoration: "none",
-    padding: theme.spacing(0.7, 1.3),
+    padding: theme.spacing(0.7, 1.5),
     margin: theme.spacing(0, 0.5),
     color: theme.palette.primary.main,
     borderRadius: 20,
@@ -27,13 +27,14 @@ export const Navbar = () => {
   const router = useRouter()
   const classes = useStyles()
   return (
-    <Toolbar sx={{ px: 4, py: 6 }}>
+    <Toolbar sx={{ px: 3, py: 6 }}>
       <Typography
         variant="h5"
         component="div"
         sx={{
           flexGrow: 1,
           fontWeight: 700,
+          fontSize: '1.5rem',
           color: theme.palette.primary.main,
         }}
       >
