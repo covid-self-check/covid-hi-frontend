@@ -24,7 +24,6 @@ const PASSPORT_ID_OLD_MAX_LENGTH = 7
 const PASSPORT_ID_NEW_MAX_LENGTH = 9
 
 const THaddresses = require('../util/THAddressData.json')
-
 export default function RegistrationForm() {
   const { register, handleSubmit, control, getValues } = useForm({
     defaultValues: {
@@ -161,7 +160,17 @@ export default function RegistrationForm() {
     }
 
     console.log(province + district + subdistrict)
-  }, [componentDidMount, formData, province, district, subdistrict, postalCode, hasProvinceChanged, hasDistrictChanged, hasSubdistrictChanged])
+  }, [
+    componentDidMount,
+    formData,
+    province,
+    district,
+    subdistrict,
+    postalCode,
+    hasProvinceChanged,
+    hasDistrictChanged,
+    hasSubdistrictChanged,
+  ])
 
   function onSubmit(data: any) {
     console.log(data)
@@ -760,7 +769,7 @@ export default function RegistrationForm() {
               form="registrationForm"
               type="submit"
               variant="contained"
-              color='primary'
+              color="primary"
               fullWidth
             >
               ยืนยัน
