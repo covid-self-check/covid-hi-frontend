@@ -1,16 +1,16 @@
-import React from "react";
-import { Toolbar, Typography } from "@material-ui/core";
-import Link from "next/link";
-import { useRouter } from "next/dist/client/router";
-import { makeStyles } from "@material-ui/styles";
-import theme from "../styles/theme";
+import React from 'react'
+import { Toolbar, Typography } from '@material-ui/core'
+import Link from 'next/link'
+import { useRouter } from 'next/dist/client/router'
+import { makeStyles } from '@material-ui/styles'
+import theme from '../styles/theme'
 
 const useStyles = makeStyles({
   link: {
     textDecoration: "none",
     padding: theme.spacing(0.7, 1.3),
     margin: theme.spacing(0, 0.5),
-    color: "white",
+    color: 'white',
     backgroundColor: theme.palette.primary.main,
     borderRadius: 20,
   },
@@ -21,11 +21,11 @@ const useStyles = makeStyles({
     color: theme.palette.primary.main,
     borderRadius: 20,
   },
-});
+})
 
 export const Navbar = () => {
-  const router = useRouter();
-  const classes = useStyles();
+  const router = useRouter()
+  const classes = useStyles()
   return (
     <Toolbar sx={{ px: 4, py: 6 }}>
       <Typography
@@ -43,9 +43,7 @@ export const Navbar = () => {
         <Typography
           variant="button"
           component="a"
-          className={
-            router.pathname == "/register" ? classes.active : classes.link
-          }
+          className={router.pathname == '/register' ? classes.active : classes.link}
         >
           ลงทะเบียน
         </Typography>
@@ -54,13 +52,11 @@ export const Navbar = () => {
         <Typography
           variant="button"
           component="a"
-          className={
-            router.pathname == "/update" ? classes.active : classes.link
-          }
+          className={router.pathname == '/update' ? classes.active : classes.link}
         >
           แจ้งอาการ
         </Typography>
       </Link>
     </Toolbar>
-  );
-};
+  )
+}

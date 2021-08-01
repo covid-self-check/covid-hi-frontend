@@ -1,5 +1,5 @@
-import styles from "../styles/Home.module.css";
-import RegistrationForm from "../components/RegistrationForm";
+import styles from '../styles/Home.module.css'
+import RegistrationForm from '../components/RegistrationForm'
 
 export default function Home() {
   return (
@@ -8,5 +8,5 @@ export default function Home() {
         <RegistrationForm />
       </div>
     </>
-  );
+  )
 }
