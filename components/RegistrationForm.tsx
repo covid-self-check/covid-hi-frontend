@@ -18,8 +18,12 @@ import Card from './Card'
 import styles from '../styles/RegistrationForm.module.css'
 import { registerData } from '../util/types'
 
+const NATIONAL_ID_MAX_LENGTH = 13
+const PASSPORT_ID_OLD_MAX_LENGTH = 7
+const PASSPORT_ID_NEW_MAX_LENGTH = 9
+
 export default function RegistrationForm() {
-  const { register, handleSubmit, control, getValues } = useForm({
+  const { handleSubmit, control, getValues } = useForm({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -43,7 +47,11 @@ export default function RegistrationForm() {
       },
     },
   })
+
   const [vaccination, setVaccination] = useState<string>('none')
+  const [nationalIdOrPassportFieldStatus, setNationalIdOrPassportFieldStatus] = useState('unknown')
+  const [nationalIdOrPassportFieldMaxLength, setNationalIdOrPassportFieldMaxLength] =
+    useState(NATIONAL_ID_MAX_LENGTH)
   const [formData, setFormData] = useState(getValues())
 
   function onSubmit(data: registerData) {
@@ -52,15 +60,74 @@ export default function RegistrationForm() {
 
   useEffect(() => {
     console.log(formData)
-  }, [formData])
+    console.log(nationalIdOrPassportFieldStatus)
+  }, [formData, nationalIdOrPassportFieldStatus])
 
   function onVaccinationChange(data: string) {
     setVaccination(data)
   }
 
+  function onNationalIdOrPassportFieldChange(data: string) {
+    if (data.length === 0) {
+      setNationalIdOrPassportFieldStatus('unknown')
+      setNationalIdOrPassportFieldMaxLength(NATIONAL_ID_MAX_LENGTH)
+      return
+    }
+
+    if (data.length === 1) {
+      if (isNumeric(data[0])) {
+        setNationalIdOrPassportFieldStatus('id')
+        setNationalIdOrPassportFieldMaxLength(NATIONAL_ID_MAX_LENGTH)
+        return
+      }
+
+      setNationalIdOrPassportFieldStatus('unknown')
+      setNationalIdOrPassportFieldMaxLength(NATIONAL_ID_MAX_LENGTH)
+      return
+    }
+
+    if (data.length >= 2) {
+      if (!isNumeric(data[0])) {
+        if (isNumeric(data[1])) {
+          setNationalIdOrPassportFieldStatus('passport_old')
+          setNationalIdOrPassportFieldMaxLength(PASSPORT_ID_OLD_MAX_LENGTH)
+          return
+        }
+
+        setNationalIdOrPassportFieldStatus('passport_new')
+        setNationalIdOrPassportFieldMaxLength(PASSPORT_ID_NEW_MAX_LENGTH)
+        return
+      }
+    }
+  }
+
   function replaceWithNumbers(text: string) {
     var removedText = text.replace(/\D+/g, '')
     return removedText
+  }
+
+  function handlePassportInput(passportId: string) {
+    console.log(nationalIdOrPassportFieldStatus)
+
+    if (nationalIdOrPassportFieldStatus === 'passport_old') {
+      return passportId[0].toUpperCase() + replaceWithNumbers(passportId.slice(1))
+    }
+
+    if (nationalIdOrPassportFieldStatus === 'passport_new') {
+      if (passportId[1] == undefined) {
+        return passportId[0].toUpperCase()
+      }
+
+      return (
+        passportId[0].toUpperCase() +
+        passportId[1].toUpperCase() +
+        replaceWithNumbers(passportId.slice(2))
+      )
+    }
+  }
+
+  function isNumeric(str: string) {
+    return /^\d+$/.test(str)
   }
 
   return (
@@ -119,7 +186,29 @@ export default function RegistrationForm() {
                   className={styles.text_field}
                   value={value}
                   fullWidth
-                  onChange={onChange}
+                  inputProps={{ maxLength: nationalIdOrPassportFieldMaxLength }}
+                  onChange={(e) => {
+                    let input = e.target.value.toUpperCase()
+
+                    if (input === '' || input == undefined) {
+                      onNationalIdOrPassportFieldChange(input)
+                      onChange('')
+                      return
+                    }
+
+                    onNationalIdOrPassportFieldChange(input)
+
+                    if (nationalIdOrPassportFieldStatus === 'unknown') {
+                      onChange(input)
+                      return
+                    }
+
+                    if (nationalIdOrPassportFieldStatus === 'id') {
+                      onChange(replaceWithNumbers(input))
+                    } else if (nationalIdOrPassportFieldStatus.includes('passport')) {
+                      onChange(handlePassportInput(input))
+                    }
+                  }}
                   error={!!error}
                   helperText={error ? error.message : null}
                 />
