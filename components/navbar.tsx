@@ -8,17 +8,18 @@ import theme from "../styles/theme";
 const useStyles = makeStyles({
   link: {
     textDecoration: "none",
-    padding: theme.spacing(0.2, 1),
+    padding: theme.spacing(0.7, 1.3),
     margin: theme.spacing(0, 0.5),
     color: "white",
     backgroundColor: theme.palette.primary.main,
-    borderRadius: 10,
+    borderRadius: 20,
   },
   active: {
     textDecoration: "none",
-    padding: theme.spacing(0.2, 1),
+    padding: theme.spacing(0.7, 1.3),
     margin: theme.spacing(0, 0.5),
     color: theme.palette.primary.main,
+    borderRadius: 20,
   },
 });
 
@@ -26,7 +27,7 @@ export const Navbar = () => {
   const router = useRouter();
   const classes = useStyles();
   return (
-    <Toolbar sx={{ py: 4 }}>
+    <Toolbar sx={{ px: 4, py: 6 }}>
       <Typography
         variant="h5"
         component="div"
@@ -40,7 +41,7 @@ export const Navbar = () => {
       </Typography>
       <Link href="/register" passHref>
         <Typography
-          variant="body2"
+          variant="button"
           component="a"
           className={
             router.pathname == "/register" ? classes.active : classes.link
@@ -51,7 +52,7 @@ export const Navbar = () => {
       </Link>
       <Link href="/update" passHref>
         <Typography
-          variant="body2"
+          variant="button"
           component="a"
           className={
             router.pathname == "/update" ? classes.active : classes.link
