@@ -4,6 +4,7 @@ export type registerData = {
   personalID: string;
   age: number;
   gender: string;
+  weight: string;
   height: number;
   congenitalDisease: string;
   address: string;
