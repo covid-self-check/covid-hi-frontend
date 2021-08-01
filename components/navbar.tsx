@@ -7,7 +7,7 @@ import theme from '../styles/theme'
 
 const useStyles = makeStyles({
   link: {
-    textDecoration: "none",
+    textDecoration: 'none',
     padding: theme.spacing(0.7, 1.5),
     margin: theme.spacing(0, 0.5),
     color: 'white',
@@ -15,7 +15,7 @@ const useStyles = makeStyles({
     borderRadius: 20,
   },
   active: {
-    textDecoration: "none",
+    textDecoration: 'none',
     padding: theme.spacing(0.7, 1.5),
     margin: theme.spacing(0, 0.5),
     color: theme.palette.primary.main,
