@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import {
   TextField,
@@ -18,21 +18,21 @@ import {
 import Card from './Card'
 import styles from '../styles/RegistrationForm.module.css'
 import { registerData } from '../util/types'
+import { getAddress } from '../util/address'
 
 const NATIONAL_ID_MAX_LENGTH = 13
 const PASSPORT_ID_OLD_MAX_LENGTH = 7
 const PASSPORT_ID_NEW_MAX_LENGTH = 9
 
-const THaddresses = require('../util/THAddressData.json')
 export default function RegistrationForm() {
   const { register, handleSubmit, control, getValues } = useForm({
     defaultValues: {
       firstName: '',
       lastName: '',
       personalID: '',
-      age: null,
-      weight: null,
-      height: null,
+      age: '',
+      weight: '',
+      height: '',
       gender: '',
       address: '',
       addressInfo: {
@@ -66,10 +66,12 @@ export default function RegistrationForm() {
   const [districts, setDistricts] = useState<string[]>([])
   const [subdistricts, setSubdistricts] = useState<string[]>([])
   const [postalCodes, setPostalCodes] = useState<string[]>([])
-  const [province, setProvince] = useState<any>('')
-  const [district, setDistrict] = useState<any>('')
-  const [subdistrict, setSubdistrict] = useState<any>('')
-  const [postalCode, setPostalCode] = useState<any>('')
+  const [province, setProvince] = useState<string>('')
+  const [district, setDistrict] = useState<string>('')
+  const [subdistrict, setSubdistrict] = useState<string>('')
+  const [postalCode, setPostalCode] = useState<string>('')
+
+  const THAddresses = useMemo(() => getAddress(), [])
 
   const useHasChanged = (val: any) => {
     const prevVal = usePrevious(val)
@@ -93,9 +95,9 @@ export default function RegistrationForm() {
     console.log(formData)
 
     if (!componentDidMount) {
-      let tempProvinces = []
-      for (let i = 0; i < THaddresses.length; i++) {
-        tempProvinces.push(THaddresses[i][0])
+      let tempProvinces: string[] = []
+      for (let i = 0; i < THAddresses.length; i++) {
+        tempProvinces.push(THAddresses[i][0] as string)
       }
 
       setProvinces(tempProvinces)
@@ -104,12 +106,12 @@ export default function RegistrationForm() {
     setComponentDidMount(true)
 
     if (hasProvinceChanged) {
-      let tempDistricts = []
+      let tempDistricts: string[] = []
 
-      for (let i = 0; i < THaddresses.length; i++) {
-        if (THaddresses[i][0] === province) {
-          for (let j = 0; j < THaddresses[i][1].length; j++) {
-            tempDistricts.push(THaddresses[i][1][j][0])
+      for (let i = 0; i < THAddresses.length; i++) {
+        if (THAddresses[i][0] === province) {
+          for (let j = 0; j < THAddresses[i][1].length; j++) {
+            tempDistricts.push(THAddresses[i][1][j][0] as string)
           }
         }
       }
@@ -121,14 +123,14 @@ export default function RegistrationForm() {
     }
 
     if (hasDistrictChanged) {
-      let tempSubdistricts = []
+      let tempSubdistricts: string[] = []
 
-      for (let i = 0; i < THaddresses.length; i++) {
-        if (THaddresses[i][0] === province) {
-          for (let j = 0; j < THaddresses[i][1].length; j++) {
-            if (THaddresses[i][1][j][0] === district) {
-              for (let k = 0; k < THaddresses[i][1][j][1].length; k++) {
-                tempSubdistricts.push(THaddresses[i][1][j][1][k][0])
+      for (let i = 0; i < THAddresses.length; i++) {
+        if (THAddresses[i][0] === province) {
+          for (let j = 0; j < THAddresses[i][1].length; j++) {
+            if (THAddresses[i][1][j][0] === district) {
+              for (let k = 0; k < THAddresses[i][1][j][1].length; k++) {
+                tempSubdistricts.push(THAddresses[i][1][j][1][k][0] as string)
               }
             }
           }
@@ -140,22 +142,17 @@ export default function RegistrationForm() {
     }
 
     if (hasSubdistrictChanged) {
-      let tempPostalCodes = []
+      let tempPostalCodes: string[] = []
 
-      for (let i = 0; i < THaddresses.length; i++) {
-        if (THaddresses[i][0] === province) {
-          for (let j = 0; j < THaddresses[i][1].length; j++) {
-            if (THaddresses[i][1][j][0] === district) {
-              for (let k = 0; k < THaddresses[i][1][j][1].length; k++) {
-                if (THaddresses[i][1][j][1][k][0] === subdistrict) {
-                  tempPostalCodes = THaddresses[i][1][j][1][k][1]
-                }
-              }
-            }
-          }
-        }
-      }
-      setPostalCodes(tempPostalCodes)
+      for (let i = 0; i < THAddresses.length; i++)
+        if (THAddresses[i][0] === province)
+          for (let j = 0; j < THAddresses[i][1].length; j++)
+            if (THAddresses[i][1][j][0] === district)
+              for (let k = 0; k < THAddresses[i][1][j][1].length; k++)
+                if (THAddresses[i][1][j][1][k][0] === subdistrict)
+                  tempPostalCodes = THAddresses[i][1][j][1][k][1] as string[]
+
+      setPostalCodes(tempPostalCodes.map((item) => `${item}`))
       setPostalCode('')
     }
 
@@ -170,6 +167,7 @@ export default function RegistrationForm() {
     hasProvinceChanged,
     hasDistrictChanged,
     hasSubdistrictChanged,
+    THAddresses,
   ])
 
   function onSubmit(data: any) {
@@ -466,7 +464,7 @@ export default function RegistrationForm() {
                     options={provinces}
                     onChange={(e, newValue) => {
                       onChange(newValue)
-                      setProvince(newValue)
+                      setProvince(newValue || '')
                     }}
                     value={province}
                     fullWidth
@@ -496,7 +494,7 @@ export default function RegistrationForm() {
                     options={districts}
                     onChange={(e, newValue) => {
                       onChange(newValue)
-                      setDistrict(newValue)
+                      setDistrict(newValue || '')
                     }}
                     value={district}
                     fullWidth
@@ -526,7 +524,7 @@ export default function RegistrationForm() {
                     options={subdistricts}
                     onChange={(e, newValue) => {
                       onChange(newValue)
-                      setSubdistrict(newValue)
+                      setSubdistrict(newValue || '')
                     }}
                     value={subdistrict}
                     fullWidth
@@ -556,9 +554,9 @@ export default function RegistrationForm() {
                     options={postalCodes}
                     onChange={(e, newValue) => {
                       onChange(newValue)
-                      setPostalCode(newValue)
+                      setPostalCode(newValue || '')
                     }}
-                    value={postalCode}
+                    value={`${postalCode}`}
                     fullWidth
                     renderInput={(params) => (
                       <TextField
