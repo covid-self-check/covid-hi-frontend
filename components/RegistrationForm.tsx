@@ -97,15 +97,19 @@ export default function RegistrationForm() {
   const [nationalIdOrPassportFieldStatus, setNationalIdOrPassportFieldStatus] = useState('unknown')
   const [nationalIdOrPassportFieldMaxLength, setNationalIdOrPassportFieldMaxLength] =
     useState(NATIONAL_ID_MAX_LENGTH)
+
   const [formData, setFormData] = useState(getValues())
+
   const [provinces, setProvinces] = useState<string[]>([])
   const [districts, setDistricts] = useState<string[]>([])
   const [subdistricts, setSubdistricts] = useState<string[]>([])
   const [postalCodes, setPostalCodes] = useState<string[]>([])
+
   const [province, setProvince] = useState<string>('')
   const [district, setDistrict] = useState<string>('')
   const [subdistrict, setSubdistrict] = useState<string>('')
   const [postalCode, setPostalCode] = useState<string>('')
+
   const [gotMedication, setMedication] = useState<string>('none')
 
   const THAddresses = useMemo(() => getAddress(), [])
@@ -134,7 +138,6 @@ export default function RegistrationForm() {
       for (let i = 0; i < THAddresses.length; i++) {
         tempProvinces.push(THAddresses[i][0] as string)
       }
-
       setProvinces(tempProvinces)
     }
 
@@ -142,7 +145,6 @@ export default function RegistrationForm() {
 
     if (hasProvinceChanged) {
       let tempDistricts: string[] = []
-
       for (let i = 0; i < THAddresses.length; i++) {
         if (THAddresses[i][0] === province) {
           for (let j = 0; j < THAddresses[i][1].length; j++) {
@@ -150,7 +152,6 @@ export default function RegistrationForm() {
           }
         }
       }
-
       setDistricts(tempDistricts)
       setDistrict('')
       setSubdistrict('')
@@ -159,7 +160,6 @@ export default function RegistrationForm() {
 
     if (hasDistrictChanged) {
       let tempSubdistricts: string[] = []
-
       for (let i = 0; i < THAddresses.length; i++) {
         if (THAddresses[i][0] === province) {
           for (let j = 0; j < THAddresses[i][1].length; j++) {
@@ -178,7 +178,6 @@ export default function RegistrationForm() {
 
     if (hasSubdistrictChanged) {
       let tempPostalCodes: string[] = []
-
       for (let i = 0; i < THAddresses.length; i++)
         if (THAddresses[i][0] === province)
           for (let j = 0; j < THAddresses[i][1].length; j++)
@@ -186,7 +185,6 @@ export default function RegistrationForm() {
               for (let k = 0; k < THAddresses[i][1][j][1].length; k++)
                 if (THAddresses[i][1][j][1][k][0] === subdistrict)
                   tempPostalCodes = THAddresses[i][1][j][1][k][1] as string[]
-
       setPostalCodes(tempPostalCodes.map((item) => `${item}`))
       setPostalCode('')
     }
