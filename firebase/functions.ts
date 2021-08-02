@@ -15,10 +15,10 @@ const { publicRuntimeConfig } = getConfig()
 
 if (!firebase.apps.length) {
   firebase.initializeApp({
-    apiKey: publicRuntimeConfig.apiKey,
-    authDomain: `${publicRuntimeConfig.projectId}.firebaseapp.com`,
-    projectId: publicRuntimeConfig.projectId,
-    databaseURL: `https://${publicRuntimeConfig.projectId}.firebaseio.com`,
+    apiKey: publicRuntimeConfig?.apiKey,
+    authDomain: `${publicRuntimeConfig?.projectId}.firebaseapp.com`,
+    projectId: publicRuntimeConfig?.projectId,
+    databaseURL: `https://${publicRuntimeConfig?.projectId}.firebaseio.com`,
   })
 }
 
