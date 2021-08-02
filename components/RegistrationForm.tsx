@@ -87,6 +87,8 @@ export default function RegistrationForm() {
         secondDoseName: '',
         secondDoseDate: '',
       },
+      gotFavipiravia: 'none',
+      favipiraviaAmount: '',
     },
   })
 
@@ -104,6 +106,7 @@ export default function RegistrationForm() {
   const [district, setDistrict] = useState<string>('')
   const [subdistrict, setSubdistrict] = useState<string>('')
   const [postalCode, setPostalCode] = useState<string>('')
+  const [gotMedication, setMedication] = useState<string>('none')
 
   const THAddresses = useMemo(() => getAddress(), [])
 
@@ -826,6 +829,57 @@ export default function RegistrationForm() {
                   rules={{ required: 'โปรดใส่วันที่ฉีดวัคซีนโดสที่สอง' }}
                 />
               </>
+            )}
+            <Controller
+              name="gotFavipiravia"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <FormControl className={styles.text_field} fullWidth>
+                  <FormLabel component="legend">สถานะการรับยา Favipiravia</FormLabel>
+                  <Select
+                    onChange={(e) => {
+                      onChange(e.target.value)
+                      setMedication(e.target.value as string)
+                    }}
+                    value={value}
+                    native
+                    label="สถานะการรับยา Favipiravia"
+                    inputProps={{
+                      name: 'vaccination',
+                      id: 'outlined-age-native-simple',
+                    }}
+                  >
+                    <option aria-label="" value="" />
+                    <option value="none">ไม่ได้รับยา</option>
+                    <option value="received">รับยา</option>
+                  </Select>
+                  <FormHelperText error={error ? true : false}>
+                    {error ? error.message : ''}
+                  </FormHelperText>
+                </FormControl>
+              )}
+              rules={{ required: 'โปรดใส่สถานะการรับยา Favipiravia' }}
+            />
+            {gotMedication === 'received' && (
+              <Controller
+                name="favipiraviaAmount"
+                control={control}
+                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                  <TextField
+                    label="ปริมาณยา Favipiravia ที่ได้รับ"
+                    className={styles.text_field}
+                    value={value}
+                    fullWidth
+                    inputProps={{ maxLength: 3 }}
+                    onChange={(e) => {
+                      onChange(replaceWithNumbers(e.target.value))
+                    }}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{ required: 'โปรดใส่ปริมาณยา Favipiravia ที่ได้รับ' }}
+              />
             )}
             <Button
               className={styles.button}
