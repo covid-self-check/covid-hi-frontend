@@ -26,6 +26,7 @@ export type registerFormData = {
   firstName: string
   lastName: string
   personalID: string
+  station: string
   age: string
   weight: string
   height: string
@@ -76,6 +77,7 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     firstName,
     lastName,
     personalID,
+    station,
     age,
     weight,
     height,
@@ -96,7 +98,7 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     firstName,
     lastName,
     personalID,
-    station: 'test', // no form yet
+    station,
     age: parseInt(age),
     gender,
     weight: parseInt(weight),
@@ -118,8 +120,8 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
         : '',
     dose2Status: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : '',
     dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : '',
-    gotFavipiravia: gotFavipiravia === 'received', // no form yet
-    favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : 0, // no form yet
+    gotFavipiravia: gotFavipiravia === 'received',
+    favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : 0,
   }
   return convertedData
 }
