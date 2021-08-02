@@ -118,3 +118,8 @@ export type updateData = {
   headAche: boolean
   hasHelper: boolean
 }
+
+export type updateDataApi = {
+  personalID: string
+  lineId: string
+} & updateData
