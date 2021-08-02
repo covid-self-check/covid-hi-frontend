@@ -9,11 +9,43 @@ import {
   FormLabel,
   TextField,
 } from '@material-ui/core'
-import styles from '../styles/RegistrationForm.module.css'
+// import styles from '../styles/RegistrationForm.module.css'
 import { Controller, useForm } from 'react-hook-form'
+
+import { makeStyles } from '@material-ui/styles'
+
 import { updateData, updateDataApi } from '../util/types'
 
+const useStyles = makeStyles(
+  {
+    title: {
+      fontSize: '3rem',
+    },
+    subtitle: {
+      fontSize: '1.5rem',
+    },
+    title_div: {
+      marginBottom: '30px',
+    },
+    text_field: {
+      marginTop: '10px',
+      marginBottom: '10px',
+    },
+    button: {
+      marginTop: '10px',
+      marginBottom: '10px',
+    },
+    form_label: {
+      marginTop: '30px',
+      marginBottom: '10px',
+    },
+  },
+  { index: 1 },
+)
+
 export default function UpdateForm() {
+  const styles = useStyles()
+
   const { control, handleSubmit } = useForm<updateData>({
     defaultValues: {
       cough: false,
