@@ -133,18 +133,20 @@ export default function UpdateForm() {
           <FormLabel className={styles.form_label} component="legend">
             สถานะ
           </FormLabel>
-          <FormControlLabel
-            control={
-              <Controller
-                name="hasHelper"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <Checkbox checked={value} onChange={onChange} />
-                )}
-              />
-            }
-            label="มีคนดูแลช่วยเหลือหรือไม่"
-          />
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Controller
+                  name="hasHelper"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <Checkbox checked={value} onChange={onChange} />
+                  )}
+                />
+              }
+              label="มีคนดูแลช่วยเหลือหรือไม่"
+            />
+          </FormGroup>
           <Button
             className={styles.button}
             type="submit"
