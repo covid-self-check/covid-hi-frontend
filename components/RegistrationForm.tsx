@@ -80,7 +80,7 @@ export default function RegistrationForm() {
       digitalLiteracy: false,
       contactInfo: {
         phoneNumber: '',
-        closeContactsPhoneNumber: '',
+        // closeContactsPhoneNumber: '',
         emergencyContactPhoneNumber: '',
       },
       lineID: '',
@@ -474,9 +474,9 @@ export default function RegistrationForm() {
                     }}
                   >
                     <option aria-label="" value="" />
-                    <option value="MALE">ชาย</option>
-                    <option value="FEMALE">หญิง</option>
-                    <option value="OTHER">อื่นๆ</option>
+                    <option value="ชาย">ชาย</option>
+                    <option value="หญิง">หญิง</option>
+                    <option value="ไม่ระบุ">ไม่ระบุ</option>
                   </Select>
                 </FormControl>
               )}
@@ -677,7 +677,7 @@ export default function RegistrationForm() {
               )}
               rules={{ required: 'โปรดใส่ไอดีไลน์' }}
             />
-            <Controller
+            {/* <Controller
               name="contactInfo.closeContactsPhoneNumber"
               control={control}
               defaultValue=""
@@ -696,7 +696,7 @@ export default function RegistrationForm() {
                 />
               )}
               rules={{ required: 'โปรดใส่เบอร์โทรติดต่อคนใกล้ชิด' }}
-            />
+            /> */}
             <Controller
               name="contactInfo.emergencyContactPhoneNumber"
               control={control}

@@ -43,6 +43,6 @@ export const updatePatient = async (data: updateData) => {
     const response: firebase.functions.HttpsCallableResult = await updateSymptom(data)
     return response.data
   } catch (error) {
-    console.log('Error: ', error)
+    console.log('Error: ', error.details)
   }
 }

@@ -17,11 +17,12 @@ export type registerDto = {
   hasHelper: boolean
   digitalLiteracy: boolean
   personalPhoneNo: string
-  personalLineID: string
-  closestUnriskPersonPhoneNo: string
-  dose1Status?: string
+  // personalLineID: string
+  // closestUnriskPersonPhoneNo: string
+  emergencyPhoneNo: string
+  dose1Name?: string
   dose1Date?: string
-  dose2Status?: string
+  dose2Name?: string
   dose2Date?: string
   gotFavipiravia: boolean
   favipiraviaAmount?: number
@@ -31,7 +32,7 @@ export type registerFormData = {
   firstName: string
   lastName: string
   personalID: string
-  station: string
+  stationName: string
   age: string
   weight: string
   height: string
@@ -49,6 +50,7 @@ export type registerFormData = {
   contactInfo: {
     phoneNumber: string
     closeContactsPhoneNumber: string
+    emergencyContactPhoneNumber: string
   }
   lineID: string
   vaccination: string
@@ -82,7 +84,7 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     firstName,
     lastName,
     personalID,
-    station,
+    stationName,
     age,
     weight,
     height,
@@ -104,7 +106,7 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     firstName,
     lastName,
     personalID,
-    station,
+    station: stationName,
     age: parseInt(age),
     gender,
     weight: parseInt(weight),
@@ -118,20 +120,21 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     hasHelper,
     digitalLiteracy,
     personalPhoneNo: contactInfo.phoneNumber,
-    personalLineID: lineID,
-    closestUnriskPersonPhoneNo: contactInfo.closeContactsPhoneNumber,
-    dose1Status:
+    // personalLineID: lineID,
+    // closestUnriskPersonPhoneNo: contactInfo.closeContactsPhoneNumber,
+    emergencyPhoneNo: contactInfo.emergencyContactPhoneNumber,
+    dose1Name:
       vaccination === 'one_dose' || vaccination === 'two_doses'
         ? vaccinationDates.firstDoseName
-        : '',
+        : undefined,
     dose1Date:
       vaccination === 'one_dose' || vaccination === 'two_doses'
         ? vaccinationDates.firstDoseDate
-        : '',
-    dose2Status: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : '',
-    dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : '',
+        : undefined,
+    dose2Name: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : undefined,
+    dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : undefined,
     gotFavipiravia: gotFavipiravia === 'received',
-    favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : 0,
+    favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : undefined,
   }
   return convertedData
 }
