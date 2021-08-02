@@ -16,15 +16,46 @@ import {
   Autocomplete,
 } from '@material-ui/core'
 import Card from './Card'
-import styles from '../styles/RegistrationForm.module.css'
+// import styles from '../styles/RegistrationForm.module.css'
 import { registerData } from '../util/types'
 import { getAddress } from '../util/address'
+import { registerPatient } from '../firebase/functions'
+import { makeStyles } from '@material-ui/styles'
 
 const NATIONAL_ID_MAX_LENGTH = 13
 const PASSPORT_ID_OLD_MAX_LENGTH = 7
 const PASSPORT_ID_NEW_MAX_LENGTH = 9
 
+const useStyles = makeStyles(
+  {
+    title: {
+      fontSize: '3rem',
+    },
+    subtitle: {
+      fontSize: '1.5rem',
+    },
+    title_div: {
+      marginBottom: '30px',
+    },
+    text_field: {
+      marginTop: '10px',
+      marginBottom: '10px',
+    },
+    button: {
+      marginTop: '10px',
+      marginBottom: '10px',
+    },
+    form_label: {
+      marginTop: '30px',
+      marginBottom: '10px',
+    },
+  },
+  { index: 1 },
+)
+
 export default function RegistrationForm() {
+  const styles = useStyles()
+
   const { register, handleSubmit, control, getValues } = useForm({
     defaultValues: {
       firstName: '',
@@ -50,8 +81,10 @@ export default function RegistrationForm() {
       lineID: '',
       vaccination: 'none',
       vaccinationDates: {
-        firstDose: '',
-        secondDose: '',
+        firstDoseName: '',
+        firstDoseDate: '',
+        secondDoseName: '',
+        secondDoseDate: '',
       },
     },
   })
@@ -170,8 +203,9 @@ export default function RegistrationForm() {
     THAddresses,
   ])
 
-  function onSubmit(data: any) {
+  const onSubmit = async (data: any) => {
     console.log(data)
+    const response = await registerPatient(data)
     setFormData(data)
   }
 
@@ -678,65 +712,94 @@ export default function RegistrationForm() {
               )}
               rules={{ required: 'โปรดใส่สถานะการฉีดวัคซีน' }}
             />
-            {vaccination === 'one_dose' && (
-              <>
-                <Controller
-                  name="vaccinationDates.firstDose"
-                  control={control}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <>
-                      <TextField
-                        fullWidth
-                        className={styles.text_field}
-                        id="date"
-                        label="วันที่ฉีดวัคซีนโดสแรก"
-                        type="date"
-                        defaultValue={undefined}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        value={value}
-                        onChange={onChange}
-                      />
-                      <FormHelperText error={error ? true : false}>
-                        {error ? error.message : ''}
-                      </FormHelperText>
-                    </>
-                  )}
-                  rules={{ required: 'โปรดใส่วันที่ฉีดวัคซีนโดสแรก' }}
-                />
-              </>
-            )}
+            {vaccination === 'one_dose' ||
+              (vaccination === 'two_doses' && (
+                <>
+                  <Controller
+                    name="vaccinationDates.firstDoseName"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                      <FormControl className={styles.text_field} fullWidth>
+                        <InputLabel htmlFor="outlined-age-native-simple">
+                          ชื่อวัคซีนที่ฉีดเข็มโดสแรก
+                        </InputLabel>
+                        <Select
+                          onChange={onChange}
+                          value={value}
+                          native
+                          label=""
+                          inputProps={{
+                            name: 'vaccinationDates.firstDoseName',
+                            id: 'outlined-age-native-simple',
+                          }}
+                        >
+                          <option aria-label="" value="" />
+                          <option value="sinovac">Sinovac</option>
+                          <option value="az">Astra Zeneca</option>
+                        </Select>
+                      </FormControl>
+                    )}
+                    rules={{ required: 'โปรดใส่ชื่อวัคซีนโดสแรก' }}
+                  />
+                  <Controller
+                    name="vaccinationDates.firstDoseDate"
+                    control={control}
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                      <>
+                        <TextField
+                          fullWidth
+                          className={styles.text_field}
+                          id="date"
+                          label="วันที่ฉีดวัคซีนโดสแรก"
+                          type="date"
+                          defaultValue={undefined}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          value={value}
+                          onChange={onChange}
+                        />
+                        <FormHelperText error={error ? true : false}>
+                          {error ? error.message : ''}
+                        </FormHelperText>
+                      </>
+                    )}
+                    rules={{ required: 'โปรดใส่วันที่ฉีดวัคซีนโดสแรก' }}
+                  />
+                </>
+              ))}
             {vaccination === 'two_doses' && (
               <>
                 <Controller
-                  name="vaccinationDates.firstDose"
+                  name="vaccinationDates.secondDoseName"
                   control={control}
+                  defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <>
-                      <TextField
-                        fullWidth
-                        className={styles.text_field}
-                        id="date"
-                        label="วันที่ฉีดวัคซีนโดสแรก"
-                        type="date"
-                        defaultValue={undefined}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                        value={value}
+                    <FormControl className={styles.text_field} fullWidth>
+                      <InputLabel htmlFor="outlined-age-native-simple">
+                        ชื่อวัคซีนที่ฉีดเข็มโดสที่สอง
+                      </InputLabel>
+                      <Select
                         onChange={onChange}
-                      />
-                      <FormHelperText error={error ? true : false}>
-                        {error ? error.message : ''}
-                      </FormHelperText>
-                    </>
+                        value={value}
+                        native
+                        label=""
+                        inputProps={{
+                          name: 'vaccinationDates.secondDoseName',
+                          id: 'outlined-age-native-simple',
+                        }}
+                      >
+                        <option aria-label="" value="" />
+                        <option value="sinovac">Sinovac</option>
+                        <option value="az">Astra Zeneca</option>
+                      </Select>
+                    </FormControl>
                   )}
-                  rules={{ required: 'โปรดใส่วันที่ฉีดวัคซีนโดสแรก' }}
+                  rules={{ required: 'โปรดใส่ชื่อวัคซีนโดสที่สอง' }}
                 />
-
                 <Controller
-                  name="vaccinationDates.secondDose"
+                  name="vaccinationDates.secondDoseDate"
                   control={control}
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <>
