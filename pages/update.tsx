@@ -1,3 +1,5 @@
+import UpdateForm from "../components/UpdateForm";
+
 export default function Update() {
-  return <div>update</div>
+  return <UpdateForm />
 }
