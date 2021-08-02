@@ -9,43 +9,11 @@ import {
   FormLabel,
   TextField,
 } from '@material-ui/core'
-// import styles from '../styles/RegistrationForm.module.css'
+import styles from '../styles/RegistrationForm.module.css'
 import { Controller, useForm } from 'react-hook-form'
-
-import { makeStyles } from '@material-ui/styles'
-
-import { updateData, updateDataApi } from '../util/types'
-
-const useStyles = makeStyles(
-  {
-    title: {
-      fontSize: '3rem',
-    },
-    subtitle: {
-      fontSize: '1.5rem',
-    },
-    title_div: {
-      marginBottom: '30px',
-    },
-    text_field: {
-      marginTop: '10px',
-      marginBottom: '10px',
-    },
-    button: {
-      marginTop: '10px',
-      marginBottom: '10px',
-    },
-    form_label: {
-      marginTop: '30px',
-      marginBottom: '10px',
-    },
-  },
-  { index: 1 },
-)
+import { updateData } from '../util/types'
 
 export default function UpdateForm() {
-  const styles = useStyles()
-
   const { control, handleSubmit } = useForm<updateData>({
     defaultValues: {
       cough: false,
@@ -55,11 +23,7 @@ export default function UpdateForm() {
     },
   })
 
-  const onSubmit = (values: updateData) => {
-    //TODO: extract id from line
-    const data: updateDataApi = { ...values, lineId: 'hello', personalID: 'world' }
-    console.log(data)
-  }
+  const onSubmit = (values: updateData) => console.log(values)
 
   return (
     <Card>
@@ -77,7 +41,7 @@ export default function UpdateForm() {
             control={control}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label="อุณภูมิรางก่าย (องศา)"
+                label="อณภูมิรางก่าย (องศา)"
                 className={styles.text_field}
                 value={value}
                 type="number"
@@ -169,20 +133,18 @@ export default function UpdateForm() {
           <FormLabel className={styles.form_label} component="legend">
             สถานะ
           </FormLabel>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Controller
-                  name="hasHelper"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Checkbox checked={value} onChange={onChange} />
-                  )}
-                />
-              }
-              label="มีคนดูแลช่วยเหลือหรือไม่"
-            />
-          </FormGroup>
+          <FormControlLabel
+            control={
+              <Controller
+                name="hasHelper"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <Checkbox checked={value} onChange={onChange} />
+                )}
+              />
+            }
+            label="มีคนดูแลช่วยเหลือหรือไม่"
+          />
           <Button
             className={styles.button}
             type="submit"
