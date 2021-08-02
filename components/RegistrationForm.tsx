@@ -21,6 +21,7 @@ import { convertFormDataToAPIData, registerFormData } from '../util/types'
 import { getAddress } from '../util/address'
 import { registerPatient } from '../firebase/functions'
 import { makeStyles } from '@material-ui/styles'
+import { useRouter } from 'next/dist/client/router'
 
 const NATIONAL_ID_MAX_LENGTH = 13
 const PASSPORT_ID_OLD_MAX_LENGTH = 7
@@ -55,6 +56,7 @@ const useStyles = makeStyles(
 
 export default function RegistrationForm() {
   const styles = useStyles()
+  const router = useRouter()
 
   const { register, handleSubmit, control, getValues } = useForm({
     defaultValues: {
@@ -89,10 +91,12 @@ export default function RegistrationForm() {
       },
       gotFavipiravia: 'none',
       favipiraviaAmount: '',
+      station: '',
     },
   })
 
-  const [componentDidMount, setComponentDidMount] = useState(false)
+  const [componentDidMount, setComponentDidMount] = useState<boolean>(false)
+
   const [vaccination, setVaccination] = useState<string>('none')
   const [nationalIdOrPassportFieldStatus, setNationalIdOrPassportFieldStatus] = useState('unknown')
   const [nationalIdOrPassportFieldMaxLength, setNationalIdOrPassportFieldMaxLength] =
@@ -145,13 +149,12 @@ export default function RegistrationForm() {
 
     if (hasProvinceChanged) {
       let tempDistricts: string[] = []
-      for (let i = 0; i < THAddresses.length; i++) {
-        if (THAddresses[i][0] === province) {
-          for (let j = 0; j < THAddresses[i][1].length; j++) {
+
+      for (let i = 0; i < THAddresses.length; i++)
+        if (THAddresses[i][0] === province)
+          for (let j = 0; j < THAddresses[i][1].length; j++)
             tempDistricts.push(THAddresses[i][1][j][0] as string)
-          }
-        }
-      }
+
       setDistricts(tempDistricts)
       setDistrict('')
       setSubdistrict('')
@@ -160,17 +163,14 @@ export default function RegistrationForm() {
 
     if (hasDistrictChanged) {
       let tempSubdistricts: string[] = []
-      for (let i = 0; i < THAddresses.length; i++) {
-        if (THAddresses[i][0] === province) {
-          for (let j = 0; j < THAddresses[i][1].length; j++) {
-            if (THAddresses[i][1][j][0] === district) {
-              for (let k = 0; k < THAddresses[i][1][j][1].length; k++) {
+
+      for (let i = 0; i < THAddresses.length; i++)
+        if (THAddresses[i][0] === province)
+          for (let j = 0; j < THAddresses[i][1].length; j++)
+            if (THAddresses[i][1][j][0] === district)
+              for (let k = 0; k < THAddresses[i][1][j][1].length; k++)
                 tempSubdistricts.push(THAddresses[i][1][j][1][k][0] as string)
-              }
-            }
-          }
-        }
-      }
+
       setSubdistricts(tempSubdistricts)
       setSubdistrict('')
       setPostalCode('')
@@ -199,6 +199,7 @@ export default function RegistrationForm() {
     hasDistrictChanged,
     hasSubdistrictChanged,
     THAddresses,
+    router,
   ])
 
   const onSubmit = async (data: registerFormData) => {
@@ -247,14 +248,6 @@ export default function RegistrationForm() {
     }
   }
 
-  function replaceWithNumbers(text: string) {
-    return text.replace(/\D+/g, '')
-  }
-
-  function replaceWithLatinCharactersOrNumbers(text: string) {
-    return text.replace(/[^A-Za-z0-9]/g, '')
-  }
-
   function handlePassportInput(passportId: string) {
     if (nationalIdOrPassportFieldStatus === 'passport_old') {
       return passportId[0].toUpperCase() + replaceWithNumbers(passportId.slice(1))
@@ -271,6 +264,16 @@ export default function RegistrationForm() {
         replaceWithNumbers(passportId.slice(2))
       )
     }
+  }
+
+  function stationIsAvailable(station: string) {}
+
+  function replaceWithNumbers(text: string) {
+    return text.replace(/\D+/g, '')
+  }
+
+  function replaceWithLatinCharactersOrNumbers(text: string) {
+    return text.replace(/[^A-Za-z0-9]/g, '')
   }
 
   function isNumeric(str: string) {
@@ -911,6 +914,25 @@ export default function RegistrationForm() {
               rules={{ required: 'โปรดใส่ปริมาณยา Favipiravia ที่ได้รับ' }}
             />
           )}
+          <Controller
+            name="station"
+            control={control}
+            render={({ field: { onChange, value }, fieldState: { error } }) => (
+              <TextField
+                label="จุดตรวจ"
+                className={styles.text_field}
+                value={router.query.station != undefined ? router.query.station : value}
+                fullWidth
+                disabled={router.query.station != undefined}
+                onChange={(e) => {
+                  onChange(e.target.value)
+                }}
+                error={!!error}
+                helperText={error ? error.message : null}
+              />
+            )}
+            rules={{ required: 'โปรดใส่จุดตรวจ' }}
+          />
           <Button
             className={styles.button}
             form="registrationForm"
