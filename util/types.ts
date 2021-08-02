@@ -9,6 +9,10 @@ export type registerDto = {
   height: number
   congenitalDisease?: string
   address: string
+  province: string
+  prefecture: string
+  district: string
+  postNo: string
   hasHelper: boolean
   digitalLiteracy: boolean
   personalPhoneNo: string
@@ -104,7 +108,11 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     weight: parseInt(weight),
     height: parseInt(height),
     congenitalDisease,
-    address: `${address} ${addressInfo.subdistrict} ${addressInfo.district} ${addressInfo.province} ${addressInfo.postalCode}`,
+    address: address,
+    province: addressInfo.province,
+    prefecture: addressInfo.district,
+    district: addressInfo.subdistrict,
+    postNo: addressInfo.postalCode,
     hasHelper,
     digitalLiteracy,
     personalPhoneNo: contactInfo.phoneNumber,
