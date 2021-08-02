@@ -448,8 +448,9 @@ export default function RegistrationForm() {
                     }}
                   >
                     <option aria-label="" value="" />
-                    <option value="male">ชาย</option>
-                    <option value="female">หญิง</option>
+                    <option value="MALE">ชาย</option>
+                    <option value="FEMALE">หญิง</option>
+                    <option value="OTHER">อื่นๆ</option>
                   </Select>
                 </FormControl>
               )}

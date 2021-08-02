@@ -14,7 +14,7 @@ const useStyles = makeStyles(
       paddingBottom: '30px',
     },
   },
-  { index: 3 },
+  { index: 1 },
 )
 
 export default function Register() {

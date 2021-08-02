@@ -13,12 +13,13 @@ export type registerData = {
   digitalLiteracy: boolean
   personalPhoneNo: string
   personalLineID: string
-  emergencyPhoneNo: string
   closestUnriskPersonPhoneNo: string
-  dose1Name: string
-  dose1Date: string
-  dose2Name: string
-  dose2Date: string
+  dose1Status?: string
+  dose1Date?: string
+  dose2Status?: string
+  dose2Date?: string
+  gotFavipiravia: boolean
+  favipiraviaAmount?: number
 }
 
 export type updateData = {
@@ -94,12 +95,13 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerData 
     digitalLiteracy,
     personalPhoneNo: contactInfo.phoneNumber,
     personalLineID: lineID,
-    emergencyPhoneNo: '', // no form yet
     closestUnriskPersonPhoneNo: contactInfo.closeContactsPhoneNumber,
-    dose1Name: vaccinationDates.firstDoseName,
+    dose1Status: vaccinationDates.firstDoseName,
     dose1Date: vaccinationDates.firstDoseDate,
-    dose2Name: vaccinationDates.secondDoseName,
+    dose2Status: vaccinationDates.secondDoseName,
     dose2Date: vaccinationDates.secondDoseDate,
+    gotFavipiravia: true, // no form yet
+    favipiraviaAmount: 999, // no form yet
   }
   return convertedData
 }
