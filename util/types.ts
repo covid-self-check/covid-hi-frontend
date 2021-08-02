@@ -1,4 +1,5 @@
 export type registerDto = {
+  lineId: string
   firstName: string
   lastName: string
   personalID: string
@@ -99,6 +100,7 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     favipiraviaAmount,
   } = data
   const convertedData: registerDto = {
+    lineId: 'placeholder',
     firstName,
     lastName,
     personalID,
