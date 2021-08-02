@@ -80,6 +80,7 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerData 
     contactInfo,
     lineID,
     digitalLiteracy,
+    vaccination,
     vaccinationDates,
     gotFavipiravia,
     favipiraviaAmount,
@@ -100,12 +101,18 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerData 
     personalPhoneNo: contactInfo.phoneNumber,
     personalLineID: lineID,
     closestUnriskPersonPhoneNo: contactInfo.closeContactsPhoneNumber,
-    dose1Status: vaccinationDates.firstDoseName,
-    dose1Date: vaccinationDates.firstDoseDate,
-    dose2Status: vaccinationDates.secondDoseName,
-    dose2Date: vaccinationDates.secondDoseDate,
+    dose1Status:
+      vaccination === 'one_dose' || vaccination === 'two_doses'
+        ? vaccinationDates.firstDoseName
+        : '',
+    dose1Date:
+      vaccination === 'one_dose' || vaccination === 'two_doses'
+        ? vaccinationDates.firstDoseDate
+        : '',
+    dose2Status: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : '',
+    dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : '',
     gotFavipiravia: gotFavipiravia === 'received', // no form yet
-    favipiraviaAmount: parseInt(favipiraviaAmount), // no form yet
+    favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : 0, // no form yet
   }
   return convertedData
 }

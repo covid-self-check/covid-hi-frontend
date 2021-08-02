@@ -56,7 +56,7 @@ const useStyles = makeStyles(
 export default function RegistrationForm() {
   const styles = useStyles()
 
-  const { handleSubmit, control, getValues } = useForm({
+  const { register, handleSubmit, control, getValues } = useForm({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -204,10 +204,10 @@ export default function RegistrationForm() {
   ])
 
   const onSubmit = async (data: registerFormData) => {
-    // console.log(data)
+    console.log(data)
     const convertedData = convertFormDataToAPIData(data)
     const response = await registerPatient(convertedData)
-    // console.log(response)
+    console.log(response)
     setFormData(data)
   }
 
@@ -400,6 +400,7 @@ export default function RegistrationForm() {
                   }}
                   error={!!error}
                   helperText={error ? error.message : null}
+                  inputProps={{ maxLength: 3 }}
                   InputProps={{
                     endAdornment: <InputAdornment position="end">กก.</InputAdornment>,
                   }}
@@ -421,6 +422,7 @@ export default function RegistrationForm() {
                   }}
                   error={!!error}
                   helperText={error ? error.message : null}
+                  inputProps={{ maxLength: 3 }}
                   InputProps={{
                     endAdornment: <InputAdornment position="end">ซม.</InputAdornment>,
                   }}
@@ -669,22 +671,45 @@ export default function RegistrationForm() {
               )}
               rules={{ required: 'โปรดใส่เบอร์โทรติดต่อคนใกล้ชิด' }}
             />
-            <Controller
-              name="hasHelper"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <FormControl className={styles.text_field}>
-                  <FormLabel component="legend">ฉัน...</FormLabel>
-                  <FormGroup>
-                    <FormControlLabel control={<Checkbox name="hasHelper" />} label="มีผู้ดูแล" />
-                    <FormControlLabel
-                      control={<Checkbox name="digitalLiteracy" />}
-                      label="สามารถกรอกข้อมูลเองได้"
+            <FormControl className={styles.text_field}>
+              <FormLabel component="legend">ฉัน...</FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="hasHelper"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox
+                          checked={value}
+                          name="hasHelper"
+                          size="medium"
+                          onChange={(e) => onChange(e.target.checked)}
+                        />
+                      )}
                     />
-                  </FormGroup>
-                </FormControl>
-              )}
-            />
+                  }
+                  label="มีผู้ดูแล"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="digitalLiteracy"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox
+                          checked={value}
+                          name="digitalLiteracy"
+                          size="medium"
+                          onChange={(e) => onChange(e.target.checked)}
+                        />
+                      )}
+                    />
+                  }
+                  label="สามารถกรอกข้อมูลเองได้"
+                />
+              </FormGroup>
+            </FormControl>
             <Controller
               name="vaccination"
               control={control}
@@ -723,25 +748,30 @@ export default function RegistrationForm() {
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <FormControl className={styles.text_field} fullWidth>
-                      <InputLabel htmlFor="outlined-age-native-simple">
-                        ชื่อวัคซีนที่ฉีดเข็มโดสแรก
-                      </InputLabel>
-                      <Select
-                        onChange={onChange}
-                        value={value}
-                        native
-                        label=""
-                        inputProps={{
-                          name: 'vaccinationDates.firstDoseName',
-                          id: 'outlined-age-native-simple',
-                        }}
-                      >
-                        <option aria-label="" value="" />
-                        <option value="sinovac">Sinovac</option>
-                        <option value="az">Astra Zeneca</option>
-                      </Select>
-                    </FormControl>
+                    <>
+                      <FormControl className={styles.text_field} fullWidth>
+                        <InputLabel htmlFor="outlined-age-native-simple">
+                          ชื่อวัคซีนที่ฉีดเข็มโดสแรก
+                        </InputLabel>
+                        <Select
+                          onChange={onChange}
+                          value={value}
+                          native
+                          label=""
+                          inputProps={{
+                            name: 'vaccinationDates.firstDoseName',
+                            id: 'outlined-age-native-simple',
+                          }}
+                        >
+                          <option aria-label="" value="" />
+                          <option value="sinovac">Sinovac</option>
+                          <option value="az">Astra Zeneca</option>
+                        </Select>
+                      </FormControl>
+                      <FormHelperText error={error ? true : false}>
+                        {error ? error.message : ''}
+                      </FormHelperText>
+                    </>
                   )}
                   rules={{ required: 'โปรดใส่ชื่อวัคซีนโดสแรก' }}
                 />
@@ -779,25 +809,30 @@ export default function RegistrationForm() {
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <FormControl className={styles.text_field} fullWidth>
-                      <InputLabel htmlFor="outlined-age-native-simple">
-                        ชื่อวัคซีนที่ฉีดเข็มโดสที่สอง
-                      </InputLabel>
-                      <Select
-                        onChange={onChange}
-                        value={value}
-                        native
-                        label=""
-                        inputProps={{
-                          name: 'vaccinationDates.secondDoseName',
-                          id: 'outlined-age-native-simple',
-                        }}
-                      >
-                        <option aria-label="" value="" />
-                        <option value="sinovac">Sinovac</option>
-                        <option value="az">Astra Zeneca</option>
-                      </Select>
-                    </FormControl>
+                    <>
+                      <FormControl className={styles.text_field} fullWidth>
+                        <InputLabel htmlFor="outlined-age-native-simple">
+                          ชื่อวัคซีนที่ฉีดเข็มโดสที่สอง
+                        </InputLabel>
+                        <Select
+                          onChange={onChange}
+                          value={value}
+                          native
+                          label=""
+                          inputProps={{
+                            name: 'vaccinationDates.secondDoseName',
+                            id: 'outlined-age-native-simple',
+                          }}
+                        >
+                          <option aria-label="" value="" />
+                          <option value="sinovac">Sinovac</option>
+                          <option value="az">Astra Zeneca</option>
+                        </Select>
+                      </FormControl>
+                      <FormHelperText error={error ? true : false}>
+                        {error ? error.message : ''}
+                      </FormHelperText>
+                    </>
                   )}
                   rules={{ required: 'โปรดใส่ชื่อวัคซีนโดสที่สอง' }}
                 />
