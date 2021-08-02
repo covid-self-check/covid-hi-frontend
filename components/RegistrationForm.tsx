@@ -129,8 +129,6 @@ export default function RegistrationForm() {
   const hasPostalCodeChanged = useHasChanged(postalCode)
 
   useEffect(() => {
-    console.log(formData)
-
     if (!componentDidMount) {
       let tempProvinces: string[] = []
       for (let i = 0; i < THAddresses.length; i++) {
@@ -192,8 +190,6 @@ export default function RegistrationForm() {
       setPostalCodes(tempPostalCodes.map((item) => `${item}`))
       setPostalCode('')
     }
-
-    console.log(province + district + subdistrict)
   }, [
     componentDidMount,
     formData,
@@ -208,9 +204,10 @@ export default function RegistrationForm() {
   ])
 
   const onSubmit = async (data: registerFormData) => {
-    console.log(data)
+    // console.log(data)
     const convertedData = convertFormDataToAPIData(data)
     const response = await registerPatient(convertedData)
+    // console.log(response)
     setFormData(data)
   }
 
@@ -261,8 +258,6 @@ export default function RegistrationForm() {
   }
 
   function handlePassportInput(passportId: string) {
-    console.log(nationalIdOrPassportFieldStatus)
-
     if (nationalIdOrPassportFieldStatus === 'passport_old') {
       return passportId[0].toUpperCase() + replaceWithNumbers(passportId.slice(1))
     }
