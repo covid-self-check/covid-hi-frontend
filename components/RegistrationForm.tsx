@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core'
 import Card from './Card'
 // import styles from '../styles/RegistrationForm.module.css'
-import { convertFormDataToAPIData, registerData, registerFormData } from '../util/types'
+import { convertFormDataToAPIData, registerFormData } from '../util/types'
 import { getAddress, getCovidTestCentres } from '../util/constants'
 import { registerPatient } from '../firebase/functions'
 import { makeStyles } from '@material-ui/styles'
@@ -119,7 +119,7 @@ export default function RegistrationForm() {
   const [postalCode, setPostalCode] = useState<string>('')
   const [gotMedication, setMedication] = useState<string>('none')
   const [stationName, setStationName] = useState<string>('')
-  const [stationIdIsAvailable, setStationIdIsAvailable] = useState<boolean>(false);
+  const [stationIdIsAvailable, setStationIdIsAvailable] = useState<boolean>(false)
 
   const THAddresses = useMemo(() => getAddress(), [])
   const covidTestCentres = useMemo(() => getCovidTestCentres(), [])
@@ -153,19 +153,15 @@ export default function RegistrationForm() {
     }
 
     if (covidTestCentreNames.length === 0) {
-      let tempCovidTestCentreNames: string[] = []
-
-      Object.keys(covidTestCentres).map((key) => {
-        tempCovidTestCentreNames.push(covidTestCentres[key].name as string)
-      })
+      const tempCovidTestCentreNames: string[] = covidTestCentres.map((centre) => centre.name)
 
       setCovidTestCentreNames(tempCovidTestCentreNames)
     }
 
     if (router.query.stationId != undefined || router.query.stationId != '') {
-      Object.keys(covidTestCentres).map((key) => {
-        if (key === router.query.stationId) {
-          setStationName(covidTestCentres[key].name)
+      covidTestCentres.forEach((centre) => {
+        if (`${centre.id}` === router.query.stationId) {
+          setStationName(centre.name)
           setStationIdIsAvailable(true)
           return
         }

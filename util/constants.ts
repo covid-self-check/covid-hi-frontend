@@ -6,5 +6,5 @@ export const getAddress = () => {
 }
 
 export const getCovidTestCentres = () => {
-    return covidTestCentres
+  return covidTestCentres
 }
