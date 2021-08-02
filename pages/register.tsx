@@ -20,10 +20,8 @@ const useStyles = makeStyles(
 export default function Register() {
   const styles = useStyles()
   return (
-    <>
-      <div className={styles.container}>
-        <RegistrationForm />
-      </div>
-    </>
+    <div className={styles.container}>
+      <RegistrationForm />
+    </div>
   )
 }
