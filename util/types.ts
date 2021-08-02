@@ -116,3 +116,8 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerData 
   }
   return convertedData
 }
+
+export type updateDataApi = {
+  personalID: string
+  lineId: string
+} & updateData

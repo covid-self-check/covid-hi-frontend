@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 import styles from '../styles/RegistrationForm.module.css'
 import { Controller, useForm } from 'react-hook-form'
-import { updateData } from '../util/types'
+import { updateData, updateDataApi } from '../util/types'
 
 export default function UpdateForm() {
   const { control, handleSubmit } = useForm<updateData>({
@@ -23,7 +23,11 @@ export default function UpdateForm() {
     },
   })
 
-  const onSubmit = (values: updateData) => console.log(values)
+  const onSubmit = (values: updateData) => {
+    //TODO: extract id from line
+    const data: updateDataApi = { ...values, lineId: 'hello', personalID: 'world' }
+    console.log(data)
+  }
 
   return (
     <Card>
