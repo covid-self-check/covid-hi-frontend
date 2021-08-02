@@ -14,7 +14,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { makeStyles } from '@material-ui/styles'
 
-import { updateData, updateDataApi } from '../util/types'
+import { convertUpdateFormDataToDto, updateData, updateDto } from '../util/types'
 
 const useStyles = makeStyles(
   {
@@ -57,7 +57,7 @@ export default function UpdateForm() {
 
   const onSubmit = (values: updateData) => {
     //TODO: extract id from line
-    const data: updateDataApi = { ...values, lineId: 'hello', personalID: 'world' }
+    const data: updateDto = convertUpdateFormDataToDto(values)
     console.log(data)
   }
 

@@ -9,7 +9,7 @@ import 'firebase/analytics'
 
 // Add the Firebase products that you want to use
 import 'firebase/functions'
-import { registerData } from '../util/types'
+import { registerDto, updateData } from '../util/types'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -22,7 +22,7 @@ if (!firebase.apps.length) {
   })
 }
 
-export const registerPatient = async (data: registerData) => {
+export const registerPatient = async (data: registerDto) => {
   let registerParticipant = firebase
     .app()
     .functions('asia-southeast2')
@@ -30,6 +30,17 @@ export const registerPatient = async (data: registerData) => {
   try {
     console.log(data)
     const response: firebase.functions.HttpsCallableResult = await registerParticipant(data)
+    return response.data
+  } catch (error) {
+    console.log('Error: ', error)
+  }
+}
+
+export const updatePatient = async (data: updateData) => {
+  let updateSymptom = firebase.app().functions('asia-southeast2').httpsCallable('updateSymptom')
+  try {
+    console.log(data)
+    const response: firebase.functions.HttpsCallableResult = await updateSymptom(data)
     return response.data
   } catch (error) {
     console.log('Error: ', error)

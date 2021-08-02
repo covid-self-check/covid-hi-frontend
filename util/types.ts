@@ -1,4 +1,4 @@
-export type registerData = {
+export type registerDto = {
   firstName: string
   lastName: string
   personalID: string
@@ -20,14 +20,6 @@ export type registerData = {
   dose2Date?: string
   gotFavipiravia: boolean
   favipiraviaAmount?: number
-}
-
-export type updateData = {
-  spO2: number //o2 in blood stream
-  bodyTemp: number //body temp
-  pulseRate: number //pulse rate
-  checklist: string[] // a list of covid symptoms
-  exhaustionLevel: number //ระดับความรู้สึกว่าเหนื่อยไหม
 }
 
 export type registerFormData = {
@@ -64,7 +56,22 @@ export type registerFormData = {
   favipiraviaAmount: string
 }
 
-export const convertFormDataToAPIData: (data: registerFormData) => registerData = (data) => {
+export type updateData = {
+  bodyTemperature: number
+  pulse: number
+  spO2: number
+  cough: boolean
+  soreThroat: boolean
+  headAche: boolean
+  hasHelper: boolean
+}
+
+export type updateDto = {
+  // personalID: string
+  lineId: string
+} & updateData
+
+export const convertFormDataToAPIData: (data: registerFormData) => registerDto = (data) => {
   const {
     firstName,
     lastName,
@@ -85,7 +92,7 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerData 
     gotFavipiravia,
     favipiraviaAmount,
   } = data
-  const convertedData: registerData = {
+  const convertedData: registerDto = {
     firstName,
     lastName,
     personalID,
@@ -117,7 +124,7 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerData 
   return convertedData
 }
 
-export type updateDataApi = {
-  personalID: string
-  lineId: string
-} & updateData
+export const convertUpdateFormDataToDto = (data: updateData) => {
+  const convertedData: updateDto = { ...data, lineId: 'hello' }
+  return convertedData
+}
