@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core'
 import Card from './Card'
 
-import { convertFormDataToAPIData, registerData, registerFormData } from '../util/types'
+import { convertFormDataToAPIData, registerFormData } from '../util/types'
 import { getAddress } from '../util/address'
 import { registerPatient } from '../firebase/functions'
 import { makeStyles } from '@material-ui/styles'
