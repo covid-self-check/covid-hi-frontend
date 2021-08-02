@@ -119,6 +119,7 @@ export default function RegistrationForm() {
   const [postalCode, setPostalCode] = useState<string>('')
   const [gotMedication, setMedication] = useState<string>('none')
   const [stationName, setStationName] = useState<string>('')
+  const [stationIdIsAvailable, setStationIdIsAvailable] = useState<boolean>(false);
 
   const THAddresses = useMemo(() => getAddress(), [])
   const covidTestCentres = useMemo(() => getCovidTestCentres(), [])
@@ -165,6 +166,7 @@ export default function RegistrationForm() {
       Object.keys(covidTestCentres).map((key) => {
         if (key === router.query.stationId) {
           setStationName(covidTestCentres[key].name)
+          setStationIdIsAvailable(true)
           return
         }
       })
@@ -987,7 +989,7 @@ export default function RegistrationForm() {
                       onChange(newValue)
                       setStationName(newValue || '')
                     }}
-                    disabled={router.query.stationId != undefined}
+                    disabled={stationIdIsAvailable}
                     value={stationName}
                     fullWidth
                     renderInput={(params) => (
