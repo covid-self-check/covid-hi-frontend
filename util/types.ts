@@ -175,3 +175,8 @@ export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserD
   const convertedData: updateDto = { ...data, lineUserID, lineIDToken }
   return convertedData
 }
+
+export type updateDataApi = {
+  personalID: string
+  lineId: string
+} & updateData
