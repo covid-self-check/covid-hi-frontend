@@ -90,7 +90,7 @@ export default function UpdateForm() {
             control={control}
             render={({ field: { onChange, value }, fieldState: { error } }) => (
               <TextField
-                label="อณภูมิรางก่าย (องศา)"
+                label="อุณภูมิรางก่าย (องศา)"
                 className={styles.text_field}
                 value={value}
                 type="number"
