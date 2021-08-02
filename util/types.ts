@@ -60,6 +60,8 @@ export type registerFormData = {
     secondDoseName: string
     secondDoseDate: string
   }
+  gotFavipiravia: string
+  favipiraviaAmount: string
 }
 
 export const convertFormDataToAPIData: (data: registerFormData) => registerData = (data) => {
@@ -79,6 +81,8 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerData 
     lineID,
     digitalLiteracy,
     vaccinationDates,
+    gotFavipiravia,
+    favipiraviaAmount,
   } = data
   const convertedData: registerData = {
     firstName,
@@ -100,8 +104,8 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerData 
     dose1Date: vaccinationDates.firstDoseDate,
     dose2Status: vaccinationDates.secondDoseName,
     dose2Date: vaccinationDates.secondDoseDate,
-    gotFavipiravia: true, // no form yet
-    favipiraviaAmount: 999, // no form yet
+    gotFavipiravia: gotFavipiravia === 'received', // no form yet
+    favipiraviaAmount: parseInt(favipiraviaAmount), // no form yet
   }
   return convertedData
 }
