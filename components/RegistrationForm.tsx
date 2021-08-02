@@ -636,15 +636,18 @@ export default function RegistrationForm() {
               name="lineID"
               control={control}
               defaultValue=""
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   label="ไอดีไลน์"
                   className={styles.text_field}
                   value={value}
                   fullWidth
                   onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
                 />
               )}
+              rules={{ required: 'โปรดใส่ไอดีไลน์' }}
             />
             <Controller
               name="contactInfo.closeContactsPhoneNumber"
