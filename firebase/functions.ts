@@ -23,8 +23,12 @@ if (!firebase.apps.length) {
 }
 
 export const registerPatient = async (data: registerData) => {
-  let registerParticipant = firebase.functions().httpsCallable('registerParticipant')
+  let registerParticipant = firebase
+    .app()
+    .functions('asia-southeast2')
+    .httpsCallable('registerParticipant')
   try {
+    console.log(data)
     const response: firebase.functions.HttpsCallableResult = await registerParticipant(data)
     return response.data
   } catch (error) {
