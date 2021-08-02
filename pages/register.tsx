@@ -1,5 +1,6 @@
 import RegistrationForm from '../components/RegistrationForm'
 import { makeStyles } from '@material-ui/styles'
+import Link from 'next/link'
 
 const useStyles = makeStyles(
   {
@@ -22,6 +23,7 @@ export default function Register() {
   return (
     <div className={styles.container}>
       <RegistrationForm />
+      <Link href="/liffskeleton">Check token ID</Link>
     </div>
   )
 }

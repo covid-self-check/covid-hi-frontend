@@ -5,6 +5,10 @@ import Head from 'next/head'
 import { CssBaseline, ThemeProvider } from '@material-ui/core'
 import theme from '../styles/theme'
 import { Navbar } from '../components/navbar'
+import getConfig from 'next/config'
+
+const { publicRuntimeConfig } = getConfig()
+const liffId = publicRuntimeConfig?.liffID
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -13,6 +17,23 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (jssStyles) {
       jssStyles?.parentElement?.removeChild(jssStyles)
     }
+
+    async function connectWithLiff() {
+      if (!liffId) {
+        throw Error('Please add DEVELOPMENT_LIFF_ENV into .env.local')
+      }
+
+      const liff = (await import('@line/liff')).default
+      try {
+        await liff.init({ liffId })
+      } catch (error) {
+        console.error('liff init error', error.message)
+      }
+      if (!liff.isLoggedIn()) {
+        liff.login({ redirectUri: window.location.href })
+      }
+    }
+    connectWithLiff()
   }, [])
 
   return (
