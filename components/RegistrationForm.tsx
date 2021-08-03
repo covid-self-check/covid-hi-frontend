@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import React, { useState, useEffect, useRef, useMemo, useContext } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import {
   TextField,
@@ -83,7 +83,7 @@ export default function RegistrationForm() {
         // closeContactsPhoneNumber: '',
         emergencyContactPhoneNumber: '',
       },
-      lineID: '',
+      // lineID: '',
       vaccination: 'none',
       vaccinationDates: {
         firstDoseName: '',
@@ -140,6 +140,10 @@ export default function RegistrationForm() {
   const hasProvinceChanged = useHasChanged(province)
   const hasDistrictChanged = useHasChanged(district)
   const hasSubdistrictChanged = useHasChanged(subdistrict)
+
+  const openModal = (isSuccess: boolean) => {
+    //TODO: success/failure modal
+  }
 
   useEffect(() => {
     if (!componentDidMount) {
@@ -229,15 +233,17 @@ export default function RegistrationForm() {
 
   const onSubmit = async (data: registerFormData) => {
     console.log(data)
-    const convertedData = convertFormDataToAPIData(data)
+    const convertedData = convertFormDataToAPIData(data, {
+      lineUserID: 'asd4as1d4sadaefe',
+      lineIDToken: 'abddc4932eddfdfd456ece',
+    })
     const response = await registerPatient(convertedData)
     console.log(response)
+    openModal(response?.result?.ok as boolean)
     setFormData(data)
   }
 
-  function onVaccinationChange(data: string) {
-    setVaccination(data)
-  }
+  const onVaccinationChange = (data: string) => setVaccination(data)
 
   function onNationalIdOrPassportFieldChange(data: string) {
     if (data.length === 0) {
@@ -293,17 +299,11 @@ export default function RegistrationForm() {
 
   function stationIsAvailable(station: string) {}
 
-  function replaceWithNumbers(text: string) {
-    return text.replace(/\D+/g, '')
-  }
+  const replaceWithNumbers = (text: string) => text.replace(/\D+/g, '')
 
-  function replaceWithLatinCharactersOrNumbers(text: string) {
-    return text.replace(/[^A-Za-z0-9]/g, '')
-  }
+  const replaceWithLatinCharactersOrNumbers = (text: string) => text.replace(/[^A-Za-z0-9]/g, '')
 
-  function isNumeric(str: string) {
-    return /^\d+$/.test(str)
-  }
+  const isNumeric = (str: string) => /^\d+$/.test(str)
 
   return (
     <>
@@ -660,7 +660,7 @@ export default function RegistrationForm() {
               )}
               rules={{ required: 'โปรดใส่เบอร์โทรติดต่อ' }}
             />
-            <Controller
+            {/* <Controller
               name="lineID"
               control={control}
               defaultValue=""
@@ -676,7 +676,7 @@ export default function RegistrationForm() {
                 />
               )}
               rules={{ required: 'โปรดใส่ไอดีไลน์' }}
-            />
+            /> */}
             {/* <Controller
               name="contactInfo.closeContactsPhoneNumber"
               control={control}
