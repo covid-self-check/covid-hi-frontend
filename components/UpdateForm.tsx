@@ -15,6 +15,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/styles'
 
 import { convertUpdateFormDataToDto, updateData, updateDto } from '../util/types'
+import { updatePatient } from '../firebase/functions'
 
 const useStyles = makeStyles(
   {
@@ -48,6 +49,9 @@ export default function UpdateForm() {
 
   const { control, handleSubmit } = useForm<updateData>({
     defaultValues: {
+      bodyTemperature: 0,
+      pulse: 0,
+      spO2: 0,
       cough: false,
       soreThroat: false,
       headAche: false,
@@ -55,10 +59,19 @@ export default function UpdateForm() {
     },
   })
 
-  const onSubmit = (values: updateData) => {
-    //TODO: extract id from line
-    const data: updateDto = convertUpdateFormDataToDto(values)
-    console.log(data)
+  const openModal = (isSuccess: boolean) => {
+    //TODO: success/failure modal
+  }
+
+  const onSubmit = async (values: updateData) => {
+    const convertedData: updateDto = convertUpdateFormDataToDto(values, {
+      lineUserID: 'asd4as1d4sadaefe',
+      lineIDToken: 'abddc4932eddfdfd456ece',
+    })
+    console.log(values)
+    const response = await updatePatient(convertedData)
+    console.log(response)
+    openModal(response?.result?.ok as boolean)
   }
 
   return (
@@ -82,7 +95,7 @@ export default function UpdateForm() {
                 value={value}
                 type="number"
                 fullWidth
-                inputProps={{ max: 50 }}
+                inputProps={{ min: 0, max: 50 }}
                 onChange={onChange}
                 error={!!error}
                 helperText={error ? error.message : null}
@@ -100,6 +113,7 @@ export default function UpdateForm() {
                 value={value}
                 type="number"
                 fullWidth
+                inputProps={{ min: 0 }}
                 onChange={onChange}
                 error={!!error}
                 helperText={error ? error.message : null}
@@ -117,7 +131,7 @@ export default function UpdateForm() {
                 value={value}
                 type="number"
                 fullWidth
-                inputProps={{ max: 100 }}
+                inputProps={{ min: 0, max: 100 }}
                 onChange={onChange}
                 error={!!error}
                 helperText={error ? error.message : null}
