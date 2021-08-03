@@ -27,32 +27,32 @@ function MyApp({ Component, pageProps }: AppProps) {
     if (token && userId) setLineData({ lineIDToken: token, lineUserID: userId })
   }, [])
 
-  useEffect(() => {
-    // Remove the server-side injected CSS.
-    const jssStyles = document.querySelector('#jss-server-side')
-    if (jssStyles) {
-      jssStyles?.parentElement?.removeChild(jssStyles)
-    }
+  // useEffect(() => {
+  //   // Remove the server-side injected CSS.
+  //   const jssStyles = document.querySelector('#jss-server-side')
+  //   if (jssStyles) {
+  //     jssStyles?.parentElement?.removeChild(jssStyles)
+  //   }
 
-    async function connectWithLiff() {
-      if (!liffId) {
-        throw Error('Please add DEVELOPMENT_LIFF_ENV into .env.local')
-      }
-      const liff = (await import('@line/liff')).default
-      try {
-        await liff.init({ liffId })
-        if (!liff.isInClient() && !liff.isLoggedIn()) liff.login({ redirectUri: liffUrl })
-        // liff.login({ redirectUri: 'https://tidy-cat-54.loca.lt' })
-      } catch (error) {
-        console.error('liff init error', error.message)
-      }
-      // if (!liff.isLoggedIn()) {
-      //   liff.login({ redirectUri: liffUrl })
-      // }
-      await getLiffData()
-    }
-    connectWithLiff()
-  }, [getLiffData])
+  //   async function connectWithLiff() {
+  //     if (!liffId) {
+  //       throw Error('Please add DEVELOPMENT_LIFF_ENV into .env.local')
+  //     }
+  //     const liff = (await import('@line/liff')).default
+  //     try {
+  //       await liff.init({ liffId })
+  //       if (!liff.isInClient() && !liff.isLoggedIn()) liff.login({ redirectUri: liffUrl })
+  //       // liff.login({ redirectUri: 'https://tidy-cat-54.loca.lt' })
+  //     } catch (error) {
+  //       console.error('liff init error', error.message)
+  //     }
+  //     // if (!liff.isLoggedIn()) {
+  //     //   liff.login({ redirectUri: liffUrl })
+  //     // }
+  //     await getLiffData()
+  //   }
+  //   connectWithLiff()
+  // }, [getLiffData])
 
   return (
     <LineContext.Provider value={lineData}>

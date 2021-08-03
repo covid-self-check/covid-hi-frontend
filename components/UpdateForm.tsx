@@ -20,10 +20,10 @@ import ModalComponent, { ModalComponentProps } from './ModalComponent'
 const useStyles = makeStyles(
   {
     title: {
-      fontSize: '3rem',
+      fontSize: '2rem',
     },
     subtitle: {
-      fontSize: '1.5rem',
+      fontSize: '1.2rem',
     },
     title_div: {
       marginBottom: '30px',

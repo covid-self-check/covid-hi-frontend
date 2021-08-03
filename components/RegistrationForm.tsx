@@ -14,6 +14,7 @@ import {
   FormGroup,
   Checkbox,
   Autocomplete,
+  MenuItem,
 } from '@material-ui/core'
 import Card from './Card'
 // import styles from '../styles/RegistrationForm.module.css'
@@ -33,10 +34,10 @@ const PASSPORT_ID_NEW_MAX_LENGTH = 9
 const useStyles = makeStyles(
   {
     title: {
-      fontSize: '3rem',
+      fontSize: '2rem',
     },
     subtitle: {
-      fontSize: '1.5rem',
+      fontSize: '1.2rem',
     },
     title_div: {
       marginBottom: '30px',
@@ -94,7 +95,7 @@ export default function RegistrationForm() {
       },
       gotFavipiravia: 'none',
       favipiraviaAmount: '',
-      stationName: '',
+      // stationName: '',
       latestCovidTestDate: '',
       rf_copd_chronic_lung_disease: false,
 
@@ -374,7 +375,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ชื่อ"
+                  label="ชื่อ *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -391,7 +392,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="นามสกุล"
+                  label="นามสกุล *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -408,7 +409,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="หมายเลขบัตรประชาชน 13 หลัก / Passport Number"
+                  label="หมายเลขบัตรประชาชน 13 หลัก / Passport Number *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -448,7 +449,7 @@ export default function RegistrationForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="อายุ"
+                  label="อายุ *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -492,7 +493,7 @@ export default function RegistrationForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="น้ำหนัก"
+                  label="น้ำหนัก *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -514,7 +515,7 @@ export default function RegistrationForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ส่วนสูง"
+                  label="ส่วนสูง *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -537,7 +538,9 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <FormControl className={styles.text_field} fullWidth>
-                  <InputLabel htmlFor="outlined-age-native-simple">เพศ</InputLabel>
+                  <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
+                    เพศ
+                  </InputLabel>
                   <Select
                     onChange={onChange}
                     value={value}
@@ -547,12 +550,16 @@ export default function RegistrationForm() {
                       name: 'gender',
                       id: 'outlined-age-native-simple',
                     }}
+                    error={error ? true : false}
                   >
                     <option aria-label="" value="" />
                     <option value="male">ชาย</option>
                     <option value="female">หญิง</option>
                     <option value="unknown">ไม่ระบุ</option>
                   </Select>
+                  <FormHelperText error={error ? true : false}>
+                    {error ? error.message : ''}
+                  </FormHelperText>
                 </FormControl>
               )}
               rules={{ required: 'โปรดใส่เพศ' }}
@@ -566,7 +573,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ที่อยู่ปัจจุบัน"
+                  label="ที่อยู่ปัจจุบัน *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -596,7 +603,7 @@ export default function RegistrationForm() {
                       <TextField
                         {...params}
                         className={styles.text_field}
-                        label="จังหวัด"
+                        label="จังหวัด *"
                         variant="outlined"
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -626,7 +633,7 @@ export default function RegistrationForm() {
                       <TextField
                         {...params}
                         className={styles.text_field}
-                        label="เขต / อำเภอ"
+                        label="เขต / อำเภอ *"
                         variant="outlined"
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -656,7 +663,7 @@ export default function RegistrationForm() {
                       <TextField
                         {...params}
                         className={styles.text_field}
-                        label="แขวง / ตำบล"
+                        label="แขวง / ตำบล *"
                         variant="outlined"
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -686,7 +693,7 @@ export default function RegistrationForm() {
                       <TextField
                         {...params}
                         className={styles.text_field}
-                        label="รหัสไปรษณีย์"
+                        label="รหัสไปรษณีย์ *"
                         variant="outlined"
                         error={!!error}
                         helperText={error ? error.message : null}
@@ -707,7 +714,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="เบอร์โทรติดต่อ (ไม่ต้องมีขีดหรือวรรค)"
+                  label="เบอร์โทรติดต่อ * (ไม่ต้องมีขีดหรือวรรค)"
                   className={styles.text_field}
                   value={value}
                   inputProps={{ maxLength: 10 }}
@@ -764,7 +771,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="เบอร์โทรติดต่อฉุกเฉิน (ไม่ต้องมีขีดหรือวรรค)"
+                  label="เบอร์โทรติดต่อฉุกเฉิน * (ไม่ต้องมีขีดหรือวรรค)"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -778,45 +785,51 @@ export default function RegistrationForm() {
               )}
               rules={{ required: 'โปรดใส่เบอร์โทรติดต่อฉุกเฉิน' }}
             />
-            <FormControl className={styles.text_field}>
-              <FormLabel component="legend">ฉัน...</FormLabel>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Controller
-                      name="hasHelper"
-                      control={control}
-                      render={({ field: { onChange, value } }) => (
-                        <Checkbox
-                          checked={value}
-                          name="hasHelper"
-                          size="medium"
-                          onChange={(e) => onChange(e.target.checked)}
-                        />
-                      )}
-                    />
-                  }
-                  label="มีผู้ดูแล"
-                />
-                <FormControlLabel
-                  control={
-                    <Controller
-                      name="digitalLiteracy"
-                      control={control}
-                      render={({ field: { onChange, value } }) => (
-                        <Checkbox
-                          checked={value}
-                          name="digitalLiteracy"
-                          size="medium"
-                          onChange={(e) => onChange(e.target.checked)}
-                        />
-                      )}
-                    />
-                  }
-                  label="สามารถกรอกข้อมูลเองได้"
-                />
-              </FormGroup>
-            </FormControl>
+            <FormLabel className={styles.form_label} component="legend">
+              มีผู้ดูแลระหว่างรักษาอยู่ที่บ้านหรือไม่
+            </FormLabel>
+            <Controller
+              name="hasHelper"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <FormControl className={styles.text_field} fullWidth>
+                  <InputLabel htmlFor="outlined-age-native-simple">มีคนดูแลหรือไม่</InputLabel>
+                  <Select
+                    onChange={onChange}
+                    value={value}
+                    native
+                    label="มีคนดูแลหรือไม่"
+                    inputProps={{
+                      name: 'hasHelper',
+                    }}
+                  >
+                    <option value={'true'}>มีคนดูแล</option>
+                    <option value={'false'}>ไม่มีคนดูแล</option>
+                  </Select>
+                </FormControl>
+              )}
+            />
+            <Controller
+              name="digitalLiteracy"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <FormControl className={styles.text_field} fullWidth>
+                  <InputLabel htmlFor="outlined-age-native-simple">มีคนช่วยกรอกหรือไม่</InputLabel>
+                  <Select
+                    onChange={onChange}
+                    value={value}
+                    native
+                    label="มีคนช่วยกรอกหรือไม่"
+                    inputProps={{
+                      name: 'digitalLiteracy',
+                    }}
+                  >
+                    <option value={'true'}>มีคนช่วยกรอก</option>
+                    <option value={'false'}>ไม่มีคนช่วยกรอก</option>
+                  </Select>
+                </FormControl>
+              )}
+            />
 
             <FormLabel className={styles.form_label} component="legend">
               ข้อมูลการฉีดวัคซีน การรับยา และวันที่ตรวจโควิด
@@ -826,7 +839,9 @@ export default function RegistrationForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <FormControl className={styles.text_field} fullWidth>
-                  <InputLabel htmlFor="outlined-age-native-simple">สถานะการฉีดวัคซีน</InputLabel>
+                  <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
+                    สถานะการฉีดวัคซีน
+                  </InputLabel>
                   <Select
                     onChange={(e) => {
                       onChange(e.target.value)
@@ -839,6 +854,7 @@ export default function RegistrationForm() {
                       name: 'vaccination',
                       id: 'outlined-age-native-simple',
                     }}
+                    error={error ? true : false}
                   >
                     <option aria-label="" value="" />
                     <option value="none">ยังไม่ได้ฉีด</option>
@@ -859,33 +875,32 @@ export default function RegistrationForm() {
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <>
-                      <FormControl className={styles.text_field} fullWidth>
-                        <InputLabel htmlFor="outlined-age-native-simple">
-                          ชื่อวัคซีนที่ฉีดเข็มโดสแรก
-                        </InputLabel>
-                        <Select
-                          onChange={onChange}
-                          value={value}
-                          native
-                          label=""
-                          inputProps={{
-                            name: 'vaccinationDates.firstDoseName',
-                            id: 'outlined-age-native-simple',
-                          }}
-                        >
-                          <option aria-label="" value="" />
-                          <option value="sinovac">Sinovac</option>
-                          <option value="az">Astrazeneca</option>
-                          <option value="sinopharm">Sinopharm</option>
-                          <option value="pfizer">Pfizer-BioNTech</option>
-                          <option value="moderna">Moderna</option>
-                        </Select>
-                      </FormControl>
+                    <FormControl className={styles.text_field} fullWidth>
+                      <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
+                        ชื่อวัคซีนที่ฉีดเข็มโดสแรก
+                      </InputLabel>
+                      <Select
+                        onChange={onChange}
+                        value={value}
+                        native
+                        label="ชื่อวัคซีนที่ฉีดเข็มโดสแรก"
+                        inputProps={{
+                          name: 'vaccinationDates.firstDoseName',
+                          id: 'outlined-age-native-simple',
+                        }}
+                        error={error ? true : false}
+                      >
+                        <option aria-label="" value="" />
+                        <option value="sinovac">Sinovac</option>
+                        <option value="az">Astrazeneca</option>
+                        <option value="sinopharm">Sinopharm</option>
+                        <option value="pfizer">Pfizer-BioNTech</option>
+                        <option value="moderna">Moderna</option>
+                      </Select>
                       <FormHelperText error={error ? true : false}>
                         {error ? error.message : ''}
                       </FormHelperText>
-                    </>
+                    </FormControl>
                   )}
                   rules={{ required: 'โปรดใส่ชื่อวัคซีนโดสแรก' }}
                 />
@@ -906,10 +921,9 @@ export default function RegistrationForm() {
                         }}
                         value={value}
                         onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
                       />
-                      <FormHelperText error={error ? true : false}>
-                        {error ? error.message : ''}
-                      </FormHelperText>
                     </>
                   )}
                   rules={{ required: 'โปรดใส่วันที่ฉีดวัคซีนโดสแรก' }}
@@ -923,33 +937,32 @@ export default function RegistrationForm() {
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <>
-                      <FormControl className={styles.text_field} fullWidth>
-                        <InputLabel htmlFor="outlined-age-native-simple">
-                          ชื่อวัคซีนที่ฉีดเข็มโดสที่สอง
-                        </InputLabel>
-                        <Select
-                          onChange={onChange}
-                          value={value}
-                          native
-                          label=""
-                          inputProps={{
-                            name: 'vaccinationDates.secondDoseName',
-                            id: 'outlined-age-native-simple',
-                          }}
-                        >
-                          <option aria-label="" value="" />
-                          <option value="sinovac">Sinovac</option>
-                          <option value="az">Astrazeneca</option>
-                          <option value="sinopharm">Sinopharm</option>
-                          <option value="pfizer">Pfizer-BioNTech</option>
-                          <option value="moderna">Moderna</option>
-                        </Select>
-                      </FormControl>
+                    <FormControl className={styles.text_field} fullWidth>
+                      <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
+                        ชื่อวัคซีนที่ฉีดเข็มโดสที่สอง
+                      </InputLabel>
+                      <Select
+                        onChange={onChange}
+                        value={value}
+                        native
+                        label="ชื่อวัคซีนที่ฉีดเข็มโดสที่สอง"
+                        inputProps={{
+                          name: 'vaccinationDates.secondDoseName',
+                          id: 'outlined-age-native-simple',
+                        }}
+                        error={error ? true : false}
+                      >
+                        <option aria-label="" value="" />
+                        <option value="sinovac">Sinovac</option>
+                        <option value="az">Astrazeneca</option>
+                        <option value="sinopharm">Sinopharm</option>
+                        <option value="pfizer">Pfizer-BioNTech</option>
+                        <option value="moderna">Moderna</option>
+                      </Select>
                       <FormHelperText error={error ? true : false}>
                         {error ? error.message : ''}
                       </FormHelperText>
-                    </>
+                    </FormControl>
                   )}
                   rules={{ required: 'โปรดใส่ชื่อวัคซีนโดสที่สอง' }}
                 />
@@ -970,10 +983,9 @@ export default function RegistrationForm() {
                         }}
                         value={value}
                         onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
                       />
-                      <FormHelperText error={error ? true : false}>
-                        {error ? error.message : ''}
-                      </FormHelperText>
                     </>
                   )}
                   rules={{ required: 'โปรดใส่วันที่ฉีดวัคซีนโดสที่สอง' }}
@@ -985,7 +997,7 @@ export default function RegistrationForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <FormControl className={styles.text_field} fullWidth>
-                  <InputLabel htmlFor="outlined-age-native-simple">
+                  <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
                     สถานะการรับยา Favipiravir
                   </InputLabel>
                   <Select
@@ -995,11 +1007,12 @@ export default function RegistrationForm() {
                     }}
                     value={value}
                     native
-                    label="สถานะการรับยา Favipiravir"
+                    label="สถานะการรับยา Favipiravir (ยาต้านไวรัส)"
                     inputProps={{
                       name: 'vaccination',
                       id: 'outlined-age-native-simple',
                     }}
+                    error={error ? true : false}
                   >
                     <option aria-label="" value="" />
                     <option value="none">ยังไม่ได้รับยา</option>
@@ -1018,7 +1031,7 @@ export default function RegistrationForm() {
                 control={control}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                   <TextField
-                    label="ปริมาณยา Favipiravir ที่ได้รับ (หน่วย)"
+                    label="ปริมาณยา Favipiravir ที่ได้รับ (เม็ด)"
                     className={styles.text_field}
                     value={value}
                     fullWidth
@@ -1033,7 +1046,7 @@ export default function RegistrationForm() {
                 rules={{ required: 'โปรดใส่ปริมาณยา Favipiravir ที่ได้รับ' }}
               />
             )}
-            <Controller
+            {/* <Controller
               name="stationName"
               control={control}
               defaultValue=""
@@ -1063,7 +1076,7 @@ export default function RegistrationForm() {
                 </>
               )}
               rules={{ required: 'โปรดใส่จุดตรวจ' }}
-            />
+            /> */}
 
             <Controller
               name="latestCovidTestDate"
@@ -1082,16 +1095,15 @@ export default function RegistrationForm() {
                     }}
                     value={value}
                     onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
                   />
-                  <FormHelperText error={error ? true : false}>
-                    {error ? error.message : ''}
-                  </FormHelperText>
                 </>
               )}
               rules={{ required: 'โปรดใส่วันที่ตรวจโควิดครั้งล่าสุด' }}
             />
             <FormLabel className={styles.form_label} component="legend">
-              โรคประจำตัว
+              โรคประจำตัว (ไม่ต้องกรอกหากไม่มี)
             </FormLabel>
             <FormGroup>
               <FormControlLabel
