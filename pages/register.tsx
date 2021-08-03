@@ -23,7 +23,6 @@ export default function Register() {
   return (
     <div className={styles.container}>
       <RegistrationForm />
-      <Link href="/liffskeleton">Check token ID</Link>
     </div>
   )
 }
