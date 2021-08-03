@@ -10,7 +10,6 @@ export type registerDto = {
   gender: string
   weight: number
   height: number
-  congenitalDisease?: string
   address: string
   province: string
   prefecture: string
@@ -69,6 +68,24 @@ export type registerFormData = {
   }
   gotFavipiravia: string
   favipiraviaAmount: string
+  rf_copd_chronic_lung_disease: number
+
+  rf_ckd_stagr_3_to_4: number
+  rf_chronic_heart_disease: number
+  rf_cva: number
+  rf_t2dm: number
+  rf_cirrhosis: number
+  rf_immunocompromise: number
+  fac_diabetes: number
+  fac_dyslipidemia: number
+  fac_hypertension: number
+  fac_heart_diseases: number
+  fac_esrd: number
+  fac_cancer: number
+  fac_tuberculosis: number
+  fac_hiv: number
+  fac_asthma: number
+  fac_pregnancy: number
 }
 
 export type updateData = {
@@ -145,7 +162,6 @@ export const convertFormDataToAPIData: (
     gender,
     weight: parseInt(weight),
     height: parseInt(height),
-    congenitalDisease,
     address: address,
     province: addressInfo.province,
     prefecture: addressInfo.district,
