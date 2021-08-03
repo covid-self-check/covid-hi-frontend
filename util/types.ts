@@ -5,7 +5,7 @@ export type registerDto = {
   lastName: string
   personalID: string
   passport: string
-  station: string
+  // station: string
   birthDate: string
   gender: string
   weight: number
@@ -191,7 +191,7 @@ export const convertFormDataToAPIData: (
     lastName,
     personalID: hasNationalID ? personalID : 'undefined',
     passport: !hasNationalID ? personalID : 'undefined',
-    station: stationName,
+    // station: stationName,
     birthDate,
     gender,
     weight: parseInt(weight),
