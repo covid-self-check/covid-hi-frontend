@@ -252,7 +252,7 @@ export default function RegistrationForm() {
         page: 'register',
         variant: 'success',
         title: 'ลงทะเบียนสำเร็จ',
-        subTitle: 'โปรดกดปุ่มด้านล่างเพื่อกรอกอาการ',
+        subTitle: 'โปรดกลับมาแจ้งอาการในภายหลัง',
       })
     else
       setModalProps({
@@ -282,17 +282,13 @@ export default function RegistrationForm() {
   const onSubmit = async (data: registerFormData) => {
     console.log(data)
     const hasNationalId = nationalIdOrPassportFieldStatus === 'id'
-    const convertedData = convertFormDataToAPIData(
-      data,
-      {
-        lineUserID: lineUserID,
-        lineIDToken: lineIDToken,
-      },
-      hasNationalId,
-    )
+    const convertedData = convertFormDataToAPIData(data, {
+      lineUserID: lineUserID,
+      lineIDToken: lineIDToken,
+    })
     const response = await registerPatient(convertedData)
     console.log(response)
-    openModal(response?.result?.ok as boolean)
+    openModal(response?.ok as boolean)
     // openModal(true)
     setFormData(data)
   }
