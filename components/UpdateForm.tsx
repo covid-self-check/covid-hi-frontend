@@ -45,18 +45,6 @@ const useStyles = makeStyles(
 )
 
 export default function UpdateForm() {
-  // state to handle modal
-  const [open, setOpen] = useState(false)
-  const [modalProps, setModalProps] = useState<
-    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle'>
-  >({
-    variant: 'success',
-    title: '',
-    subTitle: undefined,
-  })
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-
   const styles = useStyles()
   const { control, handleSubmit } = useForm<updateData>({
     defaultValues: {
@@ -70,8 +58,35 @@ export default function UpdateForm() {
     },
   })
 
-  const openModal = (isSuccess: boolean) => {
-    //TODO: success/failure modal
+  // state to handle modal
+  const [open, setOpen] = useState(false)
+  const [modalProps, setModalProps] = useState<
+    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle' | 'page'>
+  >({
+    page: 'register',
+    variant: 'success',
+    title: 'ลงทะเบียนสำเร็จ',
+    subTitle: 'โปรดกดปุ่มด้านล่างเพื่อกรอกอาการ',
+  })
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
+  const openModal = (isSuccess: boolean, color?: string, errors?: string[]) => {
+    if (isSuccess)
+      setModalProps({
+        page: 'update',
+        variant: 'success',
+        title: 'แจ้งอาการสำเร็จ',
+        subTitle: `อาการของคุณอยู่ในเกณฑ์ ${color}`,
+      })
+    else
+      setModalProps({
+        page: 'update',
+        variant: 'error',
+        title: 'แจ้งอาการไม่สำเร็จ',
+        subTitle: 'ปัญหานี้เกิดจาก',
+      })
+    handleOpen()
   }
 
   const onSubmit = async (values: updateData) => {
@@ -82,7 +97,8 @@ export default function UpdateForm() {
     console.log(values)
     const response = await updatePatient(convertedData)
     console.log(response)
-    openModal(response?.result?.ok as boolean)
+    openModal(response?.result?.ok as boolean, 'some color')
+    // openModal(true, 'some color')
   }
 
   return (

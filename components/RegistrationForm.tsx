@@ -228,15 +228,17 @@ export default function RegistrationForm() {
     covidTestCentres,
   ])
 
-  const openModal = (isSuccess: boolean) => {
+  const openModal = (isSuccess: boolean, errors?: string[]) => {
     if (isSuccess)
       setModalProps({
+        page: 'register',
         variant: 'success',
         title: 'ลงทะเบียนสำเร็จ',
         subTitle: 'โปรดกดปุ่มด้านล่างเพื่อกรอกอาการ',
       })
     else
       setModalProps({
+        page: 'register',
         variant: 'error',
         title: 'ลงทะเบียนไม่สำเร็จ',
         subTitle: 'ปัญหานี้เกิดจาก',
@@ -247,8 +249,9 @@ export default function RegistrationForm() {
   // state to handle modal
   const [open, setOpen] = useState(false)
   const [modalProps, setModalProps] = useState<
-    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle'>
+    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle' | 'page'>
   >({
+    page: 'register',
     variant: 'success',
     title: 'ลงทะเบียนสำเร็จ',
     subTitle: 'โปรดกดปุ่มด้านล่างเพื่อกรอกอาการ',
