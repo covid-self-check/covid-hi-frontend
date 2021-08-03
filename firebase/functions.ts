@@ -35,11 +35,9 @@ export const registerPatient = async (data: registerDto) => {
   } catch (error) {
     console.error('Error:')
     console.error(error)
-    Sentry.withScope(scope => {
-      scope.setTags(error?.name);
-      scope.setExtras(error?.details);
-      Sentry.captureException(error);
-    })
+    Sentry.setContext('error', { details: error?.details });
+    Sentry.captureException(error);
+    Sentry.setContext('error', { details: undefined });
     error?.details?.map((item: any) => console.error(item.message))
     return {
       result: {
@@ -58,12 +56,11 @@ export const updatePatient = async (data: updateData) => {
   } catch (error) {
     console.error('Error:')
     console.error(error)
-    Sentry.withScope(scope => {
-      scope.setTags(error?.name);
-      scope.setExtras(error?.details);
-      Sentry.captureException(error);
-    })
-    error?.details?.map((item: any) => console.error(item.message))
+    Sentry.setContext('error', { details: error?.details });
+    Sentry.captureException(error);
+    Sentry.setContext('error', { details: undefined });
+
+    error?.details?.map((item: any) => { console.error(item.message) })
 
     return {
       result: {
