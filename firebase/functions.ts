@@ -35,6 +35,7 @@ export const registerPatient = async (data: registerDto) => {
   } catch (error) {
     console.error('Error:')
     console.error(error)
+    Sentry.captureException(error)
     error?.details?.map((item: any) => console.error(item.message))
     return {
       result: {
