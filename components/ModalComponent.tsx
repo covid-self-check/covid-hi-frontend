@@ -63,9 +63,10 @@ export default function ModalComponent(props: ModalComponentProps) {
               )}
               {variant === 'success' ? (
                 page === 'register' ? (
-                  <Button variant="outlined" sx={{ mt: 4 }} onClick={() => redirectToUpdate()}>
-                    กรอกอาการ
-                  </Button>
+                  // <Button variant="outlined" sx={{ mt: 4 }} onClick={() => redirectToUpdate()}>
+                  //   กรอกอาการ
+                  // </Button>
+                  ''
                 ) : (
                   <p>โปรดปิดหน้าต่างนี้ และกลับมาแจ้งอาการในครั้งต่อๆไป</p>
                 )
