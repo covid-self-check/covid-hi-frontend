@@ -66,7 +66,7 @@ export default function RegistrationForm() {
       firstName: '',
       lastName: '',
       personalID: '',
-      age: '',
+      birthDate: '',
       weight: '',
       height: '',
       gender: '',
@@ -443,7 +443,7 @@ export default function RegistrationForm() {
                 required: 'โปรดกรอกหมายเลขบัตรประชาชน 13 หลัก / Passport Number',
               }}
             />
-            <Controller
+            {/* <Controller
               name="age"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -461,6 +461,31 @@ export default function RegistrationForm() {
                 />
               )}
               rules={{ required: 'โปรดใส่อายุ' }}
+            /> */}
+            <Controller
+              name="birthDate"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <>
+                  <TextField
+                    fullWidth
+                    className={styles.text_field}
+                    id="date"
+                    label="วัน/เดือน/ปีเกิด"
+                    type="date"
+                    defaultValue={undefined}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    value={value}
+                    onChange={onChange}
+                  />
+                  <FormHelperText error={error ? true : false}>
+                    {error ? error.message : ''}
+                  </FormHelperText>
+                </>
+              )}
+              rules={{ required: 'โปรดใส่วัน/เดือน/ปีเกิด' }}
             />
             <Controller
               name="weight"
