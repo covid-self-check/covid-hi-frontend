@@ -61,14 +61,3 @@ export const updatePatient = async (data: updateData) => {
     }
   }
 }
-
-export const updatePatient = async (data: updateData) => {
-  let updateSymptom = firebase.app().functions('asia-southeast2').httpsCallable('updateSymptom')
-  try {
-    console.log(data)
-    const response: firebase.functions.HttpsCallableResult = await updateSymptom(data)
-    return response.data
-  } catch (error) {
-    console.log('Error: ', error)
-  }
-}
