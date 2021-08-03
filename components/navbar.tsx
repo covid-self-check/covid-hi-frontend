@@ -39,7 +39,7 @@ export const Navbar = () => {
           color: theme.palette.primary.main,
         }}
       >
-        CovidSelfCheck
+        เพื่อนช่วยเช็ค
       </Typography>
     </Toolbar>
   )
