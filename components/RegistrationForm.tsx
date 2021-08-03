@@ -24,6 +24,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useRouter } from 'next/dist/client/router'
 import { route } from 'next/dist/next-server/server/router'
 import ModalComponent, { ModalComponentProps } from './ModalComponent'
+import { LineContext } from '../util/lineContext'
 
 const NATIONAL_ID_MAX_LENGTH = 13
 const PASSPORT_ID_OLD_MAX_LENGTH = 7
@@ -252,7 +253,7 @@ export default function RegistrationForm() {
         page: 'register',
         variant: 'error',
         title: 'ลงทะเบียนไม่สำเร็จ',
-        subTitle: 'ปัญหานี้เกิดจาก',
+        subTitle: 'กรุณากรอกใหม่อีกครั้ง',
       })
     handleOpen()
   }
@@ -270,12 +271,19 @@ export default function RegistrationForm() {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const { lineUserID, lineIDToken } = useContext(LineContext)
+
   const onSubmit = async (data: registerFormData) => {
     console.log(data)
-    const convertedData = convertFormDataToAPIData(data, {
-      lineUserID: 'asd4as1d4sadaefe',
-      lineIDToken: 'abddc4932eddfdfd456ece',
-    })
+    const hasNationalId = nationalIdOrPassportFieldStatus === 'id'
+    const convertedData = convertFormDataToAPIData(
+      data,
+      {
+        lineUserID: lineUserID,
+        lineIDToken: lineIDToken,
+      },
+      hasNationalId,
+    )
     const response = await registerPatient(convertedData)
     console.log(response)
     openModal(response?.result?.ok as boolean)
@@ -514,9 +522,9 @@ export default function RegistrationForm() {
                     }}
                   >
                     <option aria-label="" value="" />
-                    <option value="ชาย">ชาย</option>
-                    <option value="หญิง">หญิง</option>
-                    <option value="ไม่ระบุ">ไม่ระบุ</option>
+                    <option value="male">ชาย</option>
+                    <option value="female">หญิง</option>
+                    <option value="unknown">ไม่ระบุ</option>
                   </Select>
                 </FormControl>
               )}
