@@ -59,17 +59,6 @@ const useStyles = makeStyles(
 export default function RegistrationForm() {
   const styles = useStyles()
   const router = useRouter()
-  // state to handle modal
-  const [open, setOpen] = useState(false)
-  const [modalProps, setModalProps] = useState<
-    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle'>
-  >({
-    variant: 'success',
-    title: '',
-    subTitle: undefined,
-  })
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
 
   const { register, handleSubmit, control, getValues } = useForm({
     defaultValues: {
@@ -152,10 +141,6 @@ export default function RegistrationForm() {
   const hasProvinceChanged = useHasChanged(province)
   const hasDistrictChanged = useHasChanged(district)
   const hasSubdistrictChanged = useHasChanged(subdistrict)
-
-  const openModal = (isSuccess: boolean) => {
-    //TODO: success/failure modal
-  }
 
   useEffect(() => {
     if (!componentDidMount) {
@@ -243,6 +228,34 @@ export default function RegistrationForm() {
     covidTestCentres,
   ])
 
+  const openModal = (isSuccess: boolean) => {
+    if (isSuccess)
+      setModalProps({
+        variant: 'success',
+        title: 'ลงทะเบียนสำเร็จ',
+        subTitle: 'โปรดกดปุ่มด้านล่างเพื่อกรอกอาการ',
+      })
+    else
+      setModalProps({
+        variant: 'error',
+        title: 'ลงทะเบียนไม่สำเร็จ',
+        subTitle: 'ปัญหานี้เกิดจาก',
+      })
+    handleOpen()
+  }
+
+  // state to handle modal
+  const [open, setOpen] = useState(false)
+  const [modalProps, setModalProps] = useState<
+    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle'>
+  >({
+    variant: 'success',
+    title: 'ลงทะเบียนสำเร็จ',
+    subTitle: 'โปรดกดปุ่มด้านล่างเพื่อกรอกอาการ',
+  })
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   const onSubmit = async (data: registerFormData) => {
     console.log(data)
     const convertedData = convertFormDataToAPIData(data, {
@@ -252,6 +265,7 @@ export default function RegistrationForm() {
     const response = await registerPatient(convertedData)
     console.log(response)
     openModal(response?.result?.ok as boolean)
+    // openModal(true)
     setFormData(data)
   }
 
