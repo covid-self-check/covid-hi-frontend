@@ -193,18 +193,6 @@ export default function UpdateForm() {
                     )}
                   />
                 }
-                label="ไอ"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="soreThroat"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
                 label="เจ็บคอ"
               />
               <FormControlLabel

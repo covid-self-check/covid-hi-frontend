@@ -77,7 +77,6 @@ export default function RegistrationForm() {
         subdistrict: '',
         postalCode: '',
       },
-      congenitalDisease: '',
       hasHelper: false,
       digitalLiteracy: false,
       contactInfo: {
@@ -97,6 +96,24 @@ export default function RegistrationForm() {
       favipiraviaAmount: '',
       stationName: '',
       latestCovidTestDate: '',
+      rf_copd_chronic_lung_disease: false,
+
+      rf_ckd_stagr_3_to_4: false,
+      rf_chronic_heart_disease: false,
+      rf_cva: false,
+      rf_t2dm: false,
+      rf_cirrhosis: false,
+      rf_immunocompromise: false,
+      fac_diabetes: false,
+      fac_dyslipidemia: false,
+      fac_hypertension: false,
+      fac_heart_diseases: false,
+      fac_esrd: false,
+      fac_cancer: false,
+      fac_tuberculosis: false,
+      fac_hiv: false,
+      fac_asthma: false,
+      fac_pregnancy: false,
     },
   })
 
@@ -518,20 +535,6 @@ export default function RegistrationForm() {
                 </FormControl>
               )}
               rules={{ required: 'โปรดใส่เพศ' }}
-            />
-            <Controller
-              name="congenitalDisease"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value } }) => (
-                <TextField
-                  label="โรคประจำตัว"
-                  className={styles.text_field}
-                  value={value}
-                  fullWidth
-                  onChange={onChange}
-                />
-              )}
             />
             <FormLabel className={styles.form_label} component="legend">
               ที่อยู่ปัจจุบัน
@@ -1066,7 +1069,215 @@ export default function RegistrationForm() {
               )}
               rules={{ required: 'โปรดใส่วันที่ตรวจโควิดครั้งล่าสุด' }}
             />
-
+            <FormLabel className={styles.form_label} component="legend">
+              โรคประจำตัว
+            </FormLabel>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="rf_copd_chronic_lung_disease"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคปอดเรื้อรัง เช่น โรคถุงลมโป่งพอง"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="rf_ckd_stagr_3_to_4"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="โรคไตเรื้อรัง ตั้งแต่ระดับสามขึ้นไป"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="rf_chronic_heart_disease"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคหัวใจ"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="rf_cva"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคหลอดเลือดสมอง"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="rf_t2dm"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคเบาหวาน"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="rf_cirrhosis"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคตับแข็ง"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="rf_immunocompromise"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีภาวะภูมิคุ้มกันบกพร่อง"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_diabetes"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคเบาหวาน"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_dyslipidemia"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคไขมันในเลือดสูง"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_hypertension"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคความดันสูง"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_heart_diseases"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคหัวใจ"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_esrd"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคไตเสื่อม"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_cancer"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคมะเร็ง"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_tuberculosis"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="เป็นวัณโรค"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_hiv"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="ติดเชื้อ HIV"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_asthma"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีโรคหอบหืด"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="fac_pregnancy"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="ตั้งครรภ์"
+              />
+            </FormGroup>
             <Button
               className={styles.button}
               form="registrationForm"
