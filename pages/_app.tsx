@@ -41,7 +41,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       const liff = (await import('@line/liff')).default
       try {
         await liff.init({ liffId })
-        if (!liff.isInClient()) liff.login({ redirectUri: liffUrl })
+        if (!liff.isInClient() && !liff.isLoggedIn()) liff.login({ redirectUri: liffUrl })
+        // liff.login({ redirectUri: 'https://tidy-cat-54.loca.lt' })
       } catch (error) {
         console.error('liff init error', error.message)
       }
