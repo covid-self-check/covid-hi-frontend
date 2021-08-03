@@ -1,5 +1,5 @@
 import React from 'react'
-import { Toolbar, Typography } from '@material-ui/core'
+import { Icon, SvgIcon, Toolbar, Typography } from '@material-ui/core'
 import Link from 'next/link'
 import { useRouter } from 'next/dist/client/router'
 import { makeStyles } from '@material-ui/styles'
@@ -24,21 +24,19 @@ const useStyles = makeStyles({
 })
 
 export const Navbar = () => {
-  const router = useRouter()
-  const classes = useStyles()
   return (
-    <Toolbar sx={{ px: 3, py: 6 }}>
+    <Toolbar sx={{ px: 3, py: 5 }}>
+      <img src="./logo.svg" width="20%" alt="logo" />
       <Typography
-        variant="h5"
-        component="div"
+        variant="h4"
+        component="h4"
         sx={{
           flexGrow: 1,
           fontWeight: 700,
-          fontSize: '1.5rem',
           color: theme.palette.primary.main,
         }}
       >
-        ComCovid
+        CovidSelfCheck
       </Typography>
     </Toolbar>
   )
