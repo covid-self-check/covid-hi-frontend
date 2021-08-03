@@ -15,8 +15,8 @@ export type registerDto = {
   prefecture: string
   district: string
   postNo: string
-  // hasHelper: boolean
-  // digitalLiteracy: boolean
+  hasHelper: boolean
+  digitalLiteracy: boolean
   personalPhoneNo: string
   // personalLineID: string
   // closestUnriskPersonPhoneNo: string
@@ -68,8 +68,8 @@ export type registerFormData = {
     postalCode: string
   }
   congenitalDisease: string
-  hasHelper: boolean
-  digitalLiteracy: boolean
+  hasHelper: string
+  digitalLiteracy: string
   contactInfo: {
     phoneNumber: string
     closeContactsPhoneNumber: string
@@ -201,8 +201,8 @@ export const convertFormDataToAPIData: (
     prefecture: addressInfo.district,
     district: addressInfo.subdistrict,
     postNo: addressInfo.postalCode,
-    // hasHelper,
-    // digitalLiteracy,
+    hasHelper: hasHelper === 'true',
+    digitalLiteracy: digitalLiteracy === 'true',
     personalPhoneNo: contactInfo.phoneNumber,
     // personalLineID: lineID,
     // closestUnriskPersonPhoneNo: contactInfo.closeContactsPhoneNumber,
