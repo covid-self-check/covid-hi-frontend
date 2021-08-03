@@ -1,5 +1,6 @@
 export type registerDto = {
-  lineId: string
+  lineUserID: string
+  lineIDToken: string
   firstName: string
   lastName: string
   personalID: string
@@ -26,6 +27,11 @@ export type registerDto = {
   dose2Date?: string
   gotFavipiravia: boolean
   favipiraviaAmount?: number
+}
+
+export type lineUserData = {
+  lineUserID: string
+  lineIDToken: string
 }
 
 export type registerFormData = {
@@ -79,7 +85,32 @@ export type updateDto = {
   lineId: string
 } & updateData
 
-export const convertFormDataToAPIData: (data: registerFormData) => registerDto = (data) => {
+export type historyItem = {
+  soreThroat: boolean
+  pulse: number
+  bodyTemperature: number
+  createdDate: {
+    _seconds: number
+    _nanoseconds: number
+  }
+  cough: boolean
+  hasHelper: boolean
+  headAche: boolean
+  spO2: number
+}
+
+export type apiResponse = {
+  result: {
+    ok: boolean
+    id?: string
+    result?: historyItem[]
+  }
+}
+
+export const convertFormDataToAPIData: (
+  data: registerFormData,
+  lineData: lineUserData,
+) => registerDto = (data, lineData) => {
   const {
     firstName,
     lastName,
@@ -101,8 +132,11 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     gotFavipiravia,
     favipiraviaAmount,
   } = data
+  const { lineUserID, lineIDToken } = lineData
+
   const convertedData: registerDto = {
-    lineId: 'placeholder',
+    lineUserID,
+    lineIDToken,
     firstName,
     lastName,
     personalID,
@@ -126,13 +160,13 @@ export const convertFormDataToAPIData: (data: registerFormData) => registerDto =
     dose1Name:
       vaccination === 'one_dose' || vaccination === 'two_doses'
         ? vaccinationDates.firstDoseName
-        : undefined,
+        : '',
     dose1Date:
       vaccination === 'one_dose' || vaccination === 'two_doses'
         ? vaccinationDates.firstDoseDate
-        : undefined,
-    dose2Name: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : undefined,
-    dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : undefined,
+        : '',
+    dose2Name: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : '',
+    dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : '',
     gotFavipiravia: gotFavipiravia === 'received',
     favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : undefined,
   }

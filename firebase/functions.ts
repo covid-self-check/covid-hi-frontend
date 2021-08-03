@@ -32,7 +32,14 @@ export const registerPatient = async (data: registerDto) => {
     const response: firebase.functions.HttpsCallableResult = await registerParticipant(data)
     return response.data
   } catch (error) {
-    console.log('Error: ', error)
+    console.error('Error:')
+    console.error(error)
+    error?.details?.map((item: any) => console.error(item.message))
+    return {
+      result: {
+        ok: false,
+      },
+    }
   }
 }
 
@@ -43,6 +50,14 @@ export const updatePatient = async (data: updateData) => {
     const response: firebase.functions.HttpsCallableResult = await updateSymptom(data)
     return response.data
   } catch (error) {
-    console.log('Error: ', error.details)
+    console.error('Error:')
+    console.error(error)
+    error?.details?.map((item: any) => console.error(item.message))
+
+    return {
+      result: {
+        ok: false,
+      },
+    }
   }
 }
