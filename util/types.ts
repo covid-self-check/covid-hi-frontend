@@ -80,10 +80,7 @@ export type updateData = {
   hasHelper: boolean
 }
 
-export type updateDto = {
-  // personalID: string
-  lineId: string
-} & updateData
+export type updateDto = lineUserData & updateData
 
 export type historyItem = {
   soreThroat: boolean
@@ -173,7 +170,8 @@ export const convertFormDataToAPIData: (
   return convertedData
 }
 
-export const convertUpdateFormDataToDto = (data: updateData) => {
-  const convertedData: updateDto = { ...data, lineId: 'hello' }
+export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserData) => {
+  const { lineUserID, lineIDToken } = lineData
+  const convertedData: updateDto = { ...data, lineUserID, lineIDToken }
   return convertedData
 }
