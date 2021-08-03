@@ -1081,7 +1081,7 @@ export default function RegistrationForm() {
                 }
                 label="มีโรคปอดเรื้อรัง เช่น โรคถุงลมโป่งพอง"
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={
                   <Controller
                     name="rf_ckd_stagr_3_to_4"
@@ -1092,8 +1092,8 @@ export default function RegistrationForm() {
                   />
                 }
                 label="โรคไตเรื้อรัง ตั้งแต่ระดับสามขึ้นไป"
-              />
-              <FormControlLabel
+              /> */}
+              {/* <FormControlLabel
                 control={
                   <Controller
                     name="rf_chronic_heart_disease"
@@ -1104,7 +1104,7 @@ export default function RegistrationForm() {
                   />
                 }
                 label="มีโรคหัวใจ"
-              />
+              /> */}
               <FormControlLabel
                 control={
                   <Controller
@@ -1117,7 +1117,7 @@ export default function RegistrationForm() {
                 }
                 label="มีโรคหลอดเลือดสมอง"
               />
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={
                   <Controller
                     name="rf_t2dm"
@@ -1128,7 +1128,7 @@ export default function RegistrationForm() {
                   />
                 }
                 label="มีโรคเบาหวาน"
-              />
+              /> */}
               <FormControlLabel
                 control={
                   <Controller
