@@ -3,8 +3,8 @@ export type registerDto = {
   lineIDToken: string
   firstName: string
   lastName: string
-  personalID: string
-  passport: string
+  personalID: string | null
+  passport: string | null
   // station: string
   birthDate: string
   gender: string
@@ -189,8 +189,8 @@ export const convertFormDataToAPIData: (
     lineIDToken,
     firstName,
     lastName,
-    personalID: hasNationalID ? personalID : 'undefined',
-    passport: !hasNationalID ? personalID : 'undefined',
+    personalID: hasNationalID ? personalID : null,
+    passport: !hasNationalID ? personalID : null,
     // station: stationName,
     birthDate,
     gender,
