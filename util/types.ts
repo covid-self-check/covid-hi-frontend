@@ -168,7 +168,7 @@ export const convertFormDataToAPIData: (
     dose2Name: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : '',
     dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : '',
     gotFavipiravia: gotFavipiravia === 'received',
-    favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : undefined,
+    favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : 0,
   }
   return convertedData
 }
