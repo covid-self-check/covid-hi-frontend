@@ -40,24 +40,6 @@ export const Navbar = () => {
       >
         ComCovid
       </Typography>
-      <Link href="/register" passHref>
-        <Typography
-          variant="button"
-          component="a"
-          className={router.pathname == '/register' ? classes.active : classes.link}
-        >
-          ลงทะเบียน
-        </Typography>
-      </Link>
-      <Link href="/update" passHref>
-        <Typography
-          variant="button"
-          component="a"
-          className={router.pathname == '/update' ? classes.active : classes.link}
-        >
-          แจ้งอาการ
-        </Typography>
-      </Link>
     </Toolbar>
   )
 }
