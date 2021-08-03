@@ -36,6 +36,7 @@ export const registerPatient = async (data: registerDto) => {
     console.error('Error:')
     console.error(error)
     Sentry.withScope(scope => {
+      scope.setTags(error?.name);
       scope.setExtras(error?.details);
       Sentry.captureException(error);
     })
@@ -58,6 +59,7 @@ export const updatePatient = async (data: updateData) => {
     console.error('Error:')
     console.error(error)
     Sentry.withScope(scope => {
+      scope.setTags(error?.name);
       scope.setExtras(error?.details);
       Sentry.captureException(error);
     })
