@@ -60,7 +60,7 @@ export const updatePatient = async (data: updateData) => {
     Sentry.captureException(error);
     Sentry.setContext('error', { details: undefined });
 
-    error?.details?.map((item: any) => { console.error(item.message) })
+    error?.details?.map((item: any) => console.error(item.message))
 
     return {
       result: {
