@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Card from './Card'
 import {
   Button,
@@ -9,13 +9,13 @@ import {
   FormLabel,
   TextField,
 } from '@material-ui/core'
-// import styles from '../styles/RegistrationForm.module.css'
 import { Controller, useForm } from 'react-hook-form'
 
 import { makeStyles } from '@material-ui/styles'
 
 import { convertUpdateFormDataToDto, updateData, updateDto } from '../util/types'
 import { updatePatient } from '../firebase/functions'
+import ModalComponent, { ModalComponentProps } from './ModalComponent'
 
 const useStyles = makeStyles(
   {
@@ -45,8 +45,19 @@ const useStyles = makeStyles(
 )
 
 export default function UpdateForm() {
-  const styles = useStyles()
+  // state to handle modal
+  const [open, setOpen] = useState(false)
+  const [modalProps, setModalProps] = useState<
+    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle'>
+  >({
+    variant: 'success',
+    title: '',
+    subTitle: undefined,
+  })
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
+  const styles = useStyles()
   const { control, handleSubmit } = useForm<updateData>({
     defaultValues: {
       bodyTemperature: 0,
@@ -75,139 +86,154 @@ export default function UpdateForm() {
   }
 
   return (
-    <Card>
-      <Container className={styles.title_div} style={{ flexDirection: 'column' }}>
-        <div className={styles.title}>แจ้งอาการ</div>
-        <div className={styles.subtitle}>กรุณากรอกข้อมูลให้ครบถ้วน</div>
-      </Container>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Container>
-          <FormLabel className={styles.form_label} component="legend">
-            ข้อมูลทั่วไป
-          </FormLabel>
-          <Controller
-            name="bodyTemperature"
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextField
-                label="อุณภูมิรางก่าย (องศา)"
-                className={styles.text_field}
-                value={value}
-                type="number"
-                fullWidth
-                inputProps={{ min: 0, max: 50 }}
-                onChange={onChange}
-                error={!!error}
-                helperText={error ? error.message : null}
-              />
-            )}
-            rules={{ required: 'โปรดระบุอณหภูมิร่างกาย' }}
-          />
-          <Controller
-            name="pulse"
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextField
-                label="ค่าชีพจร"
-                className={styles.text_field}
-                value={value}
-                type="number"
-                fullWidth
-                inputProps={{ min: 0 }}
-                onChange={onChange}
-                error={!!error}
-                helperText={error ? error.message : null}
-              />
-            )}
-            rules={{ required: 'โปรดระบุค่าชีพจร' }}
-          />
-          <Controller
-            name="spO2"
-            control={control}
-            render={({ field: { onChange, value }, fieldState: { error } }) => (
-              <TextField
-                label="ระดับออกซิเจนในเลือด"
-                className={styles.text_field}
-                value={value}
-                type="number"
-                fullWidth
-                inputProps={{ min: 0, max: 100 }}
-                onChange={onChange}
-                error={!!error}
-                helperText={error ? error.message : null}
-              />
-            )}
-            rules={{ required: 'โปรดระบุค่าออกซิเจน' }}
-          />
-          <FormLabel className={styles.form_label} component="legend">
-            อาการโควิด
-          </FormLabel>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Controller
-                  name="cough"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Checkbox checked={value} onChange={onChange} />
-                  )}
-                />
-              }
-              label="ไอ"
-            />
-            <FormControlLabel
-              control={
-                <Controller
-                  name="soreThroat"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Checkbox checked={value} onChange={onChange} />
-                  )}
-                />
-              }
-              label="เจ็บคอ"
-            />
-            <FormControlLabel
-              control={
-                <Controller
-                  name="headAche"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Checkbox checked={value} onChange={onChange} />
-                  )}
-                />
-              }
-              label="ปวดหัว"
-            />
-          </FormGroup>
-          <FormLabel className={styles.form_label} component="legend">
-            สถานะ
-          </FormLabel>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Controller
-                  name="hasHelper"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <Checkbox checked={value} onChange={onChange} />
-                  )}
-                />
-              }
-              label="มีคนดูแลช่วยเหลือหรือไม่"
-            />
-          </FormGroup>
-          <Button
-            className={styles.button}
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-          >
-            ยืนยัน
-          </Button>
+    <>
+      <Card>
+        <Container className={styles.title_div} style={{ flexDirection: 'column' }}>
+          <div className={styles.title}>แจ้งอาการ</div>
+          <div className={styles.subtitle}>กรุณากรอกข้อมูลให้ครบถ้วน</div>
         </Container>
-      </form>
-    </Card>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Container>
+            <FormLabel className={styles.form_label} component="legend">
+              ข้อมูลทั่วไป
+            </FormLabel>
+            <Controller
+              name="bodyTemperature"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="อุณภูมิรางก่าย (องศา)"
+                  className={styles.text_field}
+                  value={value}
+                  type="number"
+                  fullWidth
+                  inputProps={{ min: 0, max: 50 }}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+              rules={{ required: 'โปรดระบุอณหภูมิร่างกาย' }}
+            />
+            <Controller
+              name="pulse"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="ค่าชีพจร"
+                  className={styles.text_field}
+                  value={value}
+                  type="number"
+                  fullWidth
+                  inputProps={{ min: 0 }}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+              rules={{ required: 'โปรดระบุค่าชีพจร' }}
+            />
+            <Controller
+              name="spO2"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="ระดับออกซิเจนในเลือด"
+                  className={styles.text_field}
+                  value={value}
+                  type="number"
+                  fullWidth
+                  inputProps={{ min: 0, max: 100 }}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+              rules={{ required: 'โปรดระบุค่าออกซิเจน' }}
+            />
+            <FormLabel className={styles.form_label} component="legend">
+              อาการโควิด
+            </FormLabel>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="cough"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="ไอ"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="soreThroat"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="ไอ"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="soreThroat"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="เจ็บคอ"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="headAche"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="ปวดหัว"
+              />
+            </FormGroup>
+            <FormLabel className={styles.form_label} component="legend">
+              สถานะ
+            </FormLabel>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="hasHelper"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีคนดูแลช่วยเหลือหรือไม่"
+              />
+            </FormGroup>
+            <Button
+              className={styles.button}
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
+              ยืนยัน
+            </Button>
+          </Container>
+        </form>
+      </Card>
+      <ModalComponent {...modalProps} state={open} onCloseHandler={handleClose} />
+    </>
   )
 }

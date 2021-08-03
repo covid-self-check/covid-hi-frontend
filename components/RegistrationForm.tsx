@@ -23,6 +23,7 @@ import { registerPatient } from '../firebase/functions'
 import { makeStyles } from '@material-ui/styles'
 import { useRouter } from 'next/dist/client/router'
 import { route } from 'next/dist/next-server/server/router'
+import ModalComponent, { ModalComponentProps } from './ModalComponent'
 
 const NATIONAL_ID_MAX_LENGTH = 13
 const PASSPORT_ID_OLD_MAX_LENGTH = 7
@@ -58,6 +59,17 @@ const useStyles = makeStyles(
 export default function RegistrationForm() {
   const styles = useStyles()
   const router = useRouter()
+  // state to handle modal
+  const [open, setOpen] = useState(false)
+  const [modalProps, setModalProps] = useState<
+    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle'>
+  >({
+    variant: 'success',
+    title: '',
+    subTitle: undefined,
+  })
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   const { register, handleSubmit, control, getValues } = useForm({
     defaultValues: {
@@ -1043,6 +1055,7 @@ export default function RegistrationForm() {
           </Container>
         </form>
       </Card>
+      <ModalComponent {...modalProps} state={open} onCloseHandler={handleClose} />
     </>
   )
 }
