@@ -79,7 +79,7 @@ export default function RegistrationForm() {
         postalCode: '',
       },
       hasHelper: false,
-      digitalLiteracy: false,
+      // digitalLiteracy: false,
       contactInfo: {
         phoneNumber: '',
         // closeContactsPhoneNumber: '',
@@ -806,7 +806,7 @@ export default function RegistrationForm() {
                 </FormControl>
               )}
             />
-            <Controller
+            {/* <Controller
               name="digitalLiteracy"
               control={control}
               render={({ field: { onChange, value } }) => (
@@ -826,7 +826,7 @@ export default function RegistrationForm() {
                   </Select>
                 </FormControl>
               )}
-            />
+            /> */}
 
             <FormLabel className={styles.form_label} component="legend">
               ข้อมูลการฉีดวัคซีน การรับยา และวันที่ตรวจโควิด

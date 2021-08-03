@@ -16,7 +16,7 @@ export type registerDto = {
   district: string
   postNo: string
   hasHelper: boolean
-  digitalLiteracy: boolean
+  // digitalLiteracy: boolean
   personalPhoneNo: string
   // personalLineID: string
   // closestUnriskPersonPhoneNo: string
@@ -202,7 +202,7 @@ export const convertFormDataToAPIData: (
     district: addressInfo.subdistrict,
     postNo: addressInfo.postalCode,
     hasHelper: hasHelper === 'true',
-    digitalLiteracy: digitalLiteracy === 'true',
+    // digitalLiteracy: digitalLiteracy === 'true',
     personalPhoneNo: contactInfo.phoneNumber,
     // personalLineID: lineID,
     // closestUnriskPersonPhoneNo: contactInfo.closeContactsPhoneNumber,
