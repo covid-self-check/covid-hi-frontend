@@ -467,24 +467,21 @@ export default function RegistrationForm() {
               name="birthDate"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <>
-                  <TextField
-                    fullWidth
-                    className={styles.text_field}
-                    id="date"
-                    label="วัน/เดือน/ปีเกิด"
-                    type="date"
-                    defaultValue={undefined}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    value={value}
-                    onChange={onChange}
-                  />
-                  <FormHelperText error={error ? true : false}>
-                    {error ? error.message : ''}
-                  </FormHelperText>
-                </>
+                <TextField
+                  fullWidth
+                  className={styles.text_field}
+                  id="date"
+                  label="วัน/เดือน/ปีเกิด"
+                  type="date"
+                  defaultValue={undefined}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  value={value}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
               )}
               rules={{ required: 'โปรดใส่วัน/เดือน/ปีเกิด' }}
             />
@@ -1077,8 +1074,7 @@ export default function RegistrationForm() {
               )}
               rules={{ required: 'โปรดใส่จุดตรวจ' }}
             /> */}
-
-            <Controller
+            {/*         <Controller
               name="latestCovidTestDate"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -1101,7 +1097,7 @@ export default function RegistrationForm() {
                 </>
               )}
               rules={{ required: 'โปรดใส่วันที่ตรวจโควิดครั้งล่าสุด' }}
-            />
+            /> */}
             <FormLabel className={styles.form_label} component="legend">
               โรคประจำตัว (ไม่ต้องกรอกหากไม่มี)
             </FormLabel>
