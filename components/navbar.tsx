@@ -32,6 +32,7 @@ export const Navbar = () => {
         component="h4"
         sx={{
           flexGrow: 1,
+          fontSize: '1.7rem',
           fontWeight: 700,
           color: theme.palette.primary.main,
         }}
