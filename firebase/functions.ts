@@ -10,6 +10,7 @@ import 'firebase/analytics'
 // Add the Firebase products that you want to use
 import 'firebase/functions'
 import { registerDto, updateData } from '../util/types'
+import * as Sentry from "@sentry/nextjs";
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -52,6 +53,7 @@ export const updatePatient = async (data: updateData) => {
   } catch (error) {
     console.error('Error:')
     console.error(error)
+    Sentry.captureException(error)
     error?.details?.map((item: any) => console.error(item.message))
 
     return {
