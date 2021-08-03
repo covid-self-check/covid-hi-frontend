@@ -3,7 +3,8 @@ export type registerDto = {
   lineIDToken: string
   firstName: string
   lastName: string
-  personalID: string
+  personalID: string | undefined
+  passport: string | undefined
   station: string
   age: number
   gender: string
@@ -25,7 +26,7 @@ export type registerDto = {
   dose1Date?: string
   dose2Name?: string
   dose2Date?: string
-  gotFavipiravia: boolean
+  gotFavipiravia: number
   favipiraviaAmount?: number
 }
 
@@ -107,7 +108,8 @@ export type apiResponse = {
 export const convertFormDataToAPIData: (
   data: registerFormData,
   lineData: lineUserData,
-) => registerDto = (data, lineData) => {
+  hasNationalID: boolean,
+) => registerDto = (data, lineData, hasNationalID) => {
   const {
     firstName,
     lastName,
@@ -136,7 +138,8 @@ export const convertFormDataToAPIData: (
     lineIDToken,
     firstName,
     lastName,
-    personalID,
+    personalID: hasNationalID ? personalID : undefined,
+    passport: !hasNationalID ? personalID : undefined,
     station: stationName,
     age: parseInt(age),
     gender,
@@ -164,7 +167,7 @@ export const convertFormDataToAPIData: (
         : '',
     dose2Name: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : '',
     dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : '',
-    gotFavipiravia: gotFavipiravia === 'received',
+    gotFavipiravia: gotFavipiravia === 'received' ? 1 : 0,
     favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : 0,
   }
   return convertedData
