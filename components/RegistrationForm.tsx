@@ -59,6 +59,17 @@ const useStyles = makeStyles(
 export default function RegistrationForm() {
   const styles = useStyles()
   const router = useRouter()
+  // state to handle modal
+  const [open, setOpen] = useState(false)
+  const [modalProps, setModalProps] = useState<
+    Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle'>
+  >({
+    variant: 'success',
+    title: '',
+    subTitle: undefined,
+  })
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
   const { register, handleSubmit, control, getValues } = useForm({
     defaultValues: {
