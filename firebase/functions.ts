@@ -61,7 +61,7 @@ export const updatePatient = async (data: updateData) => {
       scope.setExtras(error?.details);
       Sentry.captureException(error);
     })
-    error?.details?.map((item: any) => { console.error(item.message) })
+    error?.details?.map((item: any) => console.error(item.message))
 
     return {
       result: {
