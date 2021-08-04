@@ -51,10 +51,18 @@ export default function UpdateForm() {
       bodyTemperature: 0,
       pulse: 0,
       spO2: 0,
-      cough: false,
-      soreThroat: false,
-      headAche: false,
-      hasHelper: false,
+      sym1_severe_cough: false,
+      sym1_chest_tightness: false,
+      sym1_poor_appetite: false,
+      sym1_fatigue: false,
+      sym1_persistent_fever: false,
+      sym2_tired_body_ache: false,
+      sym2_cough: false,
+      sym2_fever: false,
+      sym2_liquid_stool: false,
+      sym2_cannot_smell: false,
+      sym2_rash: false,
+      sym2_red_eye: false,
     },
   })
 
@@ -168,61 +176,152 @@ export default function UpdateForm() {
               rules={{ required: 'โปรดระบุค่าออกซิเจน' }}
             />
             <FormLabel className={styles.form_label} component="legend">
-              อาการโควิด
+              อาการที่พบ
             </FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={
                   <Controller
-                    name="cough"
+                    name="sym2_cough"
                     control={control}
                     render={({ field: { onChange, value } }) => (
                       <Checkbox checked={value} onChange={onChange} />
                     )}
                   />
                 }
-                label="ไอ"
+                label="ไอเล็กน้อย"
               />
               <FormControlLabel
                 control={
                   <Controller
-                    name="soreThroat"
+                    name="sym1_severe_cough"
                     control={control}
                     render={({ field: { onChange, value } }) => (
                       <Checkbox checked={value} onChange={onChange} />
                     )}
                   />
                 }
-                label="เจ็บคอ"
+                label="ไอรุนแรงหรือต่อเนื่อง"
               />
               <FormControlLabel
                 control={
                   <Controller
-                    name="headAche"
+                    name="sym2_tired_body_ache"
                     control={control}
                     render={({ field: { onChange, value } }) => (
                       <Checkbox checked={value} onChange={onChange} />
                     )}
                   />
                 }
-                label="ปวดหัว"
+                label="อ่อนเพลีย / ปวดเมื่อยตามตัว"
               />
-            </FormGroup>
-            <FormLabel className={styles.form_label} component="legend">
-              สถานะ
-            </FormLabel>
-            <FormGroup>
               <FormControlLabel
                 control={
                   <Controller
-                    name="hasHelper"
+                    name="sym1_fatigue"
                     control={control}
                     render={({ field: { onChange, value } }) => (
                       <Checkbox checked={value} onChange={onChange} />
                     )}
                   />
                 }
-                label="มีคนดูแลช่วยเหลือหรือไม่"
+                label="อ่อนเพลียมาก"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="sym2_fever"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีไข้"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="sym1_persistent_fever"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีไข้ต่อเนื่องทุกวันตั้งแต่เริ่มสังเกตอาการ (5–6 วันขึ้นไป)"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="sym2_liquid_stool"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="ถ่ายเหลว"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="sym2_cannot_smell"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="ไม่ได้กลิ่น"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="sym2_rash"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="มีผื่น"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="sym2_red_eye"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="ตาแดง"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="sym1_chest_tightness"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="แน่นหน้าอก หายใจติดขัด จุก หรือหายใจสะดุด"
+              />
+              <FormControlLabel
+                control={
+                  <Controller
+                    name="sym1_poor_appetite"
+                    control={control}
+                    render={({ field: { onChange, value } }) => (
+                      <Checkbox checked={value} onChange={onChange} />
+                    )}
+                  />
+                }
+                label="เบื่ออาหาร หรือรับประทานอาหารไม่ได้"
               />
             </FormGroup>
             <Button

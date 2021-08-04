@@ -353,8 +353,6 @@ export default function RegistrationForm() {
     }
   }
 
-  function stationIsAvailable(station: string) {}
-
   const replaceWithNumbers = (text: string) => text.replace(/\D+/g, '')
 
   const replaceWithLatinCharactersOrNumbers = (text: string) => text.replace(/[^A-Za-z0-9]/g, '')

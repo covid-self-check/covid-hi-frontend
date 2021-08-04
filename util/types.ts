@@ -108,10 +108,18 @@ export type updateData = {
   bodyTemperature: number
   pulse: number
   spO2: number
-  cough: boolean
-  soreThroat: boolean
-  headAche: boolean
-  hasHelper: boolean
+  sym1_severe_cough: boolean,
+  sym1_chest_tightness: boolean,
+  sym1_poor_appetite: boolean,
+  sym1_fatigue: boolean,
+  sym1_persistent_fever: boolean,
+  sym2_tired_body_ache: boolean,
+  sym2_cough: boolean,
+  sym2_fever: boolean,
+  sym2_liquid_stool: boolean,
+  sym2_cannot_smell: boolean,
+  sym2_rash: boolean,
+  sym2_red_eye: boolean
 }
 
 export type updateDto = lineUserData & updateData
