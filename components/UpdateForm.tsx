@@ -17,6 +17,7 @@ import { convertUpdateFormDataToDto, updateData, updateDto } from '../util/types
 import { updatePatient } from '../firebase/functions'
 import ModalComponent, { ModalComponentProps } from './ModalComponent'
 import { LineContext } from '../util/lineContext'
+import LoadingModal from './LoadingModal'
 
 const useStyles = makeStyles(
   {
@@ -105,6 +106,8 @@ export default function UpdateForm() {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const [isLoading, setLoading] = useState(false)
+
   const openModal = (isSuccess: boolean, color?: string, errors?: string[]) => {
     if (isSuccess)
       setModalProps({
@@ -126,6 +129,7 @@ export default function UpdateForm() {
   const { lineUserID, lineIDToken } = useContext(LineContext)
 
   const onSubmit = async (values: updateData) => {
+    setLoading(true)
     const convertedData: updateDto = convertUpdateFormDataToDto(values, {
       lineUserID,
       lineIDToken,
@@ -133,6 +137,7 @@ export default function UpdateForm() {
     console.log(values)
     const response = await updatePatient(convertedData)
     console.log(response)
+    setLoading(false)
     openModal(response?.ok as boolean)
   }
 
@@ -586,6 +591,7 @@ export default function UpdateForm() {
           </Container>
         </form>
       </Card>
+      <LoadingModal state={isLoading} onCloseHandler={() => setLoading(false)} />
       <ModalComponent {...modalProps} state={open} onCloseHandler={handleClose} />
     </>
   )
