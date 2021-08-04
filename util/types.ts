@@ -211,6 +211,10 @@ export type apiResponse = {
   }
 }
 
+export type requestHelpData = {
+    phoneNumber: string
+}
+
 export const convertFormDataToAPIData: (
   data: registerFormData,
   lineData: lineUserData,
