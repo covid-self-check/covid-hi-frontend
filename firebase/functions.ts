@@ -9,8 +9,8 @@ import 'firebase/analytics'
 
 // Add the Firebase products that you want to use
 import 'firebase/functions'
-import { registerDto, updateData } from '../util/types'
-import * as Sentry from "@sentry/nextjs";
+import { registerDto, updateData, updateDto } from '../util/types'
+import * as Sentry from '@sentry/nextjs'
 
 const { publicRuntimeConfig } = getConfig()
 
@@ -35,9 +35,9 @@ export const registerPatient = async (data: registerDto) => {
   } catch (error) {
     console.error('Error:')
     console.error(error)
-    Sentry.setContext('error', { details: JSON.stringify(error?.details) });
-    Sentry.captureException(error);
-    Sentry.setContext('error', { details: undefined });
+    Sentry.setContext('error', { details: JSON.stringify(error?.details) })
+    Sentry.captureException(error)
+    Sentry.setContext('error', { details: undefined })
     error?.details?.map((item: any) => console.error(item.message))
     return {
       result: {
@@ -47,7 +47,7 @@ export const registerPatient = async (data: registerDto) => {
   }
 }
 
-export const updatePatient = async (data: updateData) => {
+export const updatePatient = async (data: updateDto) => {
   let updateSymptom = firebase.app().functions('asia-southeast2').httpsCallable('updateSymptom')
   try {
     console.log(data)
@@ -56,9 +56,9 @@ export const updatePatient = async (data: updateData) => {
   } catch (error) {
     console.error('Error:')
     console.error(error)
-    Sentry.setContext('error', { details: JSON.stringify(error?.details) });
-    Sentry.captureException(error);
-    Sentry.setContext('error', { details: undefined });
+    Sentry.setContext('error', { details: JSON.stringify(error?.details) })
+    Sentry.captureException(error)
+    Sentry.setContext('error', { details: undefined })
 
     error?.details?.map((item: any) => console.error(item.message))
 

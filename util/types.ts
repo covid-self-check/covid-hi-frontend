@@ -46,11 +46,6 @@ export type registerDto = {
   fac_pregnancy: number
 }
 
-export type lineUserData = {
-  lineUserID: string
-  lineIDToken: string
-}
-
 export type registerFormData = {
   firstName: string
   lastName: string
@@ -145,7 +140,31 @@ export type updateData = {
   fac_gi_symptoms: boolean
 }
 
-export type updateDto = lineUserData & updateData
+export type lineUserData = {
+  lineUserID: string
+  lineIDToken: string
+}
+
+export type updateDto = {
+  bodyTemperature: number
+  pulse: number
+  sp_o2: number
+  sp_o2_ra: number
+  sp_o2_after_eih: number
+  eih_result: string
+  sym1_severe_cough: number
+  sym1_chest_tightness: number
+  sym1_poor_appetite: number
+  sym1_fatigue: number
+  sym1_persistent_fever: number
+  sym2_tired_body_ache: number
+  sym2_cough: number
+  sym2_fever: number
+  sym2_liquid_stool: number
+  sym2_cannot_smell: number
+  sym2_rash: number
+  sym2_red_eye: number
+} & lineUserData
 
 export type historyItem = {
   soreThroat: boolean
@@ -273,6 +292,45 @@ export const convertFormDataToAPIData: (
 
 export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserData) => {
   const { lineUserID, lineIDToken } = lineData
-  const convertedData: updateDto = { ...data, lineUserID, lineIDToken }
+  const {
+    bodyTemperature,
+    pulse,
+    spO2,
+    sym1_severe_cough,
+    sym1_chest_tightness,
+    sym1_poor_appetite,
+    sym1_fatigue,
+    sym1_persistent_fever,
+    sym2_tired_body_ache,
+    sym2_cough,
+    sym2_fever,
+    sym2_liquid_stool,
+    sym2_cannot_smell,
+    sym2_rash,
+    sym2_red_eye,
+  } = data
+
+  const convertedData: updateDto = {
+    bodyTemperature,
+    pulse,
+    sp_o2: spO2,
+    sp_o2_ra: spO2,
+    sp_o2_after_eih: spO2,
+    eih_result: 'unknown',
+    sym1_severe_cough: sym1_severe_cough ? 1 : 0,
+    sym1_chest_tightness: sym1_chest_tightness ? 1 : 0,
+    sym1_poor_appetite: sym1_poor_appetite ? 1 : 0,
+    sym1_fatigue: sym1_fatigue ? 1 : 0,
+    sym1_persistent_fever: sym1_persistent_fever ? 1 : 0,
+    sym2_tired_body_ache: sym2_tired_body_ache ? 1 : 0,
+    sym2_cough: sym2_cough ? 1 : 0,
+    sym2_fever: sym2_fever ? 1 : 0,
+    sym2_liquid_stool: sym2_liquid_stool ? 1 : 0,
+    sym2_cannot_smell: sym2_cannot_smell ? 1 : 0,
+    sym2_rash: sym2_rash ? 1 : 0,
+    sym2_red_eye: sym2_red_eye ? 1 : 0,
+    lineUserID,
+    lineIDToken,
+  }
   return convertedData
 }
