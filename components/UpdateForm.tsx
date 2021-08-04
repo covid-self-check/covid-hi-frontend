@@ -180,12 +180,12 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ค่าออกซิเจนปลายนิ้ว ขณะหายใจปกติ * (เปอร์เซ็นต์)"
+                  label="ค่าออกซิเจนปลายนิ้ว ขณะหายใจปกติ (เปอร์เซ็นต์) (ไม่ต้องกรอกหากไม่มี)"
                   className={styles.text_field}
                   value={value}
                   type="number"
                   fullWidth
-                  inputProps={{ min: 1.0, max: 100.0, step: 1 }}
+                  inputProps={{ min: 0, max: 100.0, step: 1 }}
                   onChange={onChange}
                   error={!!error}
                   helperText={error ? error.message : null}
@@ -198,12 +198,12 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ค่าออกซิเจนปลายนิ้ว หลังลุก-นั่ง 1 นาที * (เปอร์เซ็นต์)"
+                  label="ค่าออกซิเจนปลายนิ้ว หลังลุก-นั่ง 1 นาที (เปอร์เซ็นต์) (ไม่ต้องกรอกหากไม่มี)"
                   className={styles.text_field}
                   value={value}
                   type="number"
                   fullWidth
-                  inputProps={{ min: 1.0, max: 100.0, step: 1 }}
+                  inputProps={{ min: 0, max: 100.0, step: 1 }}
                   onChange={onChange}
                   error={!!error}
                   helperText={error ? error.message : null}
