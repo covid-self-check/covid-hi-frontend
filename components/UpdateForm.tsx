@@ -126,12 +126,13 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="อุณภูมิรางก่าย (องศา)"
+                  label="อุณภูมิรางก่าย (องศาเซลเซียส)"
                   className={styles.text_field}
-                  value={value}
                   type="number"
                   fullWidth
-                  inputProps={{ min: 0, max: 50 }}
+                  defaultValue={36.8}
+                  value={value}
+                  inputProps={{ min: 30.0, max: 50.0, step: 0.1 }}
                   onChange={onChange}
                   error={!!error}
                   helperText={error ? error.message : null}
@@ -144,12 +145,12 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ค่าชีพจร"
+                  label="ค่าชีพจร (ครั้งต่อนาที)"
                   className={styles.text_field}
                   value={value}
                   type="number"
                   fullWidth
-                  inputProps={{ min: 0 }}
+                  inputProps={{ min: 1, max: 250, step: 1 }}
                   onChange={onChange}
                   error={!!error}
                   helperText={error ? error.message : null}
@@ -162,12 +163,12 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ระดับออกซิเจนในเลือด"
+                  label="ระดับออกซิเจนในเลือด (เปอร์เซ็นต์)"
                   className={styles.text_field}
                   value={value}
                   type="number"
                   fullWidth
-                  inputProps={{ min: 0, max: 100 }}
+                  inputProps={{ min: 1.0, max: 100.0, step: 0.1 }}
                   onChange={onChange}
                   error={!!error}
                   helperText={error ? error.message : null}
