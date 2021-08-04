@@ -26,6 +26,7 @@ import { useRouter } from 'next/dist/client/router'
 import { route } from 'next/dist/next-server/server/router'
 import ModalComponent, { ModalComponentProps } from './ModalComponent'
 import { LineContext } from '../util/lineContext'
+import LoadingModal from './LoadingModal'
 
 const NATIONAL_ID_MAX_LENGTH = 13
 const PASSPORT_ID_OLD_MAX_LENGTH = 7
@@ -265,6 +266,8 @@ export default function RegistrationForm() {
     handleOpen()
   }
 
+  const [isLoading, setLoading] = useState(false)
+
   // state to handle modal
   const [open, setOpen] = useState(false)
   const [modalProps, setModalProps] = useState<
@@ -282,6 +285,7 @@ export default function RegistrationForm() {
 
   const onSubmit = async (data: registerFormData) => {
     console.log(data)
+    setLoading(true)
     const hasNationalId = nationalIdOrPassportFieldStatus === 'id'
     const convertedData = convertFormDataToAPIData(data, {
       lineUserID: lineUserID,
@@ -289,6 +293,7 @@ export default function RegistrationForm() {
     })
     const response = await registerPatient(convertedData)
     console.log(response)
+    setLoading(false)
     openModal(response?.ok as boolean)
     // openModal(true)
     setFormData(data)
@@ -1320,6 +1325,7 @@ export default function RegistrationForm() {
           </Container>
         </form>
       </Card>
+      <LoadingModal state={isLoading} onCloseHandler={()=>setLoading(false)}/>
       <ModalComponent {...modalProps} state={open} onCloseHandler={handleClose} />
     </>
   )
