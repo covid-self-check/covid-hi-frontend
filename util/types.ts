@@ -103,6 +103,7 @@ export type updateData = {
   // bodyTemperature: number
   // pulse: number
   spO2: number
+  spO2Eih: number
   sym1_severe_cough: boolean
   sym1_chest_tightness: boolean
   sym1_poor_appetite: boolean
@@ -318,6 +319,7 @@ export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserD
     // bodyTemperature,
     // pulse,
     spO2,
+    spO2Eih,
     sym1_severe_cough,
     sym1_chest_tightness,
     sym1_poor_appetite,
@@ -354,13 +356,22 @@ export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserD
     fac_gi_symptoms,
   } = data
 
+  const oxygenResult =
+    spO2Eih - spO2 > 0
+      ? 'positive'
+      : spO2Eih - spO2 === 0
+      ? 'neutral'
+      : spO2Eih - spO2 < 0
+      ? 'negative'
+      : 'unknown'
+
   const convertedData: updateDto = {
     // bodyTemperature,
     // pulse,
     sp_o2: spO2,
     sp_o2_ra: spO2,
-    sp_o2_after_eih: spO2,
-    eih_result: 'unknown',
+    sp_o2_after_eih: spO2Eih,
+    eih_result: oxygenResult,
     sym1_severe_cough: sym1_severe_cough ? 1 : 0,
     sym1_chest_tightness: sym1_chest_tightness ? 1 : 0,
     sym1_poor_appetite: sym1_poor_appetite ? 1 : 0,

@@ -53,6 +53,7 @@ export default function UpdateForm() {
       // bodyTemperature: 0,
       // pulse: 0,
       spO2: 0,
+      spO2Eih: 0,
 
       sym1_severe_cough: false,
       sym1_chest_tightness: false,
@@ -67,23 +68,7 @@ export default function UpdateForm() {
       sym2_cannot_smell: false,
       sym2_rash: false,
       sym2_red_eye: false,
-
-      // fac_age_gte_60: false,
-      // fac_bmi_gte_30: false,
-      // fac_diabetes: false,
-      // fac_dyslipidemia: false,
-      // fac_hypertension: false,
-      // fac_heart_disease: false,
-      // fac_esrd: false,
-      // fac_cancer: false,
-      // fac_cirrhosis: false,
-      // fac_tuberculosis: false,
-      // fac_hiv: false,
-      // fac_asthma: false,
-      // fac_copd: false,
-      // fac_pregnancy: false,
       fac_bed_ridden_status: false,
-      // fac_fever: false,
       fac_uri_symptoms: false,
       fac_olfactory_symptoms: false,
       fac_diarrhea: false,
@@ -195,7 +180,7 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ระดับออกซิเจนในเลือด (เปอร์เซ็นต์)"
+                  label="ค่าออกซิเจนปลายนิ้ว ขณะหายใจปกติ (เปอร์เซ็นต์)"
                   className={styles.text_field}
                   value={value}
                   type="number"
@@ -206,7 +191,25 @@ export default function UpdateForm() {
                   helperText={error ? error.message : null}
                 />
               )}
-              rules={{ required: 'โปรดระบุค่าออกซิเจน' }}
+              rules={{ required: 'โปรดระบุค่าออกซิเจนปลายนิ้ว ขณะหายใจปกติ' }}
+            />
+            <Controller
+              name="spO2Eih"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="ค่าออกซิเจนปลายนิ้ว หลังลุก-นั่ง 1 นาที (เปอร์เซ็นต์)"
+                  className={styles.text_field}
+                  value={value}
+                  type="number"
+                  fullWidth
+                  inputProps={{ min: 1.0, max: 100.0, step: 0.1 }}
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+              rules={{ required: 'โปรดระบุค่าออกซิเจนปลายนิ้ว หลังลุก-นั่ง 1 นาที' }}
             />
             <FormLabel className={styles.form_label} component="legend">
               อาการที่พบ

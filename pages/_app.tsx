@@ -8,12 +8,14 @@ import { Navbar } from '../components/navbar'
 import getConfig from 'next/config'
 import { lineUserData } from '../util/types'
 import { LineContext } from '../util/lineContext'
+import { useRouter } from 'next/router'
 
 const { publicRuntimeConfig } = getConfig()
 const liffId = publicRuntimeConfig?.liffID
 const liffUrl = publicRuntimeConfig?.liffUrl
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { pathname } = useRouter()
   const [lineData, setLineData] = useState<lineUserData>({ lineIDToken: '', lineUserID: '' })
 
   const getLiffData = useCallback(async () => {
@@ -41,18 +43,20 @@ function MyApp({ Component, pageProps }: AppProps) {
       const liff = (await import('@line/liff')).default
       try {
         await liff.init({ liffId })
-        if (!liff.isInClient() && !liff.isLoggedIn()) liff.login({ redirectUri: liffUrl })
-        // liff.login({ redirectUri: 'https://tidy-cat-54.loca.lt' })
+        if (!liff.isInClient() && !liff.isLoggedIn())
+          liff.login({ redirectUri: `${liffUrl}/${pathname}` })
+        // liff.login({ redirectUri: 'https://localhost:3000' })
       } catch (error) {
         console.error('liff init error', error.message)
       }
       if (!liff.isLoggedIn()) {
-        liff.login({ redirectUri: liffUrl })
+        liff.login({ redirectUri: `${liffUrl}/${pathname}` })
+        // liff.login({ redirectUri: 'https://localhost:3000' })
       }
       await getLiffData()
     }
     connectWithLiff()
-  }, [getLiffData])
+  }, [getLiffData, pathname])
 
   return (
     <LineContext.Provider value={lineData}>
