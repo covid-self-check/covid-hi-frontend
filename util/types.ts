@@ -108,18 +108,41 @@ export type updateData = {
   bodyTemperature: number
   pulse: number
   spO2: number
-  sym1_severe_cough: boolean,
-  sym1_chest_tightness: boolean,
-  sym1_poor_appetite: boolean,
-  sym1_fatigue: boolean,
-  sym1_persistent_fever: boolean,
-  sym2_tired_body_ache: boolean,
-  sym2_cough: boolean,
-  sym2_fever: boolean,
-  sym2_liquid_stool: boolean,
-  sym2_cannot_smell: boolean,
-  sym2_rash: boolean,
+  sym1_severe_cough: boolean
+  sym1_chest_tightness: boolean
+  sym1_poor_appetite: boolean
+  sym1_fatigue: boolean
+  sym1_persistent_fever: boolean
+  sym2_tired_body_ache: boolean
+  sym2_cough: boolean
+  sym2_fever: boolean
+  sym2_liquid_stool: boolean
+  sym2_cannot_smell: boolean
+  sym2_rash: boolean
   sym2_red_eye: boolean
+
+  fac_age_gte_60: boolean
+  fac_bmi_gte_30: boolean
+  fac_diabetes: boolean
+  fac_dyslipidemia: boolean
+  fac_hypertension: boolean
+  fac_heart_disease: boolean
+  fac_esrd: boolean
+  fac_cancer: boolean
+  fac_cirrhosis: boolean
+  fac_tuberculosis: boolean
+  fac_hiv: boolean
+  fac_asthma: boolean
+  fac_copd: boolean
+  fac_pregnancy: boolean
+  fac_bed_ridden_status: boolean
+  fac_fever: boolean
+  fac_uri_symptoms: boolean
+  fac_olfactory_symptoms: boolean
+  fac_diarrhea: boolean
+  fac_dyspnea: boolean
+  fac_chest_discomfort: boolean
+  fac_gi_symptoms: boolean
 }
 
 export type updateDto = lineUserData & updateData
