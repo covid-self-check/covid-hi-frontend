@@ -100,8 +100,8 @@ export type registerFormData = {
 }
 
 export type updateData = {
-  bodyTemperature: number
-  pulse: number
+  // bodyTemperature: number
+  // pulse: number
   spO2: number
   sym1_severe_cough: boolean
   sym1_chest_tightness: boolean
@@ -116,22 +116,22 @@ export type updateData = {
   sym2_rash: boolean
   sym2_red_eye: boolean
 
-  fac_age_gte_60: boolean
-  fac_bmi_gte_30: boolean
-  fac_diabetes: boolean
-  fac_dyslipidemia: boolean
-  fac_hypertension: boolean
-  fac_heart_disease: boolean
-  fac_esrd: boolean
-  fac_cancer: boolean
-  fac_cirrhosis: boolean
-  fac_tuberculosis: boolean
-  fac_hiv: boolean
-  fac_asthma: boolean
-  fac_copd: boolean
-  fac_pregnancy: boolean
+  // fac_age_gte_60: boolean
+  // fac_bmi_gte_30: boolean
+  // fac_diabetes: boolean
+  // fac_dyslipidemia: boolean
+  // fac_hypertension: boolean
+  // fac_heart_disease: boolean
+  // fac_esrd: boolean
+  // fac_cancer: boolean
+  // fac_cirrhosis: boolean
+  // fac_tuberculosis: boolean
+  // fac_hiv: boolean
+  // fac_asthma: boolean
+  // fac_copd: boolean
+  // fac_pregnancy: boolean
   fac_bed_ridden_status: boolean
-  fac_fever: boolean
+  // fac_fever: boolean
   fac_uri_symptoms: boolean
   fac_olfactory_symptoms: boolean
   fac_diarrhea: boolean
@@ -146,8 +146,8 @@ export type lineUserData = {
 }
 
 export type updateDto = {
-  bodyTemperature: number
-  pulse: number
+  // bodyTemperature: number
+  // pulse: number
   sp_o2: number
   sp_o2_ra: number
   sp_o2_after_eih: number
@@ -164,6 +164,28 @@ export type updateDto = {
   sym2_cannot_smell: number
   sym2_rash: number
   sym2_red_eye: number
+  // fac_age_gte_60: number
+  // fac_bmi_gte_30: number
+  // fac_diabetes: number
+  // fac_dyslipidemia: number
+  // fac_hypertension: number
+  // fac_heart_disease: number
+  // fac_esrd: number
+  // fac_cancer: number
+  // fac_cirrhosis: number
+  // fac_tuberculosis: number
+  // fac_hiv: number
+  // fac_asthma: number
+  // fac_copd: number
+  // fac_pregnancy: number
+  fac_bed_ridden_status: number
+  // fac_fever: number
+  fac_uri_symptoms: number
+  fac_olfactory_symptoms: number
+  fac_diarrhea: number
+  fac_dyspnea: number
+  fac_chest_discomfort: number
+  fac_gi_symptoms: number
 } & lineUserData
 
 export type historyItem = {
@@ -293,8 +315,8 @@ export const convertFormDataToAPIData: (
 export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserData) => {
   const { lineUserID, lineIDToken } = lineData
   const {
-    bodyTemperature,
-    pulse,
+    // bodyTemperature,
+    // pulse,
     spO2,
     sym1_severe_cough,
     sym1_chest_tightness,
@@ -308,11 +330,33 @@ export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserD
     sym2_cannot_smell,
     sym2_rash,
     sym2_red_eye,
+    // fac_age_gte_60,
+    // fac_bmi_gte_30,
+    // fac_diabetes,
+    // fac_dyslipidemia,
+    // fac_hypertension,
+    // fac_heart_disease,
+    // fac_esrd,
+    // fac_cancer,
+    // fac_cirrhosis,
+    // fac_tuberculosis,
+    // fac_hiv,
+    // fac_asthma,
+    // fac_copd,
+    // fac_pregnancy,
+    fac_bed_ridden_status,
+    // fac_fever,
+    fac_uri_symptoms,
+    fac_olfactory_symptoms,
+    fac_diarrhea,
+    fac_dyspnea,
+    fac_chest_discomfort,
+    fac_gi_symptoms,
   } = data
 
   const convertedData: updateDto = {
-    bodyTemperature,
-    pulse,
+    // bodyTemperature,
+    // pulse,
     sp_o2: spO2,
     sp_o2_ra: spO2,
     sp_o2_after_eih: spO2,
@@ -329,6 +373,28 @@ export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserD
     sym2_cannot_smell: sym2_cannot_smell ? 1 : 0,
     sym2_rash: sym2_rash ? 1 : 0,
     sym2_red_eye: sym2_red_eye ? 1 : 0,
+    // fac_age_gte_60: fac_age_gte_60 ? 1 : 0,
+    // fac_bmi_gte_30: fac_bmi_gte_30 ? 1 : 0,
+    // fac_diabetes: fac_diabetes ? 1 : 0,
+    // fac_dyslipidemia: fac_dyslipidemia ? 1 : 0,
+    // fac_hypertension: fac_hypertension ? 1 : 0,
+    // fac_heart_disease: fac_heart_disease ? 1 : 0,
+    // fac_esrd: fac_esrd ? 1 : 0,
+    // fac_cancer: fac_cancer ? 1 : 0,
+    // fac_cirrhosis: fac_cirrhosis ? 1 : 0,
+    // fac_tuberculosis: fac_tuberculosis ? 1 : 0,
+    // fac_hiv: fac_hiv ? 1 : 0,
+    // fac_asthma: fac_asthma ? 1 : 0,
+    // fac_copd: fac_copd ? 1 : 0,
+    // fac_pregnancy: fac_pregnancy ? 1 : 0,
+    fac_bed_ridden_status: fac_bed_ridden_status ? 1 : 0,
+    // fac_fever: fac_fever ? 1 : 0,
+    fac_uri_symptoms: fac_uri_symptoms ? 1 : 0,
+    fac_olfactory_symptoms: fac_olfactory_symptoms ? 1 : 0,
+    fac_diarrhea: fac_diarrhea ? 1 : 0,
+    fac_dyspnea: fac_dyspnea ? 1 : 0,
+    fac_chest_discomfort: fac_chest_discomfort ? 1 : 0,
+    fac_gi_symptoms: fac_gi_symptoms ? 1 : 0,
     lineUserID,
     lineIDToken,
   }

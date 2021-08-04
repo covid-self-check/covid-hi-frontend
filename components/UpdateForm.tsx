@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import Card from './Card'
 import {
   Button,
@@ -16,6 +16,7 @@ import { makeStyles } from '@material-ui/styles'
 import { convertUpdateFormDataToDto, updateData, updateDto } from '../util/types'
 import { updatePatient } from '../firebase/functions'
 import ModalComponent, { ModalComponentProps } from './ModalComponent'
+import { LineContext } from '../util/lineContext'
 
 const useStyles = makeStyles(
   {
@@ -48,8 +49,8 @@ export default function UpdateForm() {
   const styles = useStyles()
   const { control, handleSubmit } = useForm<updateData>({
     defaultValues: {
-      bodyTemperature: 0,
-      pulse: 0,
+      // bodyTemperature: 0,
+      // pulse: 0,
       spO2: 0,
 
       sym1_severe_cough: false,
@@ -66,28 +67,28 @@ export default function UpdateForm() {
       sym2_rash: false,
       sym2_red_eye: false,
 
-      fac_age_gte_60: false,
-      fac_bmi_gte_30: false,
-      fac_diabetes: false,
-      fac_dyslipidemia: false,
-      fac_hypertension: false,
-      fac_heart_disease: false,
-      fac_esrd: false,
-      fac_cancer: false,
-      fac_cirrhosis: false,
-      fac_tuberculosis: false,
-      fac_hiv: false,
-      fac_asthma: false,
-      fac_copd: false,
-      fac_pregnancy: false,
+      // fac_age_gte_60: false,
+      // fac_bmi_gte_30: false,
+      // fac_diabetes: false,
+      // fac_dyslipidemia: false,
+      // fac_hypertension: false,
+      // fac_heart_disease: false,
+      // fac_esrd: false,
+      // fac_cancer: false,
+      // fac_cirrhosis: false,
+      // fac_tuberculosis: false,
+      // fac_hiv: false,
+      // fac_asthma: false,
+      // fac_copd: false,
+      // fac_pregnancy: false,
       fac_bed_ridden_status: false,
-      fac_fever: false,
+      // fac_fever: false,
       fac_uri_symptoms: false,
       fac_olfactory_symptoms: false,
       fac_diarrhea: false,
       fac_dyspnea: false,
       fac_chest_discomfort: false,
-      fac_gi_symptoms: false
+      fac_gi_symptoms: false,
     },
   })
 
@@ -110,28 +111,29 @@ export default function UpdateForm() {
         page: 'update',
         variant: 'success',
         title: 'แจ้งอาการสำเร็จ',
-        subTitle: `อาการของคุณอยู่ในเกณฑ์ ${color}`,
+        subTitle: 'โปรดรอดูผลวิเคราะห์อาการใน Line Official',
       })
     else
       setModalProps({
         page: 'update',
         variant: 'error',
         title: 'แจ้งอาการไม่สำเร็จ',
-        subTitle: 'ปัญหานี้เกิดจาก',
+        subTitle: 'กรุณากรอกใหม่อีกครั้ง',
       })
     handleOpen()
   }
 
+  const { lineUserID, lineIDToken } = useContext(LineContext)
+
   const onSubmit = async (values: updateData) => {
     const convertedData: updateDto = convertUpdateFormDataToDto(values, {
-      lineUserID: 'asd4as1d4sadaefe',
-      lineIDToken: 'abddc4932eddfdfd456ece',
+      lineUserID,
+      lineIDToken,
     })
     console.log(values)
     const response = await updatePatient(convertedData)
     console.log(response)
-    openModal(response?.result?.ok as boolean, 'some color')
-    // openModal(true, 'some color')
+    openModal(response?.ok as boolean)
   }
 
   return (
@@ -146,7 +148,7 @@ export default function UpdateForm() {
             <FormLabel className={styles.form_label} component="legend">
               ข้อมูลทั่วไป
             </FormLabel>
-            <Controller
+            {/* <Controller
               name="bodyTemperature"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -164,8 +166,8 @@ export default function UpdateForm() {
                 />
               )}
               rules={{ required: 'โปรดระบุอณหภูมิร่างกาย' }}
-            />
-            <Controller
+            /> */}
+            {/* <Controller
               name="pulse"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -182,7 +184,7 @@ export default function UpdateForm() {
                 />
               )}
               rules={{ required: 'โปรดระบุค่าชีพจร' }}
-            />
+            /> */}
             <Controller
               name="spO2"
               control={control}
@@ -355,7 +357,7 @@ export default function UpdateForm() {
               อัปเดตโรคประจำตัว (ไม่ต้องกรอกหากไม่มี)
             </FormLabel>
             <FormGroup>
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={
                   <Controller
                     name="fac_age_gte_60"
@@ -522,7 +524,7 @@ export default function UpdateForm() {
                   />
                 }
                 label="ตั้งครรภ์"
-              />
+              /> */}
               <FormControlLabel
                 control={
                   <Controller
