@@ -469,7 +469,7 @@ export const convertProfileToFormData: (profile: registerDto) => registerFormDat
     firstName,
     lastName,
     personalID: (personalID !== 'undefined' ? personalID : passport) as string,
-    birthDate: birthDate || '',
+    birthDate: convertDateFormat(birthDate) || '',
     weight: `${weight}`,
     height: `${height}`,
     gender,
@@ -481,9 +481,9 @@ export const convertProfileToFormData: (profile: registerDto) => registerFormDat
       dose2Name!?.length > 0 ? 'two_doses' : dose1Name!?.length > 0 ? 'one_dose' : 'none',
     vaccinationDates: {
       firstDoseName: dose1Name || '',
-      firstDoseDate: dose1Date || '',
+      firstDoseDate: dose1Date ? convertDateFormat(dose1Date) : '',
       secondDoseName: dose2Name || '',
-      secondDoseDate: dose2Date || '',
+      secondDoseDate: dose2Date ? convertDateFormat(dose2Date) : '',
     },
     gotFavipiravia: gotFavipiravia > 0 ? 'received' : 'none',
     favipiraviaAmount: `${gotFavipiravia}`,
@@ -517,3 +517,6 @@ export const convertRequestHelpDataToDto: (
 
   return convertedData
 }
+
+export const convertDateFormat = (date: string) =>
+  `${date?.substring(6, 10)}-${date?.substring(3, 5)}-${date?.substring(0, 2)}`
