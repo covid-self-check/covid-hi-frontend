@@ -17,8 +17,8 @@ const style = {
 }
 
 export interface ModalComponentProps {
-  variant: 'success' | 'error'
-  page: 'register' | 'update'
+  variant: 'success' | 'error' | 'redirect' | 'toAMED'
+  page: 'register' | 'update' | 'requestHelp'
   title: string
   subTitle?: string
   state: boolean
@@ -30,7 +30,7 @@ export default function ModalComponent(props: ModalComponentProps) {
 
   const router = useRouter()
 
-  const redirectToUpdate = () => router.replace('/update')
+  const redirect = (path: string) => router.replace(path)
 
   return (
     <div>
@@ -63,16 +63,25 @@ export default function ModalComponent(props: ModalComponentProps) {
               )}
               {variant === 'success' ? (
                 page === 'register' ? (
-                  // <Button variant="outlined" sx={{ mt: 4 }} onClick={() => redirectToUpdate()}>
-                  //   กรอกอาการ
-                  // </Button>
                   ''
-                ) : (
+                ) : page === 'update' ? (
                   <p>โปรดปิดหน้าต่างนี้ และกลับมาแจ้งอาการในครั้งต่อๆไป</p>
+                ) : (
+                  <p>โปรดปิดหน้าต่างนี้ และรอการติดต่อกลับ</p>
                 )
-              ) : (
+              ) : variant === 'error' ? (
                 <Button variant="outlined" sx={{ mt: 4 }} onClick={onCloseHandler}>
                   กรอกข้อมูลอีกครั้ง
+                </Button>
+              ) : variant === 'toAMED' ? (
+                <p>โปรดปิดหน้าต่างนี้</p>
+              ) : (
+                <Button
+                  variant="outlined"
+                  sx={{ mt: 4 }}
+                  onClick={() => redirect(page === 'register' ? '/update' : '/register')}
+                >
+                  {page === 'register' ? 'กรอกอาการ' : 'ลงทะเบียน'}
                 </Button>
               )}
             </Box>

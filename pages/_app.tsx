@@ -71,7 +71,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <CssBaseline />
-        <Navbar />
+        {pathname !== '/requestHelp' && <Navbar />}
         <Component {...pageProps} />
       </ThemeProvider>
     </LineContext.Provider>

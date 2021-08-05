@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect, useCallback } from 'react'
 import Card from './Card'
 import {
   Button,
@@ -14,7 +14,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/styles'
 
 import { convertUpdateFormDataToDto, updateData, updateDto } from '../util/types'
-import { updatePatient } from '../firebase/functions'
+import { getProfile, updatePatient } from '../firebase/functions'
 import ModalComponent, { ModalComponentProps } from './ModalComponent'
 import { LineContext } from '../util/lineContext'
 import LoadingModal from './LoadingModal'
@@ -93,25 +93,63 @@ export default function UpdateForm() {
 
   const [isLoading, setLoading] = useState(false)
 
-  const openModal = (isSuccess: boolean, color?: string, errors?: string[]) => {
-    if (isSuccess)
-      setModalProps({
-        page: 'update',
-        variant: 'success',
-        title: 'แจ้งอาการสำเร็จ',
-        subTitle: 'โปรดรอดูผลวิเคราะห์อาการใน Line Official',
-      })
-    else
-      setModalProps({
-        page: 'update',
-        variant: 'error',
-        title: 'แจ้งอาการไม่สำเร็จ',
-        subTitle: 'กรุณากรอกใหม่อีกครั้ง',
-      })
-    handleOpen()
-  }
+  const openModal: (isSuccess: boolean, options: { redirect?: boolean; toAMED?: boolean }) => void =
+    useCallback((isSuccess, { redirect, toAMED }) => {
+      console.log(redirect)
+      if (redirect)
+        setModalProps({
+          page: 'update',
+          variant: 'redirect',
+          title: 'ยังไม่ได้ลงทะเบียน',
+          subTitle: 'โปรดลงทะเบียนก่อนแจ้งอาการ',
+        })
+      else if (toAMED) {
+        setModalProps({
+          page: 'update',
+          variant: 'toAMED',
+          title: 'ท่านอยู่ในการดูแลของแพทย์แล้ว',
+          subTitle: 'โปรดรอการดำเนินการจากทางแพทย์ต่อไป',
+        })
+      } else if (isSuccess)
+        setModalProps({
+          page: 'update',
+          variant: 'success',
+          title: 'แจ้งอาการสำเร็จ',
+          subTitle: 'โปรดรอดูผลวิเคราะห์อาการใน Line Official',
+        })
+      else
+        setModalProps({
+          page: 'update',
+          variant: 'error',
+          title: 'แจ้งอาการไม่สำเร็จ',
+          subTitle: 'กรุณากรอกใหม่อีกครั้ง',
+        })
+      handleOpen()
+    }, [])
 
   const { lineUserID, lineIDToken } = useContext(LineContext)
+
+  const [isRegistered, setRegistered] = useState<boolean>(false)
+
+  const checkRegistration = useCallback(async () => {
+    setLoading(true)
+    if (lineUserID && lineIDToken) {
+      const profile = await getProfile({
+        lineUserID: lineUserID,
+        lineIDToken: lineIDToken,
+      })
+      console.log('profile:', profile)
+      if (profile?.patient) {
+        setRegistered(true)
+        if (profile?.patient?.toAmed === 1) openModal(false, { toAMED: true })
+      } else openModal(false, { redirect: true })
+    }
+    setLoading(false)
+  }, [lineIDToken, lineUserID, openModal])
+
+  useEffect(() => {
+    checkRegistration()
+  }, [checkRegistration])
 
   const onSubmit = async (values: updateData) => {
     setLoading(true)
@@ -123,7 +161,7 @@ export default function UpdateForm() {
     const response = await updatePatient(convertedData)
     console.log(response)
     setLoading(false)
-    openModal(response?.ok as boolean)
+    openModal(response?.ok as boolean, {})
   }
 
   return (
@@ -136,7 +174,7 @@ export default function UpdateForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Container>
             <FormLabel className={styles.form_label} component="legend">
-              ข้อมูลทั่วไป
+              ข้อมูลทั่วไป (ไม่ต้องกรอกหากไม่มี)
             </FormLabel>
             {/* <Controller
               name="bodyTemperature"
@@ -180,7 +218,7 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ค่าออกซิเจนปลายนิ้ว ขณะหายใจปกติ (เปอร์เซ็นต์) (ไม่ต้องกรอกหากไม่มี)"
+                  label="ค่าออกซิเจนปลายนิ้ว ขณะหายใจปกติ (เปอร์เซ็นต์)"
                   className={styles.text_field}
                   value={value}
                   type="number"
@@ -198,7 +236,7 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ค่าออกซิเจนปลายนิ้ว หลังลุก-นั่ง 1 นาที (เปอร์เซ็นต์) (ไม่ต้องกรอกหากไม่มี)"
+                  label="ค่าออกซิเจนปลายนิ้ว หลังลุก-นั่ง 1 นาที (เปอร์เซ็นต์)"
                   className={styles.text_field}
                   value={value}
                   type="number"

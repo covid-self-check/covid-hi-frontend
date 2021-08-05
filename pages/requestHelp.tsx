@@ -1,10 +1,10 @@
-import RegistrationForm from '../components/RegistrationForm'
 import { makeStyles } from '@material-ui/styles'
-import Link from 'next/link'
+import PhoneNumberForm from '../components/PhoneNumberForm'
 
-export const useStyles = makeStyles(
+const useStyles = makeStyles(
   {
     container: {
+      marginTop: '16px',
       marginBottom: '20px',
       minHeight: '100vh',
       padding: '0 0.5rem',
@@ -18,11 +18,11 @@ export const useStyles = makeStyles(
   { index: 1 },
 )
 
-export default function Register() {
+export default function RequestHelp() {
   const styles = useStyles()
   return (
     <div className={styles.container}>
-      <RegistrationForm />
+      <PhoneNumberForm />
     </div>
   )
 }

@@ -1,5 +1,11 @@
-import UpdateForm from "../components/UpdateForm";
+import UpdateForm from '../components/UpdateForm'
+import { useStyles } from './register'
 
 export default function Update() {
-  return <UpdateForm />
+  const styles = useStyles()
+  return (
+    <div className={styles.container}>
+      <UpdateForm />
+    </div>
+  )
 }
