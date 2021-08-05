@@ -93,8 +93,8 @@ export default function UpdateForm() {
 
   const [isLoading, setLoading] = useState(false)
 
-  const openModal: (isSuccess: boolean, options: { redirect?: boolean }) => void = useCallback(
-    (isSuccess, { redirect }) => {
+  const openModal: (isSuccess: boolean, options: { redirect?: boolean; toAMED?: boolean }) => void =
+    useCallback((isSuccess, { redirect, toAMED }) => {
       console.log(redirect)
       if (redirect)
         setModalProps({
@@ -103,7 +103,14 @@ export default function UpdateForm() {
           title: 'ยังไม่ได้ลงทะเบียน',
           subTitle: 'โปรดลงทะเบียนก่อนแจ้งอาการ',
         })
-      else if (isSuccess)
+      else if (toAMED) {
+        setModalProps({
+          page: 'update',
+          variant: 'toAMED',
+          title: 'ท่านอยู่ในการดูแลของแพทย์แล้ว',
+          subTitle: 'โปรดรอการดำเนินการจากทางแพทย์ต่อไป',
+        })
+      } else if (isSuccess)
         setModalProps({
           page: 'update',
           variant: 'success',
@@ -118,9 +125,7 @@ export default function UpdateForm() {
           subTitle: 'กรุณากรอกใหม่อีกครั้ง',
         })
       handleOpen()
-    },
-    [],
-  )
+    }, [])
 
   const { lineUserID, lineIDToken } = useContext(LineContext)
 
@@ -136,6 +141,7 @@ export default function UpdateForm() {
       console.log('profile:', profile)
       if (profile?.patient) {
         setRegistered(true)
+        if (profile?.patient?.toAmed !== 1) openModal(false, { toAMED: true })
       } else openModal(false, { redirect: true })
     }
     setLoading(false)

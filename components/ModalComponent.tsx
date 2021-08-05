@@ -17,7 +17,7 @@ const style = {
 }
 
 export interface ModalComponentProps {
-  variant: 'success' | 'error' | 'redirect'
+  variant: 'success' | 'error' | 'redirect' | 'toAMED'
   page: 'register' | 'update' | 'requestHelp'
   title: string
   subTitle?: string
@@ -73,6 +73,8 @@ export default function ModalComponent(props: ModalComponentProps) {
                 <Button variant="outlined" sx={{ mt: 4 }} onClick={onCloseHandler}>
                   กรอกข้อมูลอีกครั้ง
                 </Button>
+              ) : variant === 'toAMED' ? (
+                <p>โปรดปิดหน้าต่างนี้</p>
               ) : (
                 <Button
                   variant="outlined"
