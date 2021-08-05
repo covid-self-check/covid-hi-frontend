@@ -25,7 +25,7 @@ export type registerDto = {
   dose1Date?: string
   dose2Name?: string
   dose2Date?: string
-  gotFavipiravia: number
+  gotFavipiravir: number
   favipiraviaAmount?: number
   rf_copd_chronic_lung_disease: number
   rf_ckd_stagr_3_to_4: number
@@ -296,7 +296,7 @@ export const convertFormDataToAPIData: (
         : '',
     dose2Name: vaccination === 'two_doses' ? vaccinationDates.secondDoseName : '',
     dose2Date: vaccination === 'two_doses' ? vaccinationDates.secondDoseDate : '',
-    gotFavipiravia: gotFavipiravia === 'received' ? 1 : 0,
+    gotFavipiravir: gotFavipiravia === 'received' ? 1 : 0,
     favipiraviaAmount: favipiraviaAmount ? parseInt(favipiraviaAmount) : 0,
     rf_copd_chronic_lung_disease: rf_copd_chronic_lung_disease ? 1 : 0,
     rf_ckd_stagr_3_to_4: fac_esrd ? 1 : 0,
@@ -444,7 +444,7 @@ export const convertProfileToFormData: (profile: registerDto) => registerFormDat
     dose1Date,
     dose2Name,
     dose2Date,
-    gotFavipiravia,
+    gotFavipiravir,
     favipiraviaAmount,
     rf_copd_chronic_lung_disease,
     rf_ckd_stagr_3_to_4,
@@ -465,11 +465,13 @@ export const convertProfileToFormData: (profile: registerDto) => registerFormDat
     fac_pregnancy,
   } = profile
 
+  console.log(birthDate)
+
   return {
     firstName,
     lastName,
     personalID: (personalID !== 'undefined' ? personalID : passport) as string,
-    birthDate: convertDateFormat(birthDate) || '',
+    birthDate: birthDate ? convertDateFormat(birthDate) : '',
     weight: `${weight}`,
     height: `${height}`,
     gender,
@@ -485,8 +487,8 @@ export const convertProfileToFormData: (profile: registerDto) => registerFormDat
       secondDoseName: dose2Name || '',
       secondDoseDate: dose2Date ? convertDateFormat(dose2Date) : '',
     },
-    gotFavipiravia: gotFavipiravia > 0 ? 'received' : 'none',
-    favipiraviaAmount: `${gotFavipiravia}`,
+    gotFavipiravia: gotFavipiravir > 0 ? 'received' : 'none',
+    favipiraviaAmount: `${favipiraviaAmount}`,
     rf_copd_chronic_lung_disease: rf_copd_chronic_lung_disease === 1,
     rf_ckd_stagr_3_to_4: rf_ckd_stagr_3_to_4 === 1,
     rf_chronic_heart_disease: rf_chronic_heart_disease === 1,
