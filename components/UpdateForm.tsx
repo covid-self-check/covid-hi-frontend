@@ -141,7 +141,7 @@ export default function UpdateForm() {
       console.log('profile:', profile)
       if (profile?.patient) {
         setRegistered(true)
-        if (profile?.patient?.toAmed !== 1) openModal(false, { toAMED: true })
+        if (profile?.patient?.toAmed === 1) openModal(false, { toAMED: true })
       } else openModal(false, { redirect: true })
     }
     setLoading(false)
