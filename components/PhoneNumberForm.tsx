@@ -124,7 +124,7 @@ export default function PhoneNumberForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ชื่อ *"
+                  label="ชื่อ (ไม่ต้องใส่คำนำหน้า) *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -141,7 +141,7 @@ export default function PhoneNumberForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="เบอร์โทรติดต่อ * (ไม่ต้องมีขีดหรือวรรค)"
+                  label="เบอร์โทรติดต่อ * (ไม่ต้องมีขีดหรือเว้นวรรค)"
                   className={styles.text_field}
                   value={value}
                   inputProps={{ maxLength: 10 }}

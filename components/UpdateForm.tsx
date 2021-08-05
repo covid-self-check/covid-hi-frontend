@@ -168,7 +168,7 @@ export default function UpdateForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Container>
             <FormLabel className={styles.form_label} component="legend">
-              ข้อมูลทั่วไป
+              ข้อมูลทั่วไป (ไม่ต้องกรอกหากไม่มี)
             </FormLabel>
             {/* <Controller
               name="bodyTemperature"
@@ -212,7 +212,7 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ค่าออกซิเจนปลายนิ้ว ขณะหายใจปกติ (เปอร์เซ็นต์) (ไม่ต้องกรอกหากไม่มี)"
+                  label="ค่าออกซิเจนปลายนิ้ว ขณะหายใจปกติ (เปอร์เซ็นต์)"
                   className={styles.text_field}
                   value={value}
                   type="number"
@@ -230,7 +230,7 @@ export default function UpdateForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="ค่าออกซิเจนปลายนิ้ว หลังลุก-นั่ง 1 นาที (เปอร์เซ็นต์) (ไม่ต้องกรอกหากไม่มี)"
+                  label="ค่าออกซิเจนปลายนิ้ว หลังลุก-นั่ง 1 นาที (เปอร์เซ็นต์)"
                   className={styles.text_field}
                   value={value}
                   type="number"

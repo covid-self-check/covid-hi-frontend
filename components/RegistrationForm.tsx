@@ -419,7 +419,7 @@ export default function RegistrationForm() {
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   disabled={isRegistered}
-                  label="ชื่อ *"
+                  label="ชื่อ (ไม่ต้องใส่คำนำหน้า) *"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -760,7 +760,7 @@ export default function RegistrationForm() {
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   disabled={isRegistered}
-                  label="เบอร์โทรติดต่อ * (ไม่ต้องมีขีดหรือวรรค)"
+                  label="เบอร์โทรติดต่อ * (ไม่ต้องมีขีดหรือเว้นวรรค)"
                   className={styles.text_field}
                   value={value}
                   inputProps={{ maxLength: 10 }}
@@ -797,7 +797,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
-                  label="เบอร์โทรติดต่อคนใกล้ชิด (ไม่ต้องมีขีดหรือวรรค)"
+                  label="เบอร์โทรติดต่อคนใกล้ชิด (ไม่ต้องมีขีดหรือเว้นวรรค)"
                   className={styles.text_field}
                   value={value}
                   fullWidth
@@ -818,7 +818,7 @@ export default function RegistrationForm() {
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   disabled={isRegistered}
-                  label="เบอร์โทรติดต่อฉุกเฉิน * (ไม่ต้องมีขีดหรือวรรค)"
+                  label="เบอร์โทรติดต่อฉุกเฉิน * (ไม่ต้องมีขีดหรือเว้นวรรค)"
                   className={styles.text_field}
                   value={value}
                   fullWidth
