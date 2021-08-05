@@ -50,7 +50,7 @@ export type registerFormData = {
   firstName: string
   lastName: string
   personalID: string
-  stationName: string
+  // stationName: string
   birthDate: string
   weight: string
   height: string
@@ -62,15 +62,15 @@ export type registerFormData = {
     subdistrict: string
     postalCode: string
   }
-  congenitalDisease: string
+  // congenitalDisease: string
   hasHelper: string
-  digitalLiteracy: string
+  // digitalLiteracy: string
   contactInfo: {
     phoneNumber: string
-    closeContactsPhoneNumber: string
+    // closeContactsPhoneNumber: string
     emergencyContactPhoneNumber: string
   }
-  lineID: string
+  // lineID: string
   vaccination: string
   vaccinationDates: {
     firstDoseName: string
@@ -219,18 +219,14 @@ export const convertFormDataToAPIData: (
     firstName,
     lastName,
     personalID,
-    stationName,
     birthDate,
     weight,
     height,
     gender,
     address,
     addressInfo,
-    congenitalDisease,
     hasHelper,
     contactInfo,
-    lineID,
-    digitalLiteracy,
     vaccination,
     vaccinationDates,
     gotFavipiravia,
@@ -410,4 +406,93 @@ export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserD
     lineIDToken,
   }
   return convertedData
+}
+
+export const convertProfileToFormData: (profile: registerDto) => registerFormData = (
+  profile: registerDto,
+) => {
+  const {
+    lineUserID,
+    lineIDToken,
+    firstName,
+    lastName,
+    personalID,
+    passport,
+    birthDate,
+    gender,
+    weight,
+    height,
+    address,
+    province,
+    prefecture,
+    district,
+    postNo,
+    hasHelper,
+    personalPhoneNo,
+    emergencyPhoneNo,
+    dose1Name,
+    dose1Date,
+    dose2Name,
+    dose2Date,
+    gotFavipiravia,
+    favipiraviaAmount,
+    rf_copd_chronic_lung_disease,
+    rf_ckd_stagr_3_to_4,
+    rf_chronic_heart_disease,
+    rf_cva,
+    rf_t2dm,
+    rf_cirrhosis,
+    rf_immunocompromise,
+    fac_diabetes,
+    fac_dyslipidemia,
+    fac_hypertension,
+    fac_heart_diseases,
+    fac_esrd,
+    fac_cancer,
+    fac_tuberculosis,
+    fac_hiv,
+    fac_asthma,
+    fac_pregnancy,
+  } = profile
+
+  return {
+    firstName,
+    lastName,
+    personalID: (personalID !== 'undefined' ? personalID : passport) as string,
+    birthDate: birthDate || '',
+    weight: `${weight}`,
+    height: `${height}`,
+    gender,
+    address,
+    addressInfo: { province, district: prefecture, subdistrict: district, postalCode: postNo },
+    hasHelper: hasHelper ? 'true' : 'false',
+    contactInfo: { phoneNumber: personalPhoneNo, emergencyContactPhoneNumber: emergencyPhoneNo },
+    vaccination:
+      dose2Name!?.length > 0 ? 'two_doses' : dose1Name!?.length > 0 ? 'one_dose' : 'none',
+    vaccinationDates: {
+      firstDoseName: dose1Name || '',
+      firstDoseDate: dose1Date || '',
+      secondDoseName: dose2Name || '',
+      secondDoseDate: dose2Date || '',
+    },
+    gotFavipiravia: gotFavipiravia > 0 ? 'received' : 'none',
+    favipiraviaAmount: `${gotFavipiravia}`,
+    rf_copd_chronic_lung_disease: rf_copd_chronic_lung_disease === 1,
+    rf_ckd_stagr_3_to_4: rf_ckd_stagr_3_to_4 === 1,
+    rf_chronic_heart_disease: rf_chronic_heart_disease === 1,
+    rf_cva: rf_cva === 1,
+    rf_t2dm: rf_t2dm === 1,
+    rf_cirrhosis: rf_cirrhosis === 1,
+    rf_immunocompromise: rf_immunocompromise === 1,
+    fac_diabetes: fac_diabetes === 1,
+    fac_dyslipidemia: fac_dyslipidemia === 1,
+    fac_hypertension: fac_hypertension === 1,
+    fac_heart_diseases: fac_heart_diseases === 1,
+    fac_esrd: fac_esrd === 1,
+    fac_cancer: fac_cancer === 1,
+    fac_tuberculosis: fac_tuberculosis === 1,
+    fac_hiv: fac_hiv === 1,
+    fac_asthma: fac_asthma === 1,
+    fac_pregnancy: fac_pregnancy === 1,
+  }
 }

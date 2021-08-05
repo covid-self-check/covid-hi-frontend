@@ -9,7 +9,7 @@ import 'firebase/analytics'
 
 // Add the Firebase products that you want to use
 import 'firebase/functions'
-import { registerDto, updateData, updateDto } from '../util/types'
+import { lineUserData, registerDto, updateData, updateDto } from '../util/types'
 import * as Sentry from '@sentry/nextjs'
 
 const { publicRuntimeConfig } = getConfig()
@@ -67,5 +67,24 @@ export const updatePatient = async (data: updateDto) => {
         ok: false,
       },
     }
+  }
+}
+
+export const getProfile = async (userData: lineUserData) => {
+  let getProfile = firebase.app().functions('asia-southeast2').httpsCallable('getProfile')
+  try {
+    console.log(userData)
+    const response: firebase.functions.HttpsCallableResult = await getProfile(userData)
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('Error:')
+    console.error(error)
+    Sentry.setContext('error', { details: JSON.stringify(error?.details) })
+    Sentry.captureException(error)
+    Sentry.setContext('error', { details: undefined })
+
+    error?.details?.map((item: any) => console.error(item.message))
+    return null
   }
 }

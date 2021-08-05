@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useContext } from 'react'
+import React, { useState, useEffect, useRef, useMemo, useContext, useCallback } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import {
   TextField,
@@ -18,9 +18,9 @@ import {
 } from '@material-ui/core'
 import Card from './Card'
 // import styles from '../styles/RegistrationForm.module.css'
-import { convertFormDataToAPIData, registerFormData } from '../util/types'
+import { convertFormDataToAPIData, convertProfileToFormData, registerFormData } from '../util/types'
 import { getAddress, getCovidTestCentres } from '../util/constants'
-import { registerPatient } from '../firebase/functions'
+import { getProfile, registerPatient } from '../firebase/functions'
 import { makeStyles } from '@material-ui/styles'
 import { useRouter } from 'next/dist/client/router'
 import { route } from 'next/dist/next-server/server/router'
@@ -63,7 +63,9 @@ export default function RegistrationForm() {
   const styles = useStyles()
   const router = useRouter()
 
-  const { register, handleSubmit, control, getValues } = useForm({
+  const [formData, setFormData] = useState<registerFormData>({} as registerFormData)
+
+  const { register, handleSubmit, control, setValue } = useForm({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -125,8 +127,6 @@ export default function RegistrationForm() {
   const [nationalIdOrPassportFieldStatus, setNationalIdOrPassportFieldStatus] = useState('unknown')
   const [nationalIdOrPassportFieldMaxLength, setNationalIdOrPassportFieldMaxLength] =
     useState(NATIONAL_ID_MAX_LENGTH)
-
-  const [formData, setFormData] = useState<any>(getValues())
 
   const [provinces, setProvinces] = useState<string[]>([])
   const [districts, setDistricts] = useState<string[]>([])
@@ -198,9 +198,11 @@ export default function RegistrationForm() {
             tempDistricts.push(THAddresses[i][1][j][0] as string)
 
       setDistricts(tempDistricts)
-      setDistrict('')
-      setSubdistrict('')
-      setPostalCode('')
+      if (!isPrechecking) {
+        setDistrict('')
+        setSubdistrict('')
+        setPostalCode('')
+      }
     }
 
     if (hasDistrictChanged) {
@@ -214,8 +216,10 @@ export default function RegistrationForm() {
                 tempSubdistricts.push(THAddresses[i][1][j][1][k][0] as string)
 
       setSubdistricts(tempSubdistricts)
-      setSubdistrict('')
-      setPostalCode('')
+      if (!isPrechecking) {
+        setSubdistrict('')
+        setPostalCode('')
+      }
     }
 
     if (hasSubdistrictChanged) {
@@ -230,7 +234,7 @@ export default function RegistrationForm() {
                   tempPostalCodes = THAddresses[i][1][j][1][k][1] as string[]
 
       setPostalCodes(tempPostalCodes.map((item) => `${item}`))
-      setPostalCode('')
+      if (!isPrechecking) setPostalCode('')
     }
   }, [
     componentDidMount,
@@ -283,8 +287,44 @@ export default function RegistrationForm() {
 
   const { lineUserID, lineIDToken } = useContext(LineContext)
 
+  const [isPrechecking, setPrechecking] = useState<boolean>(false)
+
+  const [isRegistered, setRegistered] = useState<boolean>(false)
+
+  const checkRegistration = useCallback(async () => {
+    setPrechecking(true)
+    setLoading(true)
+    if (lineUserID && lineIDToken) {
+      const profile = await getProfile({
+        lineUserID: lineUserID,
+        lineIDToken: lineIDToken,
+      })
+      if (profile) {
+        setRegistered(true)
+        const patientFormData: registerFormData = convertProfileToFormData({
+          ...profile.line,
+          ...profile.patient,
+        })
+        Object.entries(patientFormData).forEach(([key, value]) => {
+          setValue(key as any, value)
+        })
+        setProvince(patientFormData.addressInfo.province)
+        setDistrict(patientFormData.addressInfo.district)
+        setSubdistrict(patientFormData.addressInfo.subdistrict)
+        setPostalCode(patientFormData.addressInfo.postalCode)
+        setVaccination(patientFormData.vaccination)
+        setMedication(patientFormData.gotFavipiravia)
+      }
+    }
+    setPrechecking(false)
+    setLoading(false)
+  }, [lineIDToken, lineUserID, setValue])
+
+  useEffect(() => {
+    checkRegistration()
+  }, [checkRegistration])
+
   const onSubmit = async (data: registerFormData) => {
-    console.log(data)
     setLoading(true)
     const hasNationalId = nationalIdOrPassportFieldStatus === 'id'
     const convertedData = convertFormDataToAPIData(data, {
@@ -292,7 +332,6 @@ export default function RegistrationForm() {
       lineIDToken: lineIDToken,
     })
     const response = await registerPatient(convertedData)
-    console.log(response)
     setLoading(false)
     openModal(response?.ok as boolean)
     // openModal(true)
@@ -307,19 +346,16 @@ export default function RegistrationForm() {
       setNationalIdOrPassportFieldMaxLength(NATIONAL_ID_MAX_LENGTH)
       return
     }
-
     if (data.length === 1) {
       if (isNumeric(data[0])) {
         setNationalIdOrPassportFieldStatus('id')
         setNationalIdOrPassportFieldMaxLength(NATIONAL_ID_MAX_LENGTH)
         return
       }
-
       setNationalIdOrPassportFieldStatus('unknown')
       setNationalIdOrPassportFieldMaxLength(NATIONAL_ID_MAX_LENGTH)
       return
     }
-
     if (data.length >= 2) {
       if (!isNumeric(data[0])) {
         if (isNumeric(data[1])) {
@@ -327,7 +363,6 @@ export default function RegistrationForm() {
           setNationalIdOrPassportFieldMaxLength(PASSPORT_ID_OLD_MAX_LENGTH)
           return
         }
-
         setNationalIdOrPassportFieldStatus('passport_new')
         setNationalIdOrPassportFieldMaxLength(PASSPORT_ID_NEW_MAX_LENGTH)
         return
@@ -363,8 +398,14 @@ export default function RegistrationForm() {
     <>
       <Card>
         <Container className={styles.title_div} style={{ flexDirection: 'column' }}>
-          <div className={styles.title}>ลงทะเบียน</div>
-          <div className={styles.subtitle}>กรุณากรอกข้อมูลให้ครบถ้วน</div>
+          <div className={styles.title}>
+            {!isRegistered ? 'ลงทะเบียน' : 'ท่านได้ลงทะเบียนเรียบร้อยแล้ว'}
+          </div>
+          <div className={styles.subtitle}>
+            {!isRegistered
+              ? 'กรุณากรอกข้อมูลให้ครบถ้วน'
+              : 'โปรดไปที่หน้าแจ้งอาการ เพื่อแจ้งอาการในแต่ละวัน'}
+          </div>
         </Container>
 
         <form id="registrationForm" onSubmit={handleSubmit(onSubmit)}>
@@ -375,9 +416,9 @@ export default function RegistrationForm() {
             <Controller
               name="firstName"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   label="ชื่อ *"
                   className={styles.text_field}
                   value={value}
@@ -392,9 +433,9 @@ export default function RegistrationForm() {
             <Controller
               name="lastName"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   label="นามสกุล *"
                   className={styles.text_field}
                   value={value}
@@ -409,9 +450,9 @@ export default function RegistrationForm() {
             <Controller
               name="personalID"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   label="หมายเลขบัตรประชาชน 13 หลัก / Passport Number *"
                   className={styles.text_field}
                   value={value}
@@ -471,6 +512,7 @@ export default function RegistrationForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   fullWidth
                   className={styles.text_field}
                   id="date"
@@ -493,6 +535,7 @@ export default function RegistrationForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   label="น้ำหนัก *"
                   className={styles.text_field}
                   value={value}
@@ -515,6 +558,7 @@ export default function RegistrationForm() {
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   label="ส่วนสูง *"
                   className={styles.text_field}
                   value={value}
@@ -537,7 +581,7 @@ export default function RegistrationForm() {
               control={control}
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <FormControl className={styles.text_field} fullWidth>
+                <FormControl className={styles.text_field} fullWidth disabled={isRegistered}>
                   <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
                     เพศ
                   </InputLabel>
@@ -573,6 +617,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   label="ที่อยู่ปัจจุบัน *"
                   className={styles.text_field}
                   value={value}
@@ -587,12 +632,12 @@ export default function RegistrationForm() {
             <Controller
               name="addressInfo.province"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <>
                   <Autocomplete
+                    disabled={isRegistered}
                     id="provinces_autocomplete"
-                    options={provinces}
+                    options={[...provinces, '']}
                     onChange={(e, newValue) => {
                       onChange(newValue)
                       setProvince(newValue || '')
@@ -617,12 +662,12 @@ export default function RegistrationForm() {
             <Controller
               name="addressInfo.district"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <>
                   <Autocomplete
+                    disabled={isRegistered}
                     id="districts_autocomplete"
-                    options={districts}
+                    options={[...districts, '']}
                     onChange={(e, newValue) => {
                       onChange(newValue)
                       setDistrict(newValue || '')
@@ -647,12 +692,12 @@ export default function RegistrationForm() {
             <Controller
               name="addressInfo.subdistrict"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <>
                   <Autocomplete
+                    disabled={isRegistered}
                     id="subdistricts_autocomplete"
-                    options={subdistricts}
+                    options={[...subdistricts, '']}
                     onChange={(e, newValue) => {
                       onChange(newValue)
                       setSubdistrict(newValue || '')
@@ -677,12 +722,12 @@ export default function RegistrationForm() {
             <Controller
               name="addressInfo.postalCode"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <>
                   <Autocomplete
+                    disabled={isRegistered}
                     id="postalCodes_autocomplete"
-                    options={postalCodes}
+                    options={[...postalCodes, '']}
                     onChange={(e, newValue) => {
                       onChange(newValue)
                       setPostalCode(newValue || '')
@@ -714,6 +759,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   label="เบอร์โทรติดต่อ * (ไม่ต้องมีขีดหรือวรรค)"
                   className={styles.text_field}
                   value={value}
@@ -771,6 +817,7 @@ export default function RegistrationForm() {
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
+                  disabled={isRegistered}
                   label="เบอร์โทรติดต่อฉุกเฉิน * (ไม่ต้องมีขีดหรือวรรค)"
                   className={styles.text_field}
                   value={value}
@@ -792,7 +839,7 @@ export default function RegistrationForm() {
               name="hasHelper"
               control={control}
               render={({ field: { onChange, value } }) => (
-                <FormControl className={styles.text_field} fullWidth>
+                <FormControl className={styles.text_field} fullWidth disabled={isRegistered}>
                   <InputLabel htmlFor="outlined-age-native-simple">มีคนดูแลหรือไม่</InputLabel>
                   <Select
                     onChange={onChange}
@@ -838,7 +885,7 @@ export default function RegistrationForm() {
               name="vaccination"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <FormControl className={styles.text_field} fullWidth>
+                <FormControl className={styles.text_field} fullWidth disabled={isRegistered}>
                   <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
                     สถานะการฉีดวัคซีน
                   </InputLabel>
@@ -875,7 +922,7 @@ export default function RegistrationForm() {
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <FormControl className={styles.text_field} fullWidth>
+                    <FormControl className={styles.text_field} fullWidth disabled={isRegistered}>
                       <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
                         ชื่อวัคซีนที่ฉีดเข็มโดสแรก
                       </InputLabel>
@@ -910,6 +957,7 @@ export default function RegistrationForm() {
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <>
                       <TextField
+                        disabled={isRegistered}
                         fullWidth
                         className={styles.text_field}
                         id="date"
@@ -937,7 +985,7 @@ export default function RegistrationForm() {
                   control={control}
                   defaultValue=""
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <FormControl className={styles.text_field} fullWidth>
+                    <FormControl className={styles.text_field} fullWidth disabled={isRegistered}>
                       <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
                         ชื่อวัคซีนที่ฉีดเข็มโดสที่สอง
                       </InputLabel>
@@ -972,6 +1020,7 @@ export default function RegistrationForm() {
                   render={({ field: { onChange, value }, fieldState: { error } }) => (
                     <>
                       <TextField
+                        disabled={isRegistered}
                         fullWidth
                         className={styles.text_field}
                         id="date"
@@ -996,7 +1045,7 @@ export default function RegistrationForm() {
               name="gotFavipiravia"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <FormControl className={styles.text_field} fullWidth>
+                <FormControl className={styles.text_field} fullWidth disabled={isRegistered}>
                   <InputLabel error={error ? true : false} htmlFor="outlined-age-native-simple">
                     สถานะการรับยา Favipiravir
                   </InputLabel>
@@ -1031,6 +1080,7 @@ export default function RegistrationForm() {
                 control={control}
                 render={({ field: { onChange, value }, fieldState: { error } }) => (
                   <TextField
+                    disabled={isRegistered}
                     label="ปริมาณยา Favipiravir ที่ได้รับ (เม็ด)"
                     className={styles.text_field}
                     value={value}
@@ -1101,23 +1151,24 @@ export default function RegistrationForm() {
               )}
               rules={{ required: 'โปรดใส่วันที่ตรวจโควิดครั้งล่าสุด' }}
             /> */}
-            <FormLabel className={styles.form_label} component="legend">
-              โรคประจำตัว (ไม่ต้องกรอกหากไม่มี)
-            </FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="rf_copd_chronic_lung_disease"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคปอดเรื้อรัง เช่น โรคถุงลมโป่งพอง"
-              />
-              {/* <FormControlLabel
+            <FormControl disabled={isRegistered}>
+              <FormLabel className={styles.form_label} component="legend">
+                โรคประจำตัว (ไม่ต้องกรอกหากไม่มี)
+              </FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="rf_copd_chronic_lung_disease"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคปอดเรื้อรัง เช่น โรคถุงลมโป่งพอง"
+                />
+                {/* <FormControlLabel
                 control={
                   <Controller
                     name="rf_ckd_stagr_3_to_4"
@@ -1129,7 +1180,7 @@ export default function RegistrationForm() {
                 }
                 label="โรคไตเรื้อรัง ตั้งแต่ระดับสามขึ้นไป"
               /> */}
-              {/* <FormControlLabel
+                {/* <FormControlLabel
                 control={
                   <Controller
                     name="rf_chronic_heart_disease"
@@ -1141,19 +1192,19 @@ export default function RegistrationForm() {
                 }
                 label="มีโรคหัวใจ"
               /> */}
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="rf_cva"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคหลอดเลือดสมอง"
-              />
-              {/* <FormControlLabel
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="rf_cva"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคหลอดเลือดสมอง"
+                />
+                {/* <FormControlLabel
                 control={
                   <Controller
                     name="rf_t2dm"
@@ -1165,165 +1216,168 @@ export default function RegistrationForm() {
                 }
                 label="มีโรคเบาหวาน"
               /> */}
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="rf_cirrhosis"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคตับแข็ง"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="rf_immunocompromise"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีภาวะภูมิคุ้มกันบกพร่อง"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_diabetes"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคเบาหวาน"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_dyslipidemia"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคไขมันในเลือดสูง"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_hypertension"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคความดันสูง"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_heart_diseases"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคหัวใจ"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_esrd"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคไตเสื่อม"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_cancer"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคมะเร็ง"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_tuberculosis"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="เป็นวัณโรค"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_hiv"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="ติดเชื้อ HIV"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_asthma"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="มีโรคหอบหืด"
-              />
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="fac_pregnancy"
-                    control={control}
-                    render={({ field: { onChange, value } }) => (
-                      <Checkbox checked={value} onChange={onChange} />
-                    )}
-                  />
-                }
-                label="ตั้งครรภ์"
-              />
-            </FormGroup>
-            <Button
-              className={styles.button}
-              form="registrationForm"
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-            >
-              ยืนยัน
-            </Button>
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="rf_cirrhosis"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคตับแข็ง"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="rf_immunocompromise"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีภาวะภูมิคุ้มกันบกพร่อง"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_diabetes"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคเบาหวาน"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_dyslipidemia"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคไขมันในเลือดสูง"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_hypertension"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคความดันสูง"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_heart_diseases"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคหัวใจ"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_esrd"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคไตเสื่อม"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_cancer"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคมะเร็ง"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_tuberculosis"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="เป็นวัณโรค"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_hiv"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="ติดเชื้อ HIV"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_asthma"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="มีโรคหอบหืด"
+                />
+                <FormControlLabel
+                  control={
+                    <Controller
+                      name="fac_pregnancy"
+                      control={control}
+                      render={({ field: { onChange, value } }) => (
+                        <Checkbox checked={value} onChange={onChange} />
+                      )}
+                    />
+                  }
+                  label="ตั้งครรภ์"
+                />
+              </FormGroup>
+            </FormControl>
+            {!isRegistered && (
+              <Button
+                className={styles.button}
+                form="registrationForm"
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                ยืนยัน
+              </Button>
+            )}
           </Container>
         </form>
       </Card>
-      <LoadingModal state={isLoading} onCloseHandler={()=>setLoading(false)}/>
+      <LoadingModal state={isLoading} onCloseHandler={() => setLoading(false)} />
       <ModalComponent {...modalProps} state={open} onCloseHandler={handleClose} />
     </>
   )
