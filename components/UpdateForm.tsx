@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect, useCallback } from 'react'
 import Card from './Card'
 import {
   Button,
@@ -14,7 +14,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { makeStyles } from '@material-ui/styles'
 
 import { convertUpdateFormDataToDto, updateData, updateDto } from '../util/types'
-import { updatePatient } from '../firebase/functions'
+import { getProfile, updatePatient } from '../firebase/functions'
 import ModalComponent, { ModalComponentProps } from './ModalComponent'
 import { LineContext } from '../util/lineContext'
 import LoadingModal from './LoadingModal'
@@ -93,25 +93,57 @@ export default function UpdateForm() {
 
   const [isLoading, setLoading] = useState(false)
 
-  const openModal = (isSuccess: boolean, color?: string, errors?: string[]) => {
-    if (isSuccess)
-      setModalProps({
-        page: 'update',
-        variant: 'success',
-        title: 'แจ้งอาการสำเร็จ',
-        subTitle: 'โปรดรอดูผลวิเคราะห์อาการใน Line Official',
-      })
-    else
-      setModalProps({
-        page: 'update',
-        variant: 'error',
-        title: 'แจ้งอาการไม่สำเร็จ',
-        subTitle: 'กรุณากรอกใหม่อีกครั้ง',
-      })
-    handleOpen()
-  }
+  const openModal: (isSuccess: boolean, options: { redirect?: boolean }) => void = useCallback(
+    (isSuccess, { redirect }) => {
+      console.log(redirect)
+      if (redirect)
+        setModalProps({
+          page: 'update',
+          variant: 'redirect',
+          title: 'ยังไม่ได้ลงทะเบียน',
+          subTitle: 'โปรดลงทะเบียนก่อนแจ้งอาการ',
+        })
+      else if (isSuccess)
+        setModalProps({
+          page: 'update',
+          variant: 'success',
+          title: 'แจ้งอาการสำเร็จ',
+          subTitle: 'โปรดรอดูผลวิเคราะห์อาการใน Line Official',
+        })
+      else
+        setModalProps({
+          page: 'update',
+          variant: 'error',
+          title: 'แจ้งอาการไม่สำเร็จ',
+          subTitle: 'กรุณากรอกใหม่อีกครั้ง',
+        })
+      handleOpen()
+    },
+    [],
+  )
 
   const { lineUserID, lineIDToken } = useContext(LineContext)
+
+  const [isRegistered, setRegistered] = useState<boolean>(false)
+
+  const checkRegistration = useCallback(async () => {
+    setLoading(true)
+    if (lineUserID && lineIDToken) {
+      const profile = await getProfile({
+        lineUserID: lineUserID,
+        lineIDToken: lineIDToken,
+      })
+      console.log('profile:', profile)
+      if (profile?.patient) {
+        setRegistered(true)
+      } else openModal(false, { redirect: true })
+    }
+    setLoading(false)
+  }, [lineIDToken, lineUserID, openModal])
+
+  useEffect(() => {
+    checkRegistration()
+  }, [checkRegistration])
 
   const onSubmit = async (values: updateData) => {
     setLoading(true)
@@ -123,7 +155,7 @@ export default function UpdateForm() {
     const response = await updatePatient(convertedData)
     console.log(response)
     setLoading(false)
-    openModal(response?.ok as boolean)
+    openModal(response?.ok as boolean, {})
   }
 
   return (

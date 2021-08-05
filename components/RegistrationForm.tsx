@@ -299,7 +299,7 @@ export default function RegistrationForm() {
         lineUserID: lineUserID,
         lineIDToken: lineIDToken,
       })
-      if (profile) {
+      if (profile?.patient) {
         setRegistered(true)
         const patientFormData: registerFormData = convertProfileToFormData({
           ...profile.line,
