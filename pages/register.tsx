@@ -2,7 +2,7 @@ import RegistrationForm from '../components/RegistrationForm'
 import { makeStyles } from '@material-ui/styles'
 import Link from 'next/link'
 
-const useStyles = makeStyles(
+export const useStyles = makeStyles(
   {
     container: {
       marginBottom: '20px',
