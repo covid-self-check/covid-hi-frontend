@@ -13,8 +13,15 @@ import { Controller, useForm } from 'react-hook-form'
 
 import { makeStyles } from '@material-ui/styles'
 
-import { convertUpdateFormDataToDto, requestHelpData, updateData, updateDto } from '../util/types'
-import { updatePatient } from '../firebase/functions'
+import {
+  convertRequestHelpDataToDto,
+  convertUpdateFormDataToDto,
+  requestHelpData,
+  requestHelpDto,
+  updateData,
+  updateDto,
+} from '../util/types'
+import { requestHelpToRegister, updatePatient } from '../firebase/functions'
 import ModalComponent, { ModalComponentProps } from './ModalComponent'
 import { LineContext } from '../util/lineContext'
 import LoadingModal from './LoadingModal'
@@ -50,7 +57,8 @@ export default function PhoneNumberForm() {
   const styles = useStyles()
   const { control, handleSubmit } = useForm<requestHelpData>({
     defaultValues: {
-      phoneNumber: '',
+      name: '',
+      personalPhoneNo: '',
     },
   })
 
@@ -72,16 +80,16 @@ export default function PhoneNumberForm() {
   const openModal = (isSuccess: boolean, color?: string, errors?: string[]) => {
     if (isSuccess)
       setModalProps({
-        page: 'update',
+        page: 'requestHelp',
         variant: 'success',
-        title: 'แจ้งอาการสำเร็จ',
-        subTitle: 'โปรดรอดูผลวิเคราะห์อาการใน Line Official',
+        title: 'แจ้งข้อมูลติดต่อสำเร็จ',
+        subTitle: 'กรุณารอการติดต่อจากทางอาสาสมัคร',
       })
     else
       setModalProps({
-        page: 'update',
+        page: 'requestHelp',
         variant: 'error',
-        title: 'แจ้งอาการไม่สำเร็จ',
+        title: 'แจ้งข้อมูลติดต่อไม่สำเร็จ',
         subTitle: 'กรุณากรอกใหม่อีกครั้ง',
       })
     handleOpen()
@@ -92,10 +100,13 @@ export default function PhoneNumberForm() {
   const onSubmit = async (values: requestHelpData) => {
     setLoading(true)
     console.log(values)
-
-    //TODO: Migrate with the API
-
+    const convertedData: requestHelpDto = convertRequestHelpDataToDto(values, {
+      lineUserID,
+      lineIDToken,
+    })
+    const response = await requestHelpToRegister(convertedData)
     setLoading(false)
+    openModal(response?.ok as boolean)
   }
 
   const replaceWithNumbers = (text: string) => text.replace(/\D+/g, '')
@@ -109,7 +120,23 @@ export default function PhoneNumberForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Container>
             <Controller
-              name="phoneNumber"
+              name="name"
+              control={control}
+              render={({ field: { onChange, value }, fieldState: { error } }) => (
+                <TextField
+                  label="ชื่อ *"
+                  className={styles.text_field}
+                  value={value}
+                  fullWidth
+                  onChange={onChange}
+                  error={!!error}
+                  helperText={error ? error.message : null}
+                />
+              )}
+              rules={{ required: 'โปรดใส่ชื่อ' }}
+            />
+            <Controller
+              name="personalPhoneNo"
               control={control}
               defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (

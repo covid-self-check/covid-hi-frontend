@@ -88,3 +88,25 @@ export const getProfile = async (userData: lineUserData) => {
     return null
   }
 }
+
+export const requestHelpToRegister = async (userData: lineUserData) => {
+  let requestHelpToRegister = firebase
+    .app()
+    .functions('asia-southeast2')
+    .httpsCallable('requestToRegister')
+  try {
+    console.log(userData)
+    const response: firebase.functions.HttpsCallableResult = await requestHelpToRegister(userData)
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('Error:')
+    console.error(error)
+    Sentry.setContext('error', { details: JSON.stringify(error?.details) })
+    Sentry.captureException(error)
+    Sentry.setContext('error', { details: undefined })
+
+    error?.details?.map((item: any) => console.error(item.message))
+    return null
+  }
+}

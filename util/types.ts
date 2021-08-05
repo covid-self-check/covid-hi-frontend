@@ -212,8 +212,14 @@ export type apiResponse = {
 }
 
 export type requestHelpData = {
-    phoneNumber: string
+  name: string
+  personalPhoneNo: string
 }
+
+export type requestHelpDto = {
+  name: string
+  personalPhoneNo: string
+} & lineUserData
 
 export const convertFormDataToAPIData: (
   data: registerFormData,
@@ -499,4 +505,15 @@ export const convertProfileToFormData: (profile: registerDto) => registerFormDat
     fac_asthma: fac_asthma === 1,
     fac_pregnancy: fac_pregnancy === 1,
   }
+}
+
+export const convertRequestHelpDataToDto: (
+  data: requestHelpData,
+  lineData: lineUserData,
+) => requestHelpDto = (data, lineData) => {
+  const { name, personalPhoneNo } = data
+
+  const convertedData = { ...lineData, name, personalPhoneNo }
+
+  return convertedData
 }

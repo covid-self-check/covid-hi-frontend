@@ -18,7 +18,7 @@ const style = {
 
 export interface ModalComponentProps {
   variant: 'success' | 'error' | 'redirect'
-  page: 'register' | 'update'
+  page: 'register' | 'update' | 'requestHelp'
   title: string
   subTitle?: string
   state: boolean
@@ -64,8 +64,10 @@ export default function ModalComponent(props: ModalComponentProps) {
               {variant === 'success' ? (
                 page === 'register' ? (
                   ''
-                ) : (
+                ) : page === 'update' ? (
                   <p>โปรดปิดหน้าต่างนี้ และกลับมาแจ้งอาการในครั้งต่อๆไป</p>
+                ) : (
+                  <p>โปรดปิดหน้าต่างนี้ และรอการติดต่อกลับ</p>
                 )
               ) : variant === 'error' ? (
                 <Button variant="outlined" sx={{ mt: 4 }} onClick={onCloseHandler}>
