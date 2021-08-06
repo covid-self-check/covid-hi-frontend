@@ -76,13 +76,14 @@ export default function ModalComponent(props: ModalComponentProps) {
               ) : variant === 'toAMED' ? (
                 <p>โปรดปิดหน้าต่างนี้</p>
               ) : (
-                <Button
-                  variant="outlined"
-                  sx={{ mt: 4 }}
-                  onClick={() => redirect(page === 'register' ? '/update' : '/register')}
-                >
-                  {page === 'register' ? 'กรอกอาการ' : 'ลงทะเบียน'}
-                </Button>
+                ''
+                // <Button
+                //   variant="outlined"
+                //   sx={{ mt: 4 }}
+                //   onClick={() => redirect(page === 'register' ? '/update' : '/register')}
+                // >
+                //   {page === 'register' ? 'กรอกอาการ' : 'ลงทะเบียน'}
+                // </Button>
               )}
             </Box>
           </Box>
