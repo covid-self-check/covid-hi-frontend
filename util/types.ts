@@ -263,6 +263,8 @@ export const convertFormDataToAPIData: (
 
   const hasNationalID = personalID.length === 13
 
+  const convertedBirthDate = (birthDate as unknown as Date).toLocaleDateString('en')
+
   const convertedData: registerDto = {
     lineUserID,
     lineIDToken,
@@ -271,7 +273,7 @@ export const convertFormDataToAPIData: (
     personalID: hasNationalID ? personalID : null,
     passport: !hasNationalID ? personalID : null,
     // station: stationName,
-    birthDate,
+    birthDate: new Date(convertedBirthDate).toLocaleDateString('en'),
     gender,
     weight: parseInt(weight),
     height: parseInt(height),
@@ -464,8 +466,6 @@ export const convertProfileToFormData: (profile: registerDto) => registerFormDat
     fac_asthma,
     fac_pregnancy,
   } = profile
-
-  console.log(birthDate)
 
   return {
     firstName,

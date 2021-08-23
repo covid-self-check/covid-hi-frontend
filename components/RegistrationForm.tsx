@@ -27,6 +27,12 @@ import { route } from 'next/dist/next-server/server/router'
 import ModalComponent, { ModalComponentProps } from './ModalComponent'
 import { LineContext } from '../util/lineContext'
 import LoadingModal from './LoadingModal'
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns'
+import thLocale from 'date-fns/locale/th'
+import AdapterDateFns from '@material-ui/lab/AdapterDateFns'
+import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
+import DatePicker from '@material-ui/lab/DatePicker'
 
 const NATIONAL_ID_MAX_LENGTH = 13
 const PASSPORT_ID_OLD_MAX_LENGTH = 7
@@ -70,7 +76,7 @@ export default function RegistrationForm() {
       firstName: '',
       lastName: '',
       personalID: '',
-      birthDate: '',
+      birthDate: null,
       weight: '',
       height: '',
       gender: '',
@@ -511,22 +517,26 @@ export default function RegistrationForm() {
               name="birthDate"
               control={control}
               render={({ field: { onChange, value }, fieldState: { error } }) => (
-                <TextField
-                  disabled={isRegistered}
-                  fullWidth
-                  className={styles.text_field}
-                  id="date"
-                  label="วัน/เดือน/ปีเกิด"
-                  type="date"
-                  defaultValue={undefined}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  value={value}
-                  onChange={onChange}
-                  error={!!error}
-                  helperText={error ? error.message : null}
-                />
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={thLocale}>
+                  <DatePicker
+                    label="วันเกิด"
+                    openTo="year"
+                    views={['year', 'month', 'day']}
+                    minDate={new Date('1900-01-01')}
+                    maxDate={new Date()}
+                    value={value}
+                    onChange={onChange}
+                    disabled={isRegistered}
+                    renderInput={(params) => (
+                      <TextField
+                        fullWidth
+                        {...params}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
               )}
               rules={{ required: 'โปรดใส่วัน/เดือน/ปีเกิด' }}
             />
@@ -756,7 +766,6 @@ export default function RegistrationForm() {
             <Controller
               name="contactInfo.phoneNumber"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value }, fieldState: { error } }) => (
                 <TextField
                   disabled={isRegistered}

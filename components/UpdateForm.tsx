@@ -101,6 +101,7 @@ export default function UpdateForm() {
           page: 'update',
           variant: 'redirect',
           title: 'ยังไม่ได้ลงทะเบียน',
+          // subTitle: 'ปัจจุบันระบบปิดรับลงทะเบียนแล้ว',
           subTitle: 'โปรดลงทะเบียนก่อนแจ้งอาการ',
         })
       else if (toAMED) {
