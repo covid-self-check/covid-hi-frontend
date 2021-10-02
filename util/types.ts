@@ -5,7 +5,6 @@ export type registerDto = {
   lastName: string
   personalID: string | null
   passport: string | null
-  // station: string
   birthDate: string
   gender: string
   weight: number
@@ -16,10 +15,7 @@ export type registerDto = {
   district: string
   postNo: string
   hasHelper: boolean
-  // digitalLiteracy: boolean
   personalPhoneNo: string
-  // personalLineID: string
-  // closestUnriskPersonPhoneNo: string
   emergencyPhoneNo: string
   dose1Name?: string
   dose1Date?: string
@@ -50,7 +46,6 @@ export type registerFormData = {
   firstName: string
   lastName: string
   personalID: string
-  // stationName: string
   birthDate: string
   weight: string
   height: string
@@ -62,15 +57,15 @@ export type registerFormData = {
     subdistrict: string
     postalCode: string
   }
-  // congenitalDisease: string
+
   hasHelper: string
-  // digitalLiteracy: string
+
   contactInfo: {
     phoneNumber: string
-    // closeContactsPhoneNumber: string
+
     emergencyContactPhoneNumber: string
   }
-  // lineID: string
+
   vaccination: string
   vaccinationDates: {
     firstDoseName: string
@@ -105,8 +100,6 @@ export type updateData = {
   height: string
   gender: string
 
-  // bodyTemperature: number
-  // pulse: number
   spO2: number
   spO2Eih: number
   sym1_severe_cough: boolean
@@ -122,30 +115,13 @@ export type updateData = {
   sym2_rash: boolean
   sym2_red_eye: boolean
 
-  // fac_age_gte_60: boolean
-  // fac_bmi_gte_30: boolean
-  // fac_diabetes: boolean
-  // fac_dyslipidemia: boolean
-  // fac_hypertension: boolean
-  // fac_heart_disease: boolean
-  // fac_esrd: boolean
-  // fac_cancer: boolean
-  // fac_cirrhosis: boolean
-  // fac_tuberculosis: boolean
-  // fac_hiv: boolean
-  // fac_asthma: boolean
-  // fac_copd: boolean
-  // fac_pregnancy: boolean
   fac_bed_ridden_status: boolean
-  // fac_fever: boolean
   fac_uri_symptoms: boolean
   fac_olfactory_symptoms: boolean
   fac_diarrhea: boolean
   fac_dyspnea: boolean
   fac_chest_discomfort: boolean
   fac_gi_symptoms: boolean
-
-  // disease
 
   rf_copd_chronic_lung_disease: boolean
   rf_ckd_stagr_3_to_4: boolean
@@ -176,8 +152,6 @@ export type updateDto = {
   weight: number
   height: number
   gender: string
-  // bodyTemperature: number
-  // pulse: number
   sp_o2: number
   sp_o2_ra: number
   sp_o2_after_eih: number
@@ -194,22 +168,7 @@ export type updateDto = {
   sym2_cannot_smell: number
   sym2_rash: number
   sym2_red_eye: number
-  // fac_age_gte_60: number
-  // fac_bmi_gte_30: number
-  // fac_diabetes: number
-  // fac_dyslipidemia: number
-  // fac_hypertension: number
-  // fac_heart_disease: number
-  // fac_esrd: number
-  // fac_cancer: number
-  // fac_cirrhosis: number
-  // fac_tuberculosis: number
-  // fac_hiv: number
-  // fac_asthma: number
-  // fac_copd: number
-  // fac_pregnancy: number
   fac_bed_ridden_status: number
-  // fac_fever: number
   fac_uri_symptoms: number
   fac_olfactory_symptoms: number
   fac_diarrhea: number
@@ -319,7 +278,6 @@ export const convertFormDataToAPIData: (
     lastName,
     personalID: hasNationalID ? personalID : null,
     passport: !hasNationalID ? personalID : null,
-    // station: stationName,
     birthDate: new Date(convertedBirthDate).toLocaleDateString('en'),
     gender,
     weight: parseInt(weight),
@@ -330,10 +288,7 @@ export const convertFormDataToAPIData: (
     district: addressInfo.subdistrict,
     postNo: addressInfo.postalCode,
     hasHelper: hasHelper === 'true',
-    // digitalLiteracy: digitalLiteracy === 'true',
     personalPhoneNo: contactInfo.phoneNumber,
-    // personalLineID: lineID,
-    // closestUnriskPersonPhoneNo: contactInfo.closeContactsPhoneNumber,
     emergencyPhoneNo: contactInfo.emergencyContactPhoneNumber,
     dose1Name:
       vaccination === 'one_dose' || vaccination === 'two_doses'
@@ -375,8 +330,6 @@ export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserD
     weight,
     height,
     gender,
-    // bodyTemperature,
-    // pulse,
     spO2,
     spO2Eih,
     sym1_severe_cough,
@@ -431,8 +384,6 @@ export const convertUpdateFormDataToDto = (data: updateData, lineData: lineUserD
     weight: parseInt(weight),
     height: parseInt(height),
     gender,
-    // bodyTemperature,
-    // pulse,
     sp_o2: spO2,
     sp_o2_ra: spO2,
     sp_o2_after_eih: spO2Eih,
