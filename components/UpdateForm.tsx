@@ -104,7 +104,6 @@ export default function UpdateForm() {
     },
   })
 
-  // state to handle modal
   const [open, setOpen] = useState(false)
   const [modalProps, setModalProps] = useState<
     Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle' | 'page'>
@@ -129,7 +128,6 @@ export default function UpdateForm() {
           page: 'update',
           variant: 'redirect',
           title: 'ยังไม่ได้ลงทะเบียน',
-          // subTitle: 'ปัจจุบันระบบปิดรับลงทะเบียนแล้ว',
           subTitle: 'โปรดลงทะเบียนก่อนแจ้งอาการ',
         })
       else if (toAMED) {
@@ -175,10 +173,6 @@ export default function UpdateForm() {
     }
     setLoading(false)
   }, [lineIDToken, lineUserID, openModal])
-
-  // useEffect(() => {
-  //   checkRegistration()
-  // }, [checkRegistration])
 
   const onSubmit = async (values: updateData) => {
     setLoading(true)

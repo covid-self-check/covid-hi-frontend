@@ -45,13 +45,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         await liff.init({ liffId })
         if (!liff.isInClient() && !liff.isLoggedIn())
           liff.login({ redirectUri: `${liffUrl}/${pathname}` })
-        // liff.login({ redirectUri: 'https://localhost:3000' })
       } catch (error) {
         console.error('liff init error', error.message)
       }
       if (!liff.isLoggedIn()) {
         liff.login({ redirectUri: `${liffUrl}/${pathname}` })
-        // liff.login({ redirectUri: 'https://localhost:3000' })
       }
       await getLiffData()
     }

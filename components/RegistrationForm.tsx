@@ -17,7 +17,7 @@ import {
   MenuItem,
 } from '@material-ui/core'
 import Card from './Card'
-// import styles from '../styles/RegistrationForm.module.css'
+
 import { convertFormDataToAPIData, convertProfileToFormData, registerFormData } from '../util/types'
 import { getAddress, getCovidTestCentres } from '../util/constants'
 import { getProfile, registerPatient } from '../firebase/functions'
@@ -88,13 +88,10 @@ export default function RegistrationForm() {
         postalCode: '',
       },
       hasHelper: false,
-      // digitalLiteracy: false,
       contactInfo: {
         phoneNumber: '',
-        // closeContactsPhoneNumber: '',
         emergencyContactPhoneNumber: '',
       },
-      // lineID: '',
       vaccination: 'none',
       vaccinationDates: {
         firstDoseName: '',
@@ -104,7 +101,6 @@ export default function RegistrationForm() {
       },
       gotFavipiravia: 'none',
       favipiraviaAmount: '',
-      // stationName: '',
       latestCovidTestDate: '',
       rf_copd_chronic_lung_disease: false,
 
@@ -278,7 +274,6 @@ export default function RegistrationForm() {
 
   const [isLoading, setLoading] = useState(false)
 
-  // state to handle modal
   const [open, setOpen] = useState(false)
   const [modalProps, setModalProps] = useState<
     Pick<ModalComponentProps, 'variant' | 'title' | 'subTitle' | 'page'>
@@ -340,7 +335,6 @@ export default function RegistrationForm() {
     const response = await registerPatient(convertedData)
     setLoading(false)
     openModal(response?.ok as boolean)
-    // openModal(true)
     setFormData(data)
   }
 
