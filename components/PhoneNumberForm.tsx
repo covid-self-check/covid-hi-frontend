@@ -99,7 +99,7 @@ export default function PhoneNumberForm() {
 
   const onSubmit = async (values: requestHelpData) => {
     setLoading(true)
-    console.log(values)
+
     const convertedData: requestHelpDto = convertRequestHelpDataToDto(values, {
       lineUserID,
       lineIDToken,

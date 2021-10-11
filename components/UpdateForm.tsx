@@ -122,7 +122,6 @@ export default function UpdateForm() {
 
   const openModal: (isSuccess: boolean, options: { redirect?: boolean; toAMED?: boolean }) => void =
     useCallback((isSuccess, { redirect, toAMED }) => {
-      console.log(redirect)
       if (redirect)
         setModalProps({
           page: 'update',
@@ -165,7 +164,6 @@ export default function UpdateForm() {
         lineUserID: lineUserID,
         lineIDToken: lineIDToken,
       })
-      console.log('profile:', profile)
       if (profile?.patient) {
         setRegistered(true)
         if (profile?.patient?.toAmed === 1) openModal(false, { toAMED: true })
@@ -180,9 +178,9 @@ export default function UpdateForm() {
       lineUserID,
       lineIDToken,
     })
-    console.log(values)
+
     const response = await updatePatient(convertedData)
-    console.log(response)
+
     setLoading(false)
     openModal(response?.ok as boolean, {})
   }
